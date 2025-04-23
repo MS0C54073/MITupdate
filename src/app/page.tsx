@@ -205,6 +205,10 @@ export default function Home() {
                 <label htmlFor="phone" className="block text-foreground text-sm font-bold mb-2">Phone:</label>
                 <input type="phone" id="phone" className="shadow appearance-none border rounded w-full py-2 px-3 text-foreground leading-tight focus:outline-none focus:shadow-outline"/>
               </div>
+               <div className="mb-4">
+                <label htmlFor="attachment" className="block text-foreground text-sm font-bold mb-2">Attach File:</label>
+                <input type="file" id="attachment" className="shadow appearance-none border rounded w-full py-2 px-3 text-foreground leading-tight focus:outline-none focus:shadow-outline"/>
+              </div>
                 <div className="mb-6">
                   <label htmlFor="comment" className="block text-foreground text-sm font-bold mb-2">Order Details:</label>
                   <textarea id="comment" className="shadow appearance-none border rounded w-full py-2 px-3 text-foreground leading-tight focus:outline-none focus:shadow-outline"></textarea>

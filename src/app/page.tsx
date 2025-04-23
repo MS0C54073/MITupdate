@@ -21,7 +21,7 @@ export default function Home() {
       <section className="mb-12">
         <div className="flex flex-col items-center md:flex-row gap-8">
           <Image
-            src="https://picsum.photos/200/200"
+            src="https://images.unsplash.com/photo-1517694712202-14f92dc9f4a5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
             alt="Muzo's Profile Picture"
             width={200}
             height={200}
@@ -90,7 +90,7 @@ export default function Home() {
           {/* Software Engineering */}
           <div className="portfolio-item rounded-lg border shadow-md p-4 hover:shadow-lg hover:animate-shake transition-shadow">
             <Image
-              src="https://picsum.photos/601/400"
+              src="https://images.unsplash.com/photo-1517694712202-14f92dc9f4a5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
               alt="Software Engineering - Teaching Related"
               width={604}
               height={400}
@@ -111,7 +111,7 @@ export default function Home() {
           {/* Teaching Experience */}
           <div className="portfolio-item rounded-lg border shadow-md p-4 hover:shadow-lg hover:animate-shake transition-shadow">
             <Image
-              src="https://picsum.photos/602/400"
+              src="https://images.unsplash.com/photo-1517694712202-14f92dc9f4a5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
               alt="Teaching Experience"
               width={605}
               height={400}
@@ -132,7 +132,7 @@ export default function Home() {
           {/* Affiliate Marketing Project */}
           <div className="portfolio-item rounded-lg border shadow-md p-4 hover:shadow-lg hover:animate-shake transition-shadow">
             <Image
-              src="https://picsum.photos/603/400"
+              src="https://images.unsplash.com/photo-1517694712202-14f92dc9f4a5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
               alt="Affiliate Marketing Project"
               width={606}
               height={400}
@@ -155,7 +155,7 @@ export default function Home() {
           {/* Hobbies */}
           <div className="portfolio-item rounded-lg border shadow-md p-4 hover:shadow-lg hover:animate-shake transition-shadow">
             <Image
-              src="https://picsum.photos/604/400"
+              src="https://images.unsplash.com/photo-1517694712202-14f92dc9f4a5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
               alt="Hobbies"
               width={607}
               height={400}
@@ -284,4 +284,3 @@ export default function Home() {
     </div>
   );
 }
-

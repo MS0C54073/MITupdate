@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useState, createContext, useContext, ReactNode, useEffect} from 'react';
+import React, {useState, createContext, useContext, ReactNode, useEffect, useCallback} from 'react';
 import {translate, TranslateInput} from '@/ai/flows/translate-flow';
 
 interface TranslationContextProps {
@@ -27,7 +27,7 @@ export const TranslationProvider: React.FC<TranslationProviderProps> = ({childre
   const [language, setLanguage] = useState<'en' | 'ru'>('en');
   const [translations, setTranslations] = useState<{[key: string]: string}>({});
 
-  const memoizedTranslate = React.useCallback(
+  const memoizedTranslate = useCallback(
     async (text: string) => {
       if (!text) {
         return '';
@@ -79,4 +79,3 @@ export const useTranslated = (text: string): string => {
 
   return translatedText;
 };
-

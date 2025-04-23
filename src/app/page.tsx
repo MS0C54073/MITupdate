@@ -162,6 +162,31 @@ export default function Home() {
           </div>
         </div>
       </section>
+       {/* Leave a comment section */}
+       <section className="mt-12 py-8 border-t border-border">
+        <h2 className="text-2xl font-semibold mb-6 text-primary">Leave a comment</h2>
+         <div>
+         <form>
+            <div className="mb-4">
+              <label htmlFor="name" className="block text-foreground text-sm font-bold mb-2">Name:</label>
+              <input type="text" id="name" className="shadow appearance-none border rounded w-full py-2 px-3 text-foreground leading-tight focus:outline-none focus:shadow-outline"/>
+            </div>
+              <div className="mb-4">
+                <label htmlFor="email" className="block text-foreground text-sm font-bold mb-2">Email:</label>
+                <input type="email" id="email" className="shadow appearance-none border rounded w-full py-2 px-3 text-foreground leading-tight focus:outline-none focus:shadow-outline"/>
+              </div>
+                <div className="mb-6">
+                  <label htmlFor="comment" className="block text-foreground text-sm font-bold mb-2">Comment:</label>
+                  <textarea id="comment" className="shadow appearance-none border rounded w-full py-2 px-3 text-foreground leading-tight focus:outline-none focus:shadow-outline"></textarea>
+                </div>
+                <div className="flex items-center justify-between">
+                  <button className="bg-accent hover:bg-red-600 text-primary-foreground font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                    Post Comment
+                  </button>
+                </div>
+              </form>
+          </div>
+      </section>
 
       {/* Contact Me Section */}
       <section className="mt-12 py-8 border-t border-border">
@@ -216,4 +241,3 @@ export default function Home() {
     </div>
   );
 }
-

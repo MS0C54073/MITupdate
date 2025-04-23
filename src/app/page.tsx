@@ -60,9 +60,9 @@ export default function Home() {
         <h2 className="text-2xl font-semibold mb-6 text-primary">Portfolio Showcase</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Tech Project */}
-          <div className="rounded-lg border shadow-md p-4 hover:shadow-lg transition-shadow">
+          <div className="rounded-lg border shadow-md p-4 hover:shadow-lg hover:animate-shake transition-shadow">
             <Image
-              src="https://picsum.photos/604/400"
+              src="https://picsum.photos/601/400"
               alt="Tech Project"
               width={604}
               height={400}
@@ -74,16 +74,16 @@ export default function Home() {
             </p>
             <a
               href="#"
-              className="inline-block mt-4 px-4 py-2 bg-accent text-primary-foreground rounded-md hover:bg-red-600 transition-colors"
+              className="inline-block mt-4 px-4 py-2 bg-accent text-primary-foreground rounded-md hover:bg-red-600 hover:animate-pulse transition-colors"
             >
               Learn More
             </a>
           </div>
 
           {/* Teaching Experience */}
-          <div className="rounded-lg border shadow-md p-4 hover:shadow-lg transition-shadow">
+          <div className="rounded-lg border shadow-md p-4 hover:shadow-lg hover:animate-shake transition-shadow">
             <Image
-              src="https://picsum.photos/605/400"
+              src="https://picsum.photos/602/400"
               alt="Teaching Experience"
               width={605}
               height={400}
@@ -95,16 +95,16 @@ export default function Home() {
             </p>
             <a
               href="#"
-              className="inline-block mt-4 px-4 py-2 bg-accent text-primary-foreground rounded-md hover:bg-red-600 transition-colors"
+              className="inline-block mt-4 px-4 py-2 bg-accent text-primary-foreground rounded-md hover:bg-red-600 hover:animate-pulse transition-colors"
             >
               Learn More
             </a>
           </div>
 
           {/* Affiliate Marketing Project */}
-          <div className="rounded-lg border shadow-md p-4 hover:shadow-lg transition-shadow">
+          <div className="rounded-lg border shadow-md p-4 hover:shadow-lg hover:animate-shake transition-shadow">
             <Image
-              src="https://picsum.photos/606/400"
+              src="https://picsum.photos/603/400"
               alt="Affiliate Marketing Project"
               width={606}
               height={400}
@@ -118,16 +118,16 @@ export default function Home() {
             </p>
             <a
               href="#"
-              className="inline-block mt-4 px-4 py-2 bg-accent text-primary-foreground rounded-md hover:bg-red-600 transition-colors"
+              className="inline-block mt-4 px-4 py-2 bg-accent text-primary-foreground rounded-md hover:bg-red-600 hover:animate-pulse transition-colors"
             >
               Learn More
             </a>
           </div>
 
           {/* Music Showcase */}
-          <div className="rounded-lg border shadow-md p-4 hover:shadow-lg transition-shadow">
+          <div className="rounded-lg border shadow-md p-4 hover:shadow-lg hover:animate-shake transition-shadow">
             <Image
-              src="https://picsum.photos/607/400"
+              src="https://picsum.photos/604/400"
               alt="Music Showcase"
               width={607}
               height={400}
@@ -137,7 +137,7 @@ export default function Home() {
             <p className="text-muted-foreground">Brief description of the music track or project.</p>
             <a
               href="#"
-              className="inline-block mt-4 px-4 py-2 bg-accent text-primary-foreground rounded-md hover:bg-red-600 transition-colors"
+              className="inline-block mt-4 px-4 py-2 bg-accent text-primary-foreground rounded-md hover:bg-red-600 hover:animate-pulse transition-colors"
             >
               Listen Now
             </a>

@@ -1,0 +1,117 @@
+.portfolio-rotation {
+    display: flex;
+    overflow: hidden;
+    width: 100%;
+    padding: 20px 0;
+}
+
+.portfolio-item {
+    flex: 0 0 auto;
+    width: 100%; /* Adjust as needed */
+    margin-right: 20px; /* Space between items */
+    transition: transform 0.5s ease-in-out;
+}
+
+.portfolio-rotation {
+  display: flex;
+  overflow-x: auto; /* Enable horizontal scrolling if items overflow */
+  scroll-snap-type: x mandatory; /* Enable scroll snapping */
+  -webkit-overflow-scrolling: touch; /* For smooth scrolling on iOS */
+}
+
+.portfolio-item {
+  flex: 0 0 80%; /* Each item takes up 80% of the container width */
+  width: 80%;
+  scroll-snap-align: start; /* Snap items to the start of the container */
+  padding: 10px;
+}
+
+.ai-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .neural-nodes {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .node {
+    width: 10px;
+    height: 10px;
+    background-color: rgba(135, 206, 235, 0.3); /* Light Blue with transparency */
+    border-radius: 50%;
+    position: absolute;
+    animation: float 4s infinite alternate;
+  }
+
+  .node:nth-child(odd) {
+    animation-delay: 1s;
+  }
+
+  @keyframes float {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(-20px);
+    }
+  }
+
+  .data-stream {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .particle {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.2);
+    animation: flow 3s linear infinite;
+  }
+
+  @keyframes flow {
+    0% {
+      transform: translateY(-100vh);
+    }
+    100% {
+      transform: translateY(100vh);
+    }
+  }
+
+  .circuit-traces {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+
+  .trace {
+    position: absolute;
+    width: 2px;
+    background-color: rgba(255, 165, 0, 0.1); /* Orange with low transparency */
+    animation: pulse 5s linear infinite;
+  }
+
+  @keyframes pulse {
+    0% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }

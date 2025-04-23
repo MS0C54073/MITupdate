@@ -3,6 +3,7 @@ import {Github, Linkedin, Youtube} from 'lucide-react';
 
 // Custom Icons
 import { WhatsappIcon, TelegramIcon } from '@/components/icons';
+import './ai.css';
 
 export default function Home() {
   return (
@@ -76,9 +77,9 @@ export default function Home() {
       {/* Portfolio Showcase */}
       <section>
         <h2 className="text-2xl font-semibold mb-6 text-primary">Portfolio Showcase</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="portfolio-rotation">
           {/* Tech Project */}
-          <div className="rounded-lg border shadow-md p-4 hover:shadow-lg hover:animate-shake transition-shadow">
+          <div className="portfolio-item rounded-lg border shadow-md p-4 hover:shadow-lg hover:animate-shake transition-shadow">
             <Image
               src="https://picsum.photos/601/400"
               alt="Tech Project - Teaching Related"
@@ -99,7 +100,7 @@ export default function Home() {
           </div>
 
           {/* Teaching Experience */}
-          <div className="rounded-lg border shadow-md p-4 hover:shadow-lg hover:animate-shake transition-shadow">
+          <div className="portfolio-item rounded-lg border shadow-md p-4 hover:shadow-lg hover:animate-shake transition-shadow">
             <Image
               src="https://picsum.photos/602/400"
               alt="Teaching Experience"
@@ -120,7 +121,7 @@ export default function Home() {
           </div>
 
           {/* Affiliate Marketing Project */}
-          <div className="rounded-lg border shadow-md p-4 hover:shadow-lg hover:animate-shake transition-shadow">
+          <div className="portfolio-item rounded-lg border shadow-md p-4 hover:shadow-lg hover:animate-shake transition-shadow">
             <Image
               src="https://picsum.photos/603/400"
               alt="Affiliate Marketing Project"
@@ -142,8 +143,8 @@ export default function Home() {
             </a>
           </div>
 
-          {/* Music Showcase */}
-          <div className="rounded-lg border shadow-md p-4 hover:shadow-lg hover:animate-shake transition-shadow">
+          {/* Hobbies */}
+          <div className="portfolio-item rounded-lg border shadow-md p-4 hover:shadow-lg hover:animate-shake transition-shadow">
             <Image
               src="https://picsum.photos/604/400"
               alt="Hobbies"
@@ -275,4 +276,3 @@ export default function Home() {
     </div>
   );
 }
-

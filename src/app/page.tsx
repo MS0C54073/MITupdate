@@ -128,12 +128,12 @@ export default function Home() {
           <div className="rounded-lg border shadow-md p-4 hover:shadow-lg hover:animate-shake transition-shadow">
             <Image
               src="https://picsum.photos/604/400"
-              alt="Music Showcase"
+              alt="Hobbies"
               width={607}
               height={400}
               className="rounded-md mb-2"
             />
-            <h3 className="text-xl font-semibold text-foreground mb-2">Music Track Title</h3>
+            <h3 className="text-xl font-semibold text-foreground mb-2">Hobbies</h3>
             <p className="text-muted-foreground">Brief description of the music track or project.</p>
             <a
               href="#"

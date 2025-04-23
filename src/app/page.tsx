@@ -1,3 +1,4 @@
+
 import Image from 'next/image';
 import {Github, Linkedin, Youtube} from 'lucide-react';
 
@@ -276,3 +277,4 @@ export default function Home() {
     </div>
   );
 }
+

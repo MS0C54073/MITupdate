@@ -62,9 +62,9 @@ export default function Home() {
           {/* Tech Project */}
           <div className="rounded-lg border shadow-md p-4">
             <Image
-              src="https://picsum.photos/600/400"
+              src="https://picsum.photos/604/400"
               alt="Tech Project"
-              width={600}
+              width={604}
               height={400}
               className="rounded-md mb-2"
             />
@@ -83,9 +83,9 @@ export default function Home() {
           {/* Teaching Experience */}
           <div className="rounded-lg border shadow-md p-4">
             <Image
-              src="https://picsum.photos/601/400"
+              src="https://picsum.photos/605/400"
               alt="Teaching Experience"
-              width={601}
+              width={605}
               height={400}
               className="rounded-md mb-2"
             />
@@ -104,9 +104,9 @@ export default function Home() {
           {/* Affiliate Marketing Project */}
           <div className="rounded-lg border shadow-md p-4">
             <Image
-              src="https://picsum.photos/602/400"
+              src="https://picsum.photos/606/400"
               alt="Affiliate Marketing Project"
-              width={602}
+              width={606}
               height={400}
               className="rounded-md mb-2"
             />
@@ -127,9 +127,9 @@ export default function Home() {
           {/* Music Showcase */}
           <div className="rounded-lg border shadow-md p-4">
             <Image
-              src="https://picsum.photos/603/400"
+              src="https://picsum.photos/607/400"
               alt="Music Showcase"
-              width={603}
+              width={607}
               height={400}
               className="rounded-md mb-2"
             />
@@ -147,3 +147,4 @@ export default function Home() {
     </div>
   );
 }
+

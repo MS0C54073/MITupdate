@@ -29,7 +29,7 @@ export default function Home() {
             {/* Social Media Links */}
             <div className="mt-4 flex space-x-4">
               <a
-                href="https://linkedin.com/in/example"
+                href="https://www.linkedin.com/in/musonda-salimu-a4a0b31b9/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-primary hover:text-highlight transition-colors"
@@ -37,7 +37,7 @@ export default function Home() {
                 <Linkedin className="h-6 w-6"/>
               </a>
               <a
-                href="https://github.com/example"
+                href="https://github.com/MS0C54073"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-primary hover:text-highlight transition-colors"
@@ -45,7 +45,7 @@ export default function Home() {
                 <Github className="h-6 w-6"/>
               </a>
               <a
-                href="https://youtube.com/example"
+                href="https://www.youtube.com/@musondasalimu2986"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-primary hover:text-highlight transition-colors"
@@ -53,7 +53,7 @@ export default function Home() {
                 <Youtube className="h-6 w-6"/>
               </a>
               <a
-                href="https://whatsapp.com/in/example"
+                href="https://wa.me/79014213578"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-primary hover:text-highlight transition-colors"
@@ -61,7 +61,7 @@ export default function Home() {
                 <WhatsappIcon className="h-6 w-6"/>
               </a>
               <a
-                href="https://telegram.com/in/example"
+                href="https://t.me/MuzoSalim"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-primary hover:text-highlight transition-colors"
@@ -172,7 +172,7 @@ export default function Home() {
         </p>
         <div className="flex space-x-4">
           <a
-            href="https://linkedin.com/in/example"
+            href="https://www.linkedin.com/in/musonda-salimu-a4a0b31b9/"
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary hover:text-highlight transition-colors"
@@ -180,7 +180,7 @@ export default function Home() {
             <Linkedin className="h-6 w-6"/>
           </a>
           <a
-            href="https://github.com/example"
+            href="https://github.com/MS0C54073"
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary hover:text-highlight transition-colors"
@@ -188,7 +188,7 @@ export default function Home() {
             <Github className="h-6 w-6"/>
           </a>
           <a
-            href="https://youtube.com/example"
+            href="https://www.youtube.com/@musondasalimu2986"
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary hover:text-highlight transition-colors"
@@ -196,7 +196,7 @@ export default function Home() {
             <Youtube className="h-6 w-6"/>
           </a>
           <a
-            href="https://whatsapp.com/in/example"
+            href="https://wa.me/79014213578"
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary hover:text-highlight transition-colors"
@@ -204,7 +204,7 @@ export default function Home() {
             <WhatsappIcon className="h-6 w-6"/>
           </a>
           <a
-            href="https://telegram.com/in/example"
+            href="https://t.me/MuzoSalim"
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary hover:text-highlight transition-colors"
@@ -216,3 +216,4 @@ export default function Home() {
     </div>
   );
 }
+

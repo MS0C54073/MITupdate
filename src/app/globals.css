@@ -9,8 +9,8 @@ body {
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
+    --background: 0 0% 100%; /* White */
+    --foreground: 0 0% 3.9%; /* Dark */
     --card: 0 0% 100%;
     --card-foreground: 0 0% 3.9%;
     --popover: 0 0% 100%;
@@ -45,8 +45,8 @@ body {
     --highlight: 203 58% 75%; /* Light blue (#87CEEB) in HSL */
   }
   .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
+    --background: 0 0% 3.9%; /* Dark */
+    --foreground: 0 0% 98%; /* White */
     --card: 0 0% 3.9%;
     --card-foreground: 0 0% 98%;
     --popover: 0 0% 3.9%;

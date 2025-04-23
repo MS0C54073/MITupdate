@@ -60,7 +60,7 @@ export default function Home() {
         <h2 className="text-2xl font-semibold mb-6 text-primary">Portfolio Showcase</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Tech Project */}
-          <div className="rounded-lg border shadow-md p-4">
+          <div className="rounded-lg border shadow-md p-4 hover:shadow-lg transition-shadow">
             <Image
               src="https://picsum.photos/604/400"
               alt="Tech Project"
@@ -81,7 +81,7 @@ export default function Home() {
           </div>
 
           {/* Teaching Experience */}
-          <div className="rounded-lg border shadow-md p-4">
+          <div className="rounded-lg border shadow-md p-4 hover:shadow-lg transition-shadow">
             <Image
               src="https://picsum.photos/605/400"
               alt="Teaching Experience"
@@ -102,7 +102,7 @@ export default function Home() {
           </div>
 
           {/* Affiliate Marketing Project */}
-          <div className="rounded-lg border shadow-md p-4">
+          <div className="rounded-lg border shadow-md p-4 hover:shadow-lg transition-shadow">
             <Image
               src="https://picsum.photos/606/400"
               alt="Affiliate Marketing Project"
@@ -125,7 +125,7 @@ export default function Home() {
           </div>
 
           {/* Music Showcase */}
-          <div className="rounded-lg border shadow-md p-4">
+          <div className="rounded-lg border shadow-md p-4 hover:shadow-lg transition-shadow">
             <Image
               src="https://picsum.photos/607/400"
               alt="Music Showcase"
@@ -147,4 +147,3 @@ export default function Home() {
     </div>
   );
 }
-

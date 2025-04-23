@@ -1,4 +1,3 @@
-
 import Image from 'next/image';
 import {Github, Linkedin, Youtube} from 'lucide-react';
 
@@ -50,6 +49,20 @@ export default function Home() {
               >
                 <Youtube className="h-6 w-6"/>
               </a>
+                <a
+                  href="https://whatsapp.com/in/example"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary hover:text-highlight transition-colors"
+                >
+                </a>
+                <a
+                  href="https://telegram.com/in/example"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary hover:text-highlight transition-colors"
+                >
+                </a>
             </div>
           </div>
         </div>
@@ -147,3 +160,4 @@ export default function Home() {
     </div>
   );
 }
+

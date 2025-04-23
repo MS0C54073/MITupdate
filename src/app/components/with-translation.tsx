@@ -17,3 +17,4 @@ export function withTranslation<P extends object>(WrappedComponent: React.Compon
     return <WrappedComponent {...(translatedProps as P)} />;
   };
 }
+

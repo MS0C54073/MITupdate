@@ -79,3 +79,4 @@ export const useTranslated = (text: string): string => {
 
   return translatedText;
 };
+

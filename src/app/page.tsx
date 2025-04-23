@@ -1,6 +1,9 @@
 import Image from 'next/image';
 import {Github, Linkedin, Youtube} from 'lucide-react';
 
+// Custom Icons
+import { WhatsappIcon, TelegramIcon } from '@/components/icons';
+
 export default function Home() {
   return (
     <div className="container mx-auto py-12 px-4 md:px-6 lg:px-8">
@@ -49,20 +52,22 @@ export default function Home() {
               >
                 <Youtube className="h-6 w-6"/>
               </a>
-                <a
-                  href="https://whatsapp.com/in/example"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-primary hover:text-highlight transition-colors"
-                >
-                </a>
-                <a
-                  href="https://telegram.com/in/example"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-primary hover:text-highlight transition-colors"
-                >
-                </a>
+              <a
+                href="https://whatsapp.com/in/example"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary hover:text-highlight transition-colors"
+              >
+                <WhatsappIcon className="h-6 w-6"/>
+              </a>
+              <a
+                href="https://telegram.com/in/example"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary hover:text-highlight transition-colors"
+              >
+                <TelegramIcon className="h-6 w-6"/>
+              </a>
             </div>
           </div>
         </div>
@@ -157,7 +162,57 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Contact Me Section */}
+      <section className="mt-12 py-8 border-t border-border">
+        <h2 className="text-2xl font-semibold mb-6 text-primary">Contact Me</h2>
+        <p className="text-foreground mb-4">
+          I'm always open to new opportunities and collaborations. Feel free to reach out through
+          any of the following channels:
+        </p>
+        <div className="flex space-x-4">
+          <a
+            href="https://linkedin.com/in/example"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary hover:text-highlight transition-colors"
+          >
+            <Linkedin className="h-6 w-6"/>
+          </a>
+          <a
+            href="https://github.com/example"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary hover:text-highlight transition-colors"
+          >
+            <Github className="h-6 w-6"/>
+          </a>
+          <a
+            href="https://youtube.com/example"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary hover:text-highlight transition-colors"
+          >
+            <Youtube className="h-6 w-6"/>
+          </a>
+          <a
+            href="https://whatsapp.com/in/example"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary hover:text-highlight transition-colors"
+          >
+            <WhatsappIcon className="h-6 w-6"/>
+          </a>
+          <a
+            href="https://telegram.com/in/example"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary hover:text-highlight transition-colors"
+          >
+            <TelegramIcon className="h-6 w-6"/>
+          </a>
+        </div>
+      </section>
     </div>
   );
 }
-

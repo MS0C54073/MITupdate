@@ -111,7 +111,7 @@ export default function Home() {
               className="rounded-md mb-2"
             />
             <h3 className="text-xl font-semibold text-foreground mb-2">
-              Affiliate Marketing Project Title
+              Affiliate Marketing Manager
             </h3>
             <p className="text-muted-foreground">
               Brief description of the affiliate marketing project. Include strategies and results.
@@ -147,3 +147,4 @@ export default function Home() {
     </div>
   );
 }
+

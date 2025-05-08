@@ -17,27 +17,74 @@ const TranslatedText = ({ text }: { text: string }) => {
 export default function Home() {
   return (
     <div className="container mx-auto py-12 px-4 md:px-6 lg:px-8">
+      {/* AI Background Effect */}
+      <div className="ai-background">
+        <div className="neural-nodes">
+          {[...Array(10)].map((_, i) => (
+            <div
+              key={`node-${i}`}
+              className="node"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 2}s`,
+              }}
+            />
+          ))}
+        </div>
+        <div className="data-stream">
+          {[...Array(30)].map((_, i) => (
+            <div
+              key={`particle-${i}`}
+              className="particle"
+              style={{
+                left: `${Math.random() * 100}%`,
+                animationDuration: `${2 + Math.random() * 3}s`,
+                animationDelay: `${Math.random() * 5}s`,
+              }}
+            />
+          ))}
+        </div>
+        <div className="circuit-traces">
+          {[...Array(5)].map((_, i) => (
+            <div
+              key={`trace-${i}`}
+              className="trace"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                width: `${Math.random() * 200}px`,
+                height: '2px',
+                transform: `rotate(${Math.random() * 360}deg)`,
+                animationDelay: `${Math.random() * 3}s`,
+              }}
+            />
+          ))}
+        </div>
+      </div>
       {/* Profile Section */}
-      <section className="mb-12">
-        <div className="flex flex-col items-center md:flex-row gap-8">
+      <section className="mb-12 relative z-10">
+        <div className="flex flex-col items-center text-center md:flex-row md:text-left gap-8 p-6 bg-card/80 backdrop-blur-sm rounded-xl shadow-xl">
           <Image
-            src="https://images.unsplash.com/photo-1517694712202-14f92dc9f4a5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+            src="https://picsum.photos/200/200"
+            data-ai-hint="profile man"
             alt="Muzo's Profile Picture"
             width={200}
             height={200}
-            className="rounded-full shadow-lg"
+            className="rounded-full shadow-lg border-4 border-primary"
           />
-          <div>
+          <div className="text-center md:text-left">
             <h1 className="text-3xl font-bold mb-2 text-primary"><TranslatedText text="Musonda Salimu (Muzo)"/></h1>
             <p className="text-muted-foreground mb-4">
               <TranslatedText text="Tech Enthusiast, English Teacher, Affiliate Marketer, and Music Lover"/>
             </p>
             <p className="text-foreground">
               <TranslatedText text="Passionate about leveraging technology for education and creating engaging content."/>
+              {' '}
               <TranslatedText text="Exploring the intersections of tech, teaching, marketing, and music."/>
             </p>
             {/* Social Media Links */}
-            <div className="mt-4 flex space-x-4">
+            <div className="mt-4 flex space-x-4 justify-center md:justify-start">
               <a
                 href="https://www.linkedin.com/in/musonda-salimu-a4a0b31b9/"
                 target="_blank"
@@ -84,17 +131,18 @@ export default function Home() {
       </section>
 
       {/* Portfolio Showcase */}
-      <section>
-        <h2 className="text-2xl font-semibold mb-6 text-primary"><TranslatedText text="Portfolio Showcase"/></h2>
+      <section  className="relative z-10">
+        <h2 className="text-2xl font-semibold mb-6 text-primary text-center"><TranslatedText text="Portfolio Showcase"/></h2>
         <div className="portfolio-rotation">
           {/* Software Engineering */}
-          <div className="portfolio-item rounded-lg border shadow-md p-4 hover:shadow-lg hover:animate-shake transition-shadow">
+          <div className="portfolio-item bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300">
             <Image
-              src="https://images.unsplash.com/photo-1517694712202-14f92dc9f4a5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
-              alt="Software Engineering - Teaching Related"
+              src="https://picsum.photos/604/400?random=1"
+              data-ai-hint="software code"
+              alt="Software Engineering"
               width={604}
               height={400}
-              className="rounded-md mb-2"
+              className="rounded-md mb-2 w-full h-auto object-cover"
             />
             <h3 className="text-xl font-semibold text-foreground mb-2"><TranslatedText text="Software Engineering"/></h3>
             <p className="text-muted-foreground">
@@ -109,13 +157,14 @@ export default function Home() {
           </div>
 
           {/* Teaching Experience */}
-          <div className="portfolio-item rounded-lg border shadow-md p-4 hover:shadow-lg hover:animate-shake transition-shadow">
+          <div className="portfolio-item bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300">
             <Image
-              src="https://images.unsplash.com/photo-1517694712202-14f92dc9f4a5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+              src="https://picsum.photos/605/400?random=2"
+              data-ai-hint="classroom teaching"
               alt="Teaching Experience"
               width={605}
               height={400}
-              className="rounded-md mb-2"
+              className="rounded-md mb-2 w-full h-auto object-cover"
             />
             <h3 className="text-xl font-semibold text-foreground mb-2"><TranslatedText text="Teaching Experience"/></h3>
             <p className="text-muted-foreground">
@@ -130,13 +179,14 @@ export default function Home() {
           </div>
 
           {/* Affiliate Marketing Project */}
-          <div className="portfolio-item rounded-lg border shadow-md p-4 hover:shadow-lg hover:animate-shake transition-shadow">
+          <div className="portfolio-item bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300">
             <Image
-              src="https://images.unsplash.com/photo-1517694712202-14f92dc9f4a5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+              src="https://picsum.photos/606/400?random=3"
+              data-ai-hint="marketing analytics"
               alt="Affiliate Marketing Project"
               width={606}
               height={400}
-              className="rounded-md mb-2"
+              className="rounded-md mb-2 w-full h-auto object-cover"
             />
             <h3 className="text-xl font-semibold text-foreground mb-2">
               <TranslatedText text="Affiliate Marketing Manager"/>
@@ -153,13 +203,14 @@ export default function Home() {
           </div>
 
           {/* Hobbies */}
-          <div className="portfolio-item rounded-lg border shadow-md p-4 hover:shadow-lg hover:animate-shake transition-shadow">
+          <div className="portfolio-item bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300">
             <Image
-              src="https://images.unsplash.com/photo-1517694712202-14f92dc9f4a5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+              src="https://picsum.photos/607/400?random=4"
+              data-ai-hint="music studio"
               alt="Hobbies"
               width={607}
               height={400}
-              className="rounded-md mb-2"
+              className="rounded-md mb-2 w-full h-auto object-cover"
             />
             <h3 className="text-xl font-semibold text-foreground mb-2"><TranslatedText text="Hobbies"/></h3>
             <p className="text-muted-foreground"><TranslatedText text="Brief description of the music track or project."/></p>
@@ -173,24 +224,24 @@ export default function Home() {
         </div>
       </section>
        {/* Leave a comment section */}
-       <section className="mt-12 py-8 border-t border-border">
-        <h2 className="text-2xl font-semibold mb-6 text-primary"><TranslatedText text="Leave a comment"/></h2>
-         <div>
+       <section className="mt-12 py-8 border-t border-border relative z-10">
+        <h2 className="text-2xl font-semibold mb-6 text-primary text-center"><TranslatedText text="Leave a comment"/></h2>
+         <div className="max-w-xl mx-auto p-6 bg-card/80 backdrop-blur-sm rounded-xl shadow-xl">
          <form>
             <div className="mb-4">
-              <label htmlFor="name" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Name:"/></label>
-              <input type="text" id="name" className="shadow appearance-none border rounded w-full py-2 px-3 text-foreground leading-tight focus:outline-none focus:shadow-outline"/>
+              <label htmlFor="comment-name" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Name:"/></label>
+              <input type="text" id="comment-name" className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary" />
             </div>
               <div className="mb-4">
-                <label htmlFor="email" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Email:"/></label>
-                <input type="email" id="email" className="shadow appearance-none border rounded w-full py-2 px-3 text-foreground leading-tight focus:outline-none focus:shadow-outline"/>
+                <label htmlFor="comment-email" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Email:"/></label>
+                <input type="email" id="comment-email" className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary"/>
               </div>
                 <div className="mb-6">
-                  <label htmlFor="comment" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Comment:"/></label>
-                  <textarea id="comment" className="shadow appearance-none border rounded w-full py-2 px-3 text-foreground leading-tight focus:outline-none focus:shadow-outline"></textarea>
+                  <label htmlFor="comment-text" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Comment:"/></label>
+                  <textarea id="comment-text" rows={4} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary"></textarea>
                 </div>
-                <div className="flex items-center justify-between">
-                  <button className="bg-accent hover:bg-red-600 text-primary-foreground font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                <div className="flex items-center justify-end">
+                  <button className="bg-accent hover:bg-red-600 text-primary-foreground font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors" type="button">
                   <TranslatedText text="Post Comment"/>
                   </button>
                 </div>
@@ -199,32 +250,32 @@ export default function Home() {
       </section>
 
        {/* Leave an order section */}
-       <section className="mt-12 py-8 border-t border-border">
-        <h2 className="text-2xl font-semibold mb-6 text-primary"><TranslatedText text="Leave an order"/></h2>
-         <div>
+       <section className="mt-12 py-8 border-t border-border relative z-10">
+        <h2 className="text-2xl font-semibold mb-6 text-primary text-center"><TranslatedText text="Leave an order"/></h2>
+         <div className="max-w-xl mx-auto p-6 bg-card/80 backdrop-blur-sm rounded-xl shadow-xl">
          <form>
             <div className="mb-4">
-              <label htmlFor="name" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Name:"/></label>
-              <input type="text" id="name" className="shadow appearance-none border rounded w-full py-2 px-3 text-foreground leading-tight focus:outline-none focus:shadow-outline"/>
+              <label htmlFor="order-name" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Name:"/></label>
+              <input type="text" id="order-name" className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary"/>
             </div>
               <div className="mb-4">
-                <label htmlFor="email" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Email:"/></label>
-                <input type="email" id="email" className="shadow appearance-none border rounded w-full py-2 px-3 text-foreground leading-tight focus:outline-none focus:shadow-outline"/>
+                <label htmlFor="order-email" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Email:"/></label>
+                <input type="email" id="order-email" className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary"/>
               </div>
                <div className="mb-4">
-                <label htmlFor="phone" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Phone:"/></label>
-                <input type="phone" id="phone" className="shadow appearance-none border rounded w-full py-2 px-3 text-foreground leading-tight focus:outline-none focus:shadow-outline"/>
+                <label htmlFor="order-phone" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Phone:"/></label>
+                <input type="tel" id="order-phone" className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary"/>
               </div>
                <div className="mb-4">
-                <label htmlFor="attachment" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Attach File:"/></label>
-                <input type="file" id="attachment" className="shadow appearance-none border rounded w-full py-2 px-3 text-foreground leading-tight focus:outline-none focus:shadow-outline"/>
+                <label htmlFor="order-attachment" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Attach File:"/></label>
+                <input type="file" id="order-attachment" className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90 focus:ring-2 focus:ring-primary"/>
               </div>
                 <div className="mb-6">
-                  <label htmlFor="comment" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Order Details:"/></label>
-                  <textarea id="comment" className="shadow appearance-none border rounded w-full py-2 px-3 text-foreground leading-tight focus:outline-none focus:shadow-outline"></textarea>
+                  <label htmlFor="order-details" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Order Details:"/></label>
+                  <textarea id="order-details" rows={4} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary"></textarea>
                 </div>
-                <div className="flex items-center justify-between">
-                  <button className="bg-accent hover:bg-red-600 text-primary-foreground font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+                <div className="flex items-center justify-end">
+                  <button className="bg-accent hover:bg-red-600 text-primary-foreground font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors" type="button">
                   <TranslatedText text="Place Order"/>
                   </button>
                 </div>
@@ -233,54 +284,62 @@ export default function Home() {
       </section>
 
       {/* Contact Me Section */}
-      <section className="mt-12 py-8 border-t border-border">
-        <h2 className="text-2xl font-semibold mb-6 text-primary"><TranslatedText text="Contact Me"/></h2>
+      <section className="mt-12 py-8 border-t border-border relative z-10">
+        <h2 className="text-2xl font-semibold mb-6 text-primary text-center"><TranslatedText text="Contact Me"/></h2>
+        <div className="max-w-xl mx-auto text-center p-6 bg-card/80 backdrop-blur-sm rounded-xl shadow-xl">
         <p className="text-foreground mb-4">
           <TranslatedText text="I'm always open to new opportunities and collaborations. Feel free to reach out through any of the following channels:"/>
         </p>
-        <div className="flex space-x-4">
+        <div className="flex space-x-6 justify-center">
           <a
             href="https://www.linkedin.com/in/musonda-salimu-a4a0b31b9/"
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary hover:text-highlight transition-colors"
+            aria-label="LinkedIn Profile"
           >
-            <Linkedin className="h-6 w-6"/>
+            <Linkedin className="h-8 w-8"/>
           </a>
           <a
             href="https://github.com/MS0C54073"
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary hover:text-highlight transition-colors"
+            aria-label="GitHub Profile"
           >
-            <Github className="h-6 w-6"/>
+            <Github className="h-8 w-8"/>
           </a>
           <a
             href="https://www.youtube.com/@musondasalimu2986"
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary hover:text-highlight transition-colors"
+            aria-label="YouTube Channel"
           >
-            <Youtube className="h-6 w-6"/>
+            <Youtube className="h-8 w-8"/>
           </a>
           <a
             href="https://wa.me/79014213578"
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary hover:text-highlight transition-colors"
+            aria-label="WhatsApp"
           >
-            <WhatsappIcon className="h-6 w-6"/>
+            <WhatsappIcon className="h-8 w-8"/>
           </a>
           <a
             href="https://t.me/MuzoSalim"
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary hover:text-highlight transition-colors"
+            aria-label="Telegram"
           >
-            <TelegramIcon className="h-6 w-6"/>
+            <TelegramIcon className="h-8 w-8"/>
           </a>
+        </div>
         </div>
       </section>
     </div>
   );
 }
+

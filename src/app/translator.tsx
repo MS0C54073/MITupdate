@@ -27,16 +27,34 @@ export const TranslationProvider: React.FC<TranslationProviderProps> = ({childre
   const [language, setLanguage] = useState<'en' | 'ru'>('en');
   const [translations, setTranslations] = useState<{[key: string]: string}>({});
 
+  useEffect(() => {
+    // Clear translations cache when language changes
+    setTranslations({});
+  }, [language]);
+
   const memoizedTranslate = useCallback(
     async (text: string) => {
-      if (!text) {
+      if (!text.trim()) { // Do not translate empty or whitespace-only strings
         return '';
       }
+      // If the text is already translated to the current language, return it from cache
+      // This assumes cache keys are unique enough or we rely on the language change to clear the cache.
+      // For a more robust cache, keys could be `text-${language}`.
+      // However, with the useEffect clearing cache on language change, this simple keying is okay.
       if (translations[text]) {
         return translations[text];
       }
 
       try {
+        // If current language is English, no need to translate
+        if (language === 'en') {
+          setTranslations(prevTranslations => ({
+            ...prevTranslations,
+            [text]: text,
+          }));
+          return text;
+        }
+
         const result = await translate({
           text: text,
           targetLanguage: language,
@@ -49,10 +67,11 @@ export const TranslationProvider: React.FC<TranslationProviderProps> = ({childre
         return result.translatedText;
       } catch (error) {
         console.error('Translation error:', error);
+        // Fallback to original text in case of error
         return text;
       }
     },
-    [language, translations]
+    [language, translations] // translations dependency is important for the caching logic
   );
 
   const value = {
@@ -66,16 +85,25 @@ export const TranslationProvider: React.FC<TranslationProviderProps> = ({childre
 
 // Usage hook for components that need translation
 export const useTranslated = (text: string): string => {
-  const {translate} = useTranslation();
+  const {translate, language} = useTranslation();
   const [translatedText, setTranslatedText] = useState(text);
 
   useEffect(() => {
     async function updateTranslation() {
+      if (!text.trim()) {
+        setTranslatedText('');
+        return;
+      }
+      // When language is English, use original text immediately
+      if (language === 'en') {
+        setTranslatedText(text);
+        return;
+      }
       const result = await translate(text);
       setTranslatedText(result);
     }
     updateTranslation();
-  }, [text, translate]);
+  }, [text, translate, language]); // Ensure language is a dependency
 
   return translatedText;
 };

@@ -1,73 +1,86 @@
+
 'use client';
 
 import Image from 'next/image';
-import {Github, Linkedin, Youtube} from 'lucide-react';
+import { Github, Linkedin, Youtube } from 'lucide-react';
 
 // Custom Icons
 import { WhatsappIcon, TelegramIcon } from '@/components/icons';
 import './ai.css';
-import { useTranslated } from './translator';
+import { useTranslated } from './translator'; // Corrected import path
 import { useState, useEffect } from 'react';
 
+
+// This component ensures that useTranslated is only called on the client-side.
 const TranslatedText = ({ text }: { text: string }) => {
   const translatedText = useTranslated(text);
   return <>{translatedText}</>;
 };
 
 export default function Home() {
+  // State to manage client-side rendering for AI background
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+
   return (
     <div className="container mx-auto py-12 px-4 md:px-6 lg:px-8">
-      {/* AI Background Effect */}
-      <div className="ai-background">
-        <div className="neural-nodes">
-          {[...Array(10)].map((_, i) => (
-            <div
-              key={`node-${i}`}
-              className="node"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 2}s`,
-              }}
-            />
-          ))}
+      {/* AI Background Effect - Render only on client */}
+      {isClient && (
+        <div className="ai-background">
+          <div className="neural-nodes">
+            {[...Array(10)].map((_, i) => (
+              <div
+                key={`node-${i}`}
+                className="node"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                  animationDelay: `${Math.random() * 2}s`,
+                }}
+              />
+            ))}
+          </div>
+          <div className="data-stream">
+            {[...Array(30)].map((_, i) => (
+              <div
+                key={`particle-${i}`}
+                className="particle"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  animationDuration: `${2 + Math.random() * 3}s`,
+                  animationDelay: `${Math.random() * 5}s`,
+                }}
+              />
+            ))}
+          </div>
+          <div className="circuit-traces">
+            {[...Array(5)].map((_, i) => (
+              <div
+                key={`trace-${i}`}
+                className="trace"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                  width: `${Math.random() * 200}px`,
+                  height: '2px',
+                  transform: `rotate(${Math.random() * 360}deg)`,
+                  animationDelay: `${Math.random() * 3}s`,
+                }}
+              />
+            ))}
+          </div>
         </div>
-        <div className="data-stream">
-          {[...Array(30)].map((_, i) => (
-            <div
-              key={`particle-${i}`}
-              className="particle"
-              style={{
-                left: `${Math.random() * 100}%`,
-                animationDuration: `${2 + Math.random() * 3}s`,
-                animationDelay: `${Math.random() * 5}s`,
-              }}
-            />
-          ))}
-        </div>
-        <div className="circuit-traces">
-          {[...Array(5)].map((_, i) => (
-            <div
-              key={`trace-${i}`}
-              className="trace"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                width: `${Math.random() * 200}px`,
-                height: '2px',
-                transform: `rotate(${Math.random() * 360}deg)`,
-                animationDelay: `${Math.random() * 3}s`,
-              }}
-            />
-          ))}
-        </div>
-      </div>
+      )}
       {/* Profile Section */}
       <section className="mb-12 relative z-10">
         <div className="flex flex-col items-center text-center md:flex-row md:text-left gap-8 p-6 bg-card/80 backdrop-blur-sm rounded-xl shadow-xl">
           <Image
-            src="https://picsum.photos/200/200"
-            data-ai-hint="profile man"
+            src="https://picsum.photos/200"
+            data-ai-hint="profile portrait"
             alt="Muzo's Profile Picture"
             width={200}
             height={200}
@@ -90,6 +103,7 @@ export default function Home() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-primary hover:text-highlight transition-colors"
+                aria-label="LinkedIn"
               >
                 <Linkedin className="h-6 w-6"/>
               </a>
@@ -98,6 +112,7 @@ export default function Home() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-primary hover:text-highlight transition-colors"
+                aria-label="GitHub"
               >
                 <Github className="h-6 w-6"/>
               </a>
@@ -106,6 +121,7 @@ export default function Home() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-primary hover:text-highlight transition-colors"
+                aria-label="YouTube"
               >
                 <Youtube className="h-6 w-6"/>
               </a>
@@ -114,6 +130,7 @@ export default function Home() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-primary hover:text-highlight transition-colors"
+                aria-label="Whatsapp"
               >
                 <WhatsappIcon className="h-6 w-6"/>
               </a>
@@ -122,6 +139,7 @@ export default function Home() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-primary hover:text-highlight transition-colors"
+                aria-label="Telegram"
               >
                 <TelegramIcon className="h-6 w-6"/>
               </a>
@@ -137,10 +155,10 @@ export default function Home() {
           {/* Software Engineering */}
           <div className="portfolio-item bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300">
             <Image
-              src="https://picsum.photos/604/400?random=1"
-              data-ai-hint="software code"
+              src="https://picsum.photos/600/400?random=1"
+              data-ai-hint="abstract code"
               alt="Software Engineering"
-              width={604}
+              width={600}
               height={400}
               className="rounded-md mb-2 w-full h-auto object-cover"
             />
@@ -159,10 +177,10 @@ export default function Home() {
           {/* Teaching Experience */}
           <div className="portfolio-item bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300">
             <Image
-              src="https://picsum.photos/605/400?random=2"
-              data-ai-hint="classroom teaching"
+              src="https://picsum.photos/600/400?random=2"
+              data-ai-hint="modern classroom"
               alt="Teaching Experience"
-              width={605}
+              width={600}
               height={400}
               className="rounded-md mb-2 w-full h-auto object-cover"
             />
@@ -181,10 +199,10 @@ export default function Home() {
           {/* Affiliate Marketing Project */}
           <div className="portfolio-item bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300">
             <Image
-              src="https://picsum.photos/606/400?random=3"
-              data-ai-hint="marketing analytics"
+              src="https://picsum.photos/600/400?random=3"
+              data-ai-hint="digital marketing"
               alt="Affiliate Marketing Project"
-              width={606}
+              width={600}
               height={400}
               className="rounded-md mb-2 w-full h-auto object-cover"
             />
@@ -205,10 +223,10 @@ export default function Home() {
           {/* Hobbies */}
           <div className="portfolio-item bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300">
             <Image
-              src="https://picsum.photos/607/400?random=4"
-              data-ai-hint="music studio"
+              src="https://picsum.photos/600/400?random=4"
+              data-ai-hint="music production"
               alt="Hobbies"
-              width={607}
+              width={600}
               height={400}
               className="rounded-md mb-2 w-full h-auto object-cover"
             />
@@ -342,4 +360,3 @@ export default function Home() {
     </div>
   );
 }
-

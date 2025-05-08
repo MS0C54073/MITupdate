@@ -4,7 +4,7 @@
 import React, { useState, createContext, useContext, ReactNode, useEffect, useCallback } from 'react';
 import { translate as genkitTranslate } from '@/ai/flows/translate-flow';
 import { db } from '@/lib/firebase'; // Import Firestore instance
-import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, getDoc, setDoc, serverTimestamp, Timestamp } from 'firebase/firestore';
 
 // Helper function to generate SHA-256 hash for document IDs
 async function sha256(message: string): Promise<string> {
@@ -16,8 +16,6 @@ async function sha256(message: string): Promise<string> {
     return hashHex;
   } catch (error) {
     console.error('SHA-256 hashing failed, falling back to plain text (not recommended for all inputs):', error);
-    // Fallback for environments where crypto.subtle might not be available or working as expected (e.g. non-secure contexts for some browsers)
-    // This is a simple fallback and might not be suitable for all text inputs as Firestore document IDs have restrictions.
     return message.replace(/[^a-zA-Z0-9]/g, '_'); // Basic sanitization
   }
 }
@@ -45,11 +43,9 @@ interface TranslationProviderProps {
 
 export const TranslationProvider: React.FC<TranslationProviderProps> = ({ children }) => {
   const [language, setLanguage] = useState<'en' | 'ru'>('ru'); // Default language set to Russian
-  // Session cache: stores translations for the current session and language
   const [sessionTranslationsCache, setSessionTranslationsCache] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
-    // Clear session cache when language changes
     setSessionTranslationsCache({});
   }, [language]);
 
@@ -59,31 +55,19 @@ export const TranslationProvider: React.FC<TranslationProviderProps> = ({ childr
         return '';
       }
 
-      // If the target language is English, and the original text is already English, return it.
-      // This also handles the case where the original text might be Russian and we want to translate it to English.
+      // If the target language is English, no translation is needed.
+      // `englishText` is assumed to be the canonical English version.
       if (language === 'en') {
-        // Potentially, if we expect non-English source text to be translated to English,
-        // we might need to check if `englishText` is actually English.
-        // For now, assuming `englishText` is the key and if target is 'en', it's the desired output.
-        // This needs to be robust if original texts can be in Russian.
-        // For this iteration, if the target is 'en', we assume the input `englishText` is the desired output
-        // or it needs to be translated TO English if it's not already.
-        // The current Genkit flow assumes input `text` is to be translated.
-        // If `englishText` is actually Russian and `language` is 'en', we need to translate.
-      }
-
-
-      // 1. Check session cache
-      // The cache key should be consistent, e.g., always the English version of the text.
-      // For simplicity, using `englishText` as key. If `englishText` can be Russian, this needs refinement.
-      const cacheKey = englishText; // Assuming `englishText` is the canonical English version.
-      if (sessionTranslationsCache[cacheKey] && language !== 'en') { // Only use cache if not translating to English (as English is source)
-         return sessionTranslationsCache[cacheKey];
-      }
-       if (language === 'en') { // If target is English, just return the input (assuming it's English)
         return englishText;
       }
 
+      // For non-English target languages (e.g., 'ru'):
+      const cacheKey = englishText; // Keyed by the English text
+
+      // 1. Check session cache for the translation to the current `language`
+      if (sessionTranslationsCache[cacheKey]) {
+         return sessionTranslationsCache[cacheKey];
+      }
 
       const docId = await sha256(englishText); // Firestore doc ID based on English text
       const docRef = doc(db, "translations", docId);
@@ -93,36 +77,48 @@ export const TranslationProvider: React.FC<TranslationProviderProps> = ({ childr
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           const data = docSnap.data();
-          if (data && data[language]) { // Check if translation for the current target language exists
+          // Check if translation for the current target language exists in Firestore
+          if (data && data[language]) {
             const cachedTranslatedText = data[language];
+            // Update session cache
             setSessionTranslationsCache(prev => ({ ...prev, [cacheKey]: cachedTranslatedText }));
             return cachedTranslatedText;
           }
         }
 
-        // 3. Fetch from Genkit API if not in caches
+        // 3. Fetch from Genkit API if not in caches or Firestore for the target language
+        console.log(`TRANSLATOR_DEBUG: Attempting to translate "${englishText}" to "${language}" via API.`);
         const apiResult = await genkitTranslate({
-          text: englishText, // Source text to translate
-          targetLanguage: language, // Target language
+          text: englishText,       // Source text to translate (always English)
+          targetLanguage: language, // Target language (e.g., 'ru')
         });
+        
+        if (!apiResult || !apiResult.translatedText) {
+          console.error(`TRANSLATOR_DEBUG: API call for "${englishText}" to "${language}" returned no translated text. Fallback to English.`);
+          return englishText;
+        }
         const apiTranslatedText = apiResult.translatedText;
+        console.log(`TRANSLATOR_DEBUG: API translation for "${englishText}" to "${language}" SUCCESS: "${apiTranslatedText}"`);
 
         // Store successful translation in Firestore
-        const firestoreData: { [key: string]: any } = {
-          en: englishText, // Store the original English text
-          lastTranslated: serverTimestamp()
+        // Ensure Firestore data includes the English text and the new translation
+        const firestoreDataToSet: { [key: string]: any } = {
+          en: englishText, // Store/update the original English text
+          lastTranslated: serverTimestamp() // Firestore server timestamp
         };
-        firestoreData[language] = apiTranslatedText; // Store the translation for the target language
+        firestoreDataToSet[language] = apiTranslatedText; // Store the translation for the target language
         
-        await setDoc(docRef, firestoreData, { merge: true });
+        await setDoc(docRef, firestoreDataToSet, { merge: true });
+        console.log(`TRANSLATOR_DEBUG: Stored translation for "${englishText}" to "${language}" in Firestore.`);
 
         // Update session cache
         setSessionTranslationsCache(prev => ({ ...prev, [cacheKey]: apiTranslatedText }));
         return apiTranslatedText;
 
       } catch (error) {
-        console.error(`Translation error for "${englishText}" to "${language}":`, error);
-        return englishText; // Fallback to original English text
+        console.error(`TRANSLATOR_DEBUG: Translation error for "${englishText}" to "${language}":`, error);
+        // Fallback to original English text if API call or Firestore operation fails
+        return englishText; 
       }
     },
     [language, sessionTranslationsCache]
@@ -138,26 +134,29 @@ export const TranslationProvider: React.FC<TranslationProviderProps> = ({ childr
 };
 
 export const useTranslated = (englishText: string): string => {
-  const { translate, language: currentLanguage } = useTranslation(); // Renamed to currentLanguage to avoid conflict
-  const [translatedText, setTranslatedText] = useState(englishText);
+  const { translate, language: currentLanguage } = useTranslation();
+  const [translatedText, setTranslatedText] = useState(englishText); 
 
   useEffect(() => {
+    let isMounted = true;
     async function updateTranslation() {
       if (!englishText.trim()) {
-        setTranslatedText('');
+        if (isMounted) setTranslatedText('');
         return;
       }
-      // If the current language is English, set the translated text to the original English text.
+      
       if (currentLanguage === 'en') {
-        setTranslatedText(englishText);
-        return;
+        if (isMounted) setTranslatedText(englishText);
+      } else {
+        const result = await translate(englishText);
+        if (isMounted) setTranslatedText(result);
       }
-      // For other languages (e.g., Russian), call the translate function.
-      const result = await translate(englishText);
-      setTranslatedText(result);
     }
     updateTranslation();
-  }, [englishText, translate, currentLanguage]); // Added currentLanguage to dependencies
+    return () => {
+      isMounted = false;
+    };
+  }, [englishText, translate, currentLanguage]);
 
   return translatedText;
 };

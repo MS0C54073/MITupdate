@@ -1,4 +1,3 @@
-
 'use client';
 
 import type { FC } from 'react';
@@ -61,7 +60,7 @@ const AuthModal: FC<AuthModalProps> = ({ isOpen, onClose, onLoginSuccess }) => {
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="password" tipo="password" className="text-right">
+            <Label htmlFor="password" className="text-right">
               <TranslatedText text="Password" />
             </Label>
             <Input

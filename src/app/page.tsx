@@ -4,7 +4,13 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Github, Linkedin, Youtube } from 'lucide-react';
-import { useRouter } from 'next/navigation'; // Added import
+import { useRouter } from 'next/navigation';
+import { useForm, type SubmitHandler } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { db } from '@/lib/firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { useToast } from '@/hooks/use-toast';
 
 // Custom Icons
 import { WhatsappIcon, TelegramIcon } from '@/components/icons';
@@ -13,28 +19,96 @@ import TranslatedText from '@/app/components/translated-text';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import AuthModal from '@/app/components/auth-modal';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import type { Comment, Order } from '@/lib/types';
+
+
+const commentSchema = z.object({
+  name: z.string().min(1, { message: 'Name is required' }),
+  email: z.string().email({ message: 'Invalid email address' }).optional().or(z.literal('')),
+  comment: z.string().optional(),
+});
+type CommentFormData = z.infer<typeof commentSchema>;
+
+const orderSchema = z.object({
+  name: z.string().min(1, { message: 'Name is required' }),
+  email: z.string().email({ message: 'Invalid email address' }).optional().or(z.literal('')),
+  phone: z.string().optional(),
+  details: z.string().optional(),
+  attachment: z.any().optional(), // Changed from z.instanceof(FileList)
+});
+type OrderFormData = z.infer<typeof orderSchema>;
 
 
 export default function Home() {
-  const router = useRouter(); // Initialize useRouter
-  // State to manage client-side rendering for AI background
+  const router = useRouter();
   const [isClient, setIsClient] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const { toast } = useToast();
+
+  const { register: registerComment, handleSubmit: handleSubmitComment, reset: resetCommentForm, formState: { errors: commentErrors } } = useForm<CommentFormData>({
+    resolver: zodResolver(commentSchema),
+  });
+
+  const { register: registerOrder, handleSubmit: handleSubmitOrder, reset: resetOrderForm, formState: { errors: orderErrors } } = useForm<OrderFormData>({
+    resolver: zodResolver(orderSchema),
+  });
+
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
   const handleAdminLoginSuccess = () => {
-    console.log("Admin login successful");
     setIsAuthModalOpen(false);
-    router.push('/admin/dashboard'); // Navigate to admin dashboard
+    router.push('/admin/dashboard');
+  };
+
+  const onCommentSubmit: SubmitHandler<CommentFormData> = async (data) => {
+    try {
+      const commentData: Omit<Comment, 'id'> = {
+        ...data,
+        timestamp: serverTimestamp(),
+      };
+      await addDoc(collection(db, 'comments'), commentData);
+      toast({ title: 'Success', description: 'Comment submitted successfully!' });
+      resetCommentForm();
+    } catch (error) {
+      console.error("Error submitting comment: ", error);
+      toast({ title: 'Error', description: 'Failed to submit comment.', variant: 'destructive' });
+    }
+  };
+
+  const onOrderSubmit: SubmitHandler<OrderFormData> = async (data) => {
+    try {
+      // The 'data.attachment' will be a FileList on the client-side if a file was selected.
+      const file = data.attachment && data.attachment.length > 0 ? data.attachment[0] : null;
+      const attachmentName = file ? (file as File).name : null;
+      // In a real app, you'd upload the file to Firebase Storage here and get a URL.
+      // For now, we're just storing the name.
+
+      const orderData: Omit<Order, 'id'> = {
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        details: data.details,
+        attachmentName: attachmentName,
+        timestamp: serverTimestamp(),
+      };
+      await addDoc(collection(db, 'orders'), orderData);
+      toast({ title: 'Success', description: 'Order submitted successfully!' });
+      resetOrderForm();
+    } catch (error) {
+      console.error("Error submitting order: ", error);
+      toast({ title: 'Error', description: 'Failed to submit order.', variant: 'destructive' });
+    }
   };
 
 
   return (
     <div className="container mx-auto py-12 px-4 md:px-6 lg:px-8">
-      {/* AI Background Effect - Render only on client */}
       {isClient && (
         <div className="ai-background">
           <div className="neural-nodes">
@@ -81,7 +155,6 @@ export default function Home() {
           </div>
         </div>
       )}
-      {/* Profile Section */}
       <section className="mb-12 relative z-10">
         <div className="flex flex-col items-center text-center md:flex-row md:text-left gap-8 p-6 bg-card/80 backdrop-blur-sm rounded-xl shadow-xl">
           <Image
@@ -102,7 +175,6 @@ export default function Home() {
               {' '}
               <TranslatedText text="Exploring the intersections of tech, teaching, marketing, and music."/>
             </p>
-            {/* Social Media Links */}
             <div className="mt-4 flex space-x-4 justify-center md:justify-start">
               <a
                 href="https://www.linkedin.com/in/musonda-salimu-a4a0b31b9/"
@@ -163,11 +235,9 @@ export default function Home() {
         onLoginSuccess={handleAdminLoginSuccess}
       />
 
-      {/* Portfolio Showcase */}
       <section  className="relative z-10">
         <h2 className="text-2xl font-semibold mb-6 text-primary text-center"><TranslatedText text="Portfolio Showcase"/></h2>
         <div className="portfolio-rotation">
-          {/* Software Engineering */}
           <Link href="/software-engineering" passHref legacyBehavior>
             <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
               <Image
@@ -190,11 +260,10 @@ export default function Home() {
             </a>
           </Link>
 
-          {/* Teaching Experience */}
           <Link href="/teaching-experience" passHref legacyBehavior>
             <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
               <Image
-                src="https://picsum.photos/600/400?random=classroom"
+                src="https://picsum.photos/600/400?random=education"
                 data-ai-hint="education classroom"
                 alt="Teaching Experience"
                 width={600}
@@ -213,11 +282,10 @@ export default function Home() {
             </a>
           </Link>
 
-          {/* Affiliate Marketing Project */}
           <Link href="/affiliate-marketing-manager" passHref legacyBehavior>
             <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
               <Image
-                src="https://picsum.photos/600/400?random=marketing"
+                src="https://picsum.photos/600/400?random=analytics"
                 data-ai-hint="marketing analytics"
                 alt="Affiliate Marketing Project"
                 width={600}
@@ -238,11 +306,10 @@ export default function Home() {
             </a>
           </Link>
 
-          {/* Hobbies */}
           <Link href="/hobbies" passHref legacyBehavior>
             <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
               <Image
-                src="https://picsum.photos/600/400?random=hobbies"
+                src="https://picsum.photos/600/400?random=creative"
                 data-ai-hint="creative hobbies"
                 alt="Hobbies"
                 width={600}
@@ -260,7 +327,7 @@ export default function Home() {
           </Link>
         </div>
       </section>
-       {/* Leave a comment section */}
+
        <section className="mt-12 py-8 border-t border-border relative z-10">
         <h2 className="text-2xl font-semibold mb-6 text-primary text-center"><TranslatedText text="Leave a comment"/></h2>
        <Button variant="link" asChild>
@@ -269,29 +336,30 @@ export default function Home() {
           </Link>
         </Button>
          <div className="max-w-xl mx-auto p-6 bg-card/80 backdrop-blur-sm rounded-xl shadow-xl">
-         <form>
+         <form onSubmit={handleSubmitComment(onCommentSubmit)}>
             <div className="mb-4">
-              <label htmlFor="comment-name" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Name:"/></label>
-              <input type="text" id="comment-name" className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary" />
+              <Label htmlFor="comment-name" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Name:"/></Label>
+              <Input type="text" id="comment-name" {...registerComment("name")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary" />
+              {commentErrors.name && <p className="text-destructive text-xs italic mt-1"><TranslatedText text={commentErrors.name.message || ""} /></p>}
             </div>
               <div className="mb-4">
-                <label htmlFor="comment-email" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Email:"/></label>
-                <input type="email" id="comment-email" className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary"/>
+                <Label htmlFor="comment-email" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Email (Optional):"/></Label>
+                <Input type="email" id="comment-email" {...registerComment("email")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary"/>
+                {commentErrors.email && <p className="text-destructive text-xs italic mt-1"><TranslatedText text={commentErrors.email.message || ""} /></p>}
               </div>
                 <div className="mb-6">
-                  <label htmlFor="comment-text" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Comment:"/></label>
-                  <textarea id="comment-text" rows={4} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary"></textarea>
+                  <Label htmlFor="comment-text" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Comment (Optional):"/></Label>
+                  <Textarea id="comment-text" rows={4} {...registerComment("comment")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary"></Textarea>
                 </div>
                 <div className="flex items-center justify-end">
-                  <button className="bg-accent hover:bg-accent/90 text-primary-foreground font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors" type="button">
-                  <TranslatedText text="Post Comment"/>
-                  </button>
+                  <Button type="submit" className="bg-accent hover:bg-accent/90 text-primary-foreground font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors">
+                    <TranslatedText text="Post Comment"/>
+                  </Button>
                 </div>
               </form>
           </div>
       </section>
 
-       {/* Leave an order section */}
        <section className="mt-12 py-8 border-t border-border relative z-10">
         <h2 className="text-2xl font-semibold mb-6 text-primary text-center"><TranslatedText text="Leave an order"/></h2>
        <Button variant="link" asChild>
@@ -300,37 +368,38 @@ export default function Home() {
           </Link>
         </Button>
          <div className="max-w-xl mx-auto p-6 bg-card/80 backdrop-blur-sm rounded-xl shadow-xl">
-         <form>
+         <form onSubmit={handleSubmitOrder(onOrderSubmit)}>
             <div className="mb-4">
-              <label htmlFor="order-name" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Name:"/></label>
-              <input type="text" id="order-name" className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary"/>
+              <Label htmlFor="order-name" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Name:"/></Label>
+              <Input type="text" id="order-name" {...registerOrder("name")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary"/>
+              {orderErrors.name && <p className="text-destructive text-xs italic mt-1"><TranslatedText text={orderErrors.name.message || ""} /></p>}
             </div>
               <div className="mb-4">
-                <label htmlFor="order-email" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Email:"/></label>
-                <input type="email" id="order-email" className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary"/>
+                <Label htmlFor="order-email" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Email (Optional):"/></Label>
+                <Input type="email" id="order-email" {...registerOrder("email")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary"/>
+                {orderErrors.email && <p className="text-destructive text-xs italic mt-1"><TranslatedText text={orderErrors.email.message || ""} /></p>}
               </div>
                <div className="mb-4">
-                <label htmlFor="order-phone" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Phone:"/></label>
-                <input type="tel" id="order-phone" className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary"/>
+                <Label htmlFor="order-phone" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Phone (Optional):"/></Label>
+                <Input type="tel" id="order-phone" {...registerOrder("phone")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary"/>
               </div>
                <div className="mb-4">
-                <label htmlFor="order-attachment" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Attach File:"/></label>
-                <input type="file" id="order-attachment" className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90 focus:ring-2 focus:ring-primary"/>
+                <Label htmlFor="order-attachment" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Attach File (Optional):"/></Label>
+                <Input type="file" id="order-attachment" {...registerOrder("attachment")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90 focus:ring-2 focus:ring-primary"/>
               </div>
                 <div className="mb-6">
-                  <label htmlFor="order-details" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Order Details:"/></label>
-                  <textarea id="order-details" rows={4} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary"></textarea>
+                  <Label htmlFor="order-details" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Order Details (Optional):"/></Label>
+                  <Textarea id="order-details" rows={4} {...registerOrder("details")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary"></Textarea>
                 </div>
                 <div className="flex items-center justify-end">
-                  <button className="bg-accent hover:bg-accent/90 text-primary-foreground font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors" type="button">
-                  <TranslatedText text="Place Order"/>
-                  </button>
+                  <Button type="submit" className="bg-accent hover:bg-accent/90 text-primary-foreground font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors">
+                    <TranslatedText text="Place Order"/>
+                  </Button>
                 </div>
               </form>
           </div>
       </section>
 
-      {/* Contact Me Section */}
       <section className="mt-12 py-8 border-t border-border relative z-10">
         <h2 className="text-2xl font-semibold mb-6 text-primary text-center"><TranslatedText text="Contact Me"/></h2>
         <div className="max-w-xl mx-auto text-center p-6 bg-card/80 backdrop-blur-sm rounded-xl shadow-xl">

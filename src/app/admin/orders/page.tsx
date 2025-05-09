@@ -1,18 +1,58 @@
-
 'use client';
 
 import Link from 'next/link';
 import TranslatedText from '@/app/components/translated-text';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, ShoppingCart, Download } from 'lucide-react';
+import { ArrowLeft, ShoppingCart, Download, Loader2 } from 'lucide-react';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import { db } from '@/lib/firebase';
+import { collection, getDocs, orderBy, query, Timestamp } from 'firebase/firestore';
+import type { Order } from '@/lib/types';
 
 export default function AdminOrdersPage() {
-  // Placeholder data - replace with actual data fetching
-  const orders = [
-    { id: 'order123', name: 'Alice Wonderland', email: 'alice@example.com', phone: '555-1234', details: 'Request for web development services.', attachmentName: 'project_brief.pdf', timestamp: new Date().toLocaleString() },
-    { id: 'order456', name: 'Bob The Builder', email: 'bob@example.com', phone: '555-5678', details: 'Inquiry about affiliate marketing consultation.', attachmentName: null, timestamp: new Date(Date.now() - 7200000).toLocaleString() },
-  ];
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const ordersCollection = collection(db, 'orders');
+        const q = query(ordersCollection, orderBy('timestamp', 'desc'));
+        const querySnapshot = await getDocs(q);
+        const fetchedOrders = querySnapshot.docs.map((doc) => {
+          const data = doc.data();
+          let formattedTimestamp = 'N/A';
+          if (data.timestamp && typeof (data.timestamp as Timestamp).toDate === 'function') {
+            formattedTimestamp = (data.timestamp as Timestamp).toDate().toLocaleString();
+          } else if (data.timestamp && data.timestamp.seconds) {
+             formattedTimestamp = new Date(data.timestamp.seconds * 1000).toLocaleString();
+          }
+
+          return {
+            id: doc.id,
+            name: data.name || 'N/A',
+            email: data.email || 'N/A',
+            phone: data.phone || 'N/A',
+            details: data.details || 'No details provided.',
+            attachmentName: data.attachmentName || null,
+            timestamp: formattedTimestamp, // Store as string after formatting
+          } as unknown as Order; // Cast to Order after processing
+        });
+        setOrders(fetchedOrders);
+      } catch (err) {
+        console.error("Error fetching orders: ", err);
+        setError('Failed to load orders.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, []);
 
   return (
     <div className="container mx-auto py-12 px-4 md:px-6 lg:px-8 min-h-screen flex flex-col">
@@ -35,7 +75,18 @@ export default function AdminOrdersPage() {
           <h2 className="text-3xl font-semibold text-foreground mb-6">
             <TranslatedText text="Client Requests" />
           </h2>
-          {orders.length > 0 ? (
+          {loading && (
+            <div className="flex justify-center items-center py-10">
+              <Loader2 className="h-12 w-12 animate-spin text-primary" />
+              <p className="ml-4 text-lg text-muted-foreground"><TranslatedText text="Loading orders..." /></p>
+            </div>
+          )}
+          {error && (
+            <div className="text-center py-10 text-destructive">
+              <p className="text-lg"><TranslatedText text={error} /></p>
+            </div>
+          )}
+          {!loading && !error && orders.length > 0 ? (
             <div className="space-y-6">
               {orders.map((order) => (
                 <div key={order.id} className="p-4 bg-background/50 rounded-lg border shadow-md">
@@ -46,11 +97,13 @@ export default function AdminOrdersPage() {
                       <p className="text-sm text-muted-foreground"><TranslatedText text="Email:" /> {order.email}</p>
                       <p className="text-sm text-muted-foreground"><TranslatedText text="Phone:" /> {order.phone}</p>
                     </div>
-                    <p className="text-xs text-muted-foreground">{order.timestamp}</p>
+                     <p className="text-xs text-muted-foreground">
+                       {typeof order.timestamp === 'string' ? order.timestamp : (order.timestamp as Timestamp)?.toDate?.().toLocaleString() || 'Invalid Date'}
+                    </p>
                   </div>
-                  <p className="text-sm text-foreground mb-2"><span className="font-semibold"><TranslatedText text="Details:" /></span> <TranslatedText text={order.details} /></p>
+                  <p className="text-sm text-foreground mb-2"><span className="font-semibold"><TranslatedText text="Details:" /></span> <TranslatedText text={order.details || ''} /></p>
                   {order.attachmentName && (
-                    <Button variant="outline" size="sm">
+                    <Button variant="outline" size="sm" disabled> {/* Download functionality not implemented */}
                       <Download className="mr-2 h-3 w-3" />
                       <TranslatedText text="Download Attachment" /> ({order.attachmentName})
                     </Button>
@@ -58,7 +111,8 @@ export default function AdminOrdersPage() {
                 </div>
               ))}
             </div>
-          ) : (
+          ) : null}
+          {!loading && !error && orders.length === 0 && (
              <div className="text-center py-10">
               <Image
                 src="https://picsum.photos/400/300?random=emptyorders"
@@ -85,4 +139,3 @@ export default function AdminOrdersPage() {
     </div>
   );
 }
-

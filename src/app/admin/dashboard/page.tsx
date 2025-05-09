@@ -1,17 +1,40 @@
-
 'use client';
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowLeft, Bell, MessageSquare, ShoppingCart } from 'lucide-react';
+import { ArrowLeft, Bell, MessageSquare, ShoppingCart, Loader2 } from 'lucide-react';
 import TranslatedText from '@/app/components/translated-text';
+import { useEffect, useState } from 'react';
+import { db } from '@/lib/firebase';
+import { collection, getDocs } from 'firebase/firestore';
 
 export default function AdminDashboardPage() {
-  // Placeholder counts - in a real app, fetch these dynamically
-  const newCommentsCount = 5; // Example count
-  const newOrdersCount = 2;   // Example count
+  const [newCommentsCount, setNewCommentsCount] = useState(0);
+  const [newOrdersCount, setNewOrdersCount] = useState(0);
+  const [loadingCounts, setLoadingCounts] = useState(true);
   const totalNotifications = newCommentsCount + newOrdersCount;
+
+  useEffect(() => {
+    const fetchCounts = async () => {
+      setLoadingCounts(true);
+      try {
+        const commentsSnapshot = await getDocs(collection(db, "comments"));
+        setNewCommentsCount(commentsSnapshot.size);
+
+        const ordersSnapshot = await getDocs(collection(db, "orders"));
+        setNewOrdersCount(ordersSnapshot.size);
+      } catch (error) {
+        console.error("Error fetching counts for dashboard:", error);
+        // Optionally, set an error state and display a message
+      } finally {
+        setLoadingCounts(false);
+      }
+    };
+
+    fetchCounts();
+  }, []);
+
 
   return (
     <div className="container mx-auto py-12 px-4 md:px-6 lg:px-8 min-h-screen flex flex-col">
@@ -25,7 +48,13 @@ export default function AdminDashboardPage() {
           </Button>
           <div className="relative">
             <Bell className="h-6 w-6 text-primary" />
-            {totalNotifications > 0 && (
+            {loadingCounts ? (
+                 <span 
+                className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-xs text-destructive-foreground"
+              >
+                <Loader2 className="h-3 w-3 animate-spin" />
+              </span>
+            ) : totalNotifications > 0 && (
               <span 
                 className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-xs text-destructive-foreground"
                 data-ai-hint="dynamic notification count"
@@ -49,9 +78,13 @@ export default function AdminDashboardPage() {
             <MessageSquare className="h-6 w-6 text-accent" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-primary" data-ai-hint="dynamic comment count">
-              {newCommentsCount}
-            </div>
+            {loadingCounts ? (
+              <Loader2 className="h-8 w-8 animate-spin text-primary my-1" />
+            ) : (
+              <div className="text-3xl font-bold text-primary" data-ai-hint="dynamic comment count">
+                {newCommentsCount}
+              </div>
+            )}
             <p className="text-xs text-muted-foreground mb-4">
               <TranslatedText text="New feedback messages" />
             </p>
@@ -71,9 +104,13 @@ export default function AdminDashboardPage() {
             <ShoppingCart className="h-6 w-6 text-accent" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-primary" data-ai-hint="dynamic order count">
-              {newOrdersCount}
-            </div>
+             {loadingCounts ? (
+              <Loader2 className="h-8 w-8 animate-spin text-primary my-1" />
+            ) : (
+              <div className="text-3xl font-bold text-primary" data-ai-hint="dynamic order count">
+                {newOrdersCount}
+              </div>
+            )}
             <p className="text-xs text-muted-foreground mb-4">
               <TranslatedText text="New client requests" />
             </p>

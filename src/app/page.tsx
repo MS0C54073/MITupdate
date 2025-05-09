@@ -2,12 +2,13 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { Github, Linkedin, Youtube } from 'lucide-react';
 
 // Custom Icons
 import { WhatsappIcon, TelegramIcon } from '@/components/icons';
 import './ai.css';
-import { useTranslated } from './translator'; // Corrected import path
+import { useTranslated } from './translator';
 import { useState, useEffect } from 'react';
 
 
@@ -153,92 +154,96 @@ export default function Home() {
         <h2 className="text-2xl font-semibold mb-6 text-primary text-center"><TranslatedText text="Portfolio Showcase"/></h2>
         <div className="portfolio-rotation">
           {/* Software Engineering */}
-          <div className="portfolio-item bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300">
-            <Image
-              src="https://picsum.photos/600/400?random=1"
-              data-ai-hint="abstract code"
-              alt="Software Engineering"
-              width={600}
-              height={400}
-              className="rounded-md mb-2 w-full h-auto object-cover"
-            />
-            <h3 className="text-xl font-semibold text-foreground mb-2"><TranslatedText text="Software Engineering"/></h3>
-            <p className="text-muted-foreground">
-              <TranslatedText text="Brief description of the tech project. Mention technologies used and outcomes."/>
-            </p>
-            <a
-              href="#"
-              className="inline-block mt-4 px-4 py-2 bg-accent text-primary-foreground rounded-md hover:bg-red-600 hover:animate-pulse transition-colors"
-            >
-              <TranslatedText text="Learn More"/>
+          <Link href="/software-engineering" passHref legacyBehavior>
+            <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
+              <Image
+                src="https://picsum.photos/600/400?random=se"
+                data-ai-hint="software development"
+                alt="Software Engineering"
+                width={600}
+                height={400}
+                className="rounded-md mb-2 w-full h-auto object-cover"
+              />
+              <h3 className="text-xl font-semibold text-foreground mb-2"><TranslatedText text="Software Engineering"/></h3>
+              <p className="text-muted-foreground">
+                <TranslatedText text="Brief description of the tech project. Mention technologies used and outcomes."/>
+              </p>
+              <div
+                className="inline-block mt-4 px-4 py-2 bg-accent text-primary-foreground rounded-md hover:bg-accent/90 transition-colors"
+              >
+                <TranslatedText text="Learn More"/>
+              </div>
             </a>
-          </div>
+          </Link>
 
           {/* Teaching Experience */}
-          <div className="portfolio-item bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300">
-            <Image
-              src="https://picsum.photos/600/400?random=2"
-              data-ai-hint="modern classroom"
-              alt="Teaching Experience"
-              width={600}
-              height={400}
-              className="rounded-md mb-2 w-full h-auto object-cover"
-            />
-            <h3 className="text-xl font-semibold text-foreground mb-2"><TranslatedText text="Teaching Experience"/></h3>
-            <p className="text-muted-foreground">
-              <TranslatedText text="Brief description of the teaching experience. Highlight subjects taught and achievements."/>
-            </p>
-            <a
-              href="#"
-              className="inline-block mt-4 px-4 py-2 bg-accent text-primary-foreground rounded-md hover:bg-red-600 hover:animate-pulse transition-colors"
-            >
-              <TranslatedText text="Learn More"/>
+          <Link href="/teaching-experience" passHref legacyBehavior>
+            <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
+              <Image
+                src="https://picsum.photos/600/400?random=te"
+                data-ai-hint="education classroom"
+                alt="Teaching Experience"
+                width={600}
+                height={400}
+                className="rounded-md mb-2 w-full h-auto object-cover"
+              />
+              <h3 className="text-xl font-semibold text-foreground mb-2"><TranslatedText text="Teaching Experience"/></h3>
+              <p className="text-muted-foreground">
+                <TranslatedText text="Brief description of the teaching experience. Highlight subjects taught and achievements."/>
+              </p>
+              <div
+                className="inline-block mt-4 px-4 py-2 bg-accent text-primary-foreground rounded-md hover:bg-accent/90 transition-colors"
+              >
+                <TranslatedText text="Learn More"/>
+              </div>
             </a>
-          </div>
+          </Link>
 
           {/* Affiliate Marketing Project */}
-          <div className="portfolio-item bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300">
-            <Image
-              src="https://picsum.photos/600/400?random=3"
-              data-ai-hint="digital marketing"
-              alt="Affiliate Marketing Project"
-              width={600}
-              height={400}
-              className="rounded-md mb-2 w-full h-auto object-cover"
-            />
-            <h3 className="text-xl font-semibold text-foreground mb-2">
-              <TranslatedText text="Affiliate Marketing Manager"/>
-            </h3>
-            <p className="text-muted-foreground">
-              <TranslatedText text="Brief description of the affiliate marketing project. Include strategies and results."/>
-            </p>
-            <a
-              href="#"
-              className="inline-block mt-4 px-4 py-2 bg-accent text-primary-foreground rounded-md hover:bg-red-600 hover:animate-pulse transition-colors"
-            >
-              <TranslatedText text="Learn More"/>
+          <Link href="/affiliate-marketing-manager" passHref legacyBehavior>
+            <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
+              <Image
+                src="https://picsum.photos/600/400?random=am"
+                data-ai-hint="marketing analytics"
+                alt="Affiliate Marketing Project"
+                width={600}
+                height={400}
+                className="rounded-md mb-2 w-full h-auto object-cover"
+              />
+              <h3 className="text-xl font-semibold text-foreground mb-2">
+                <TranslatedText text="Affiliate Marketing Manager"/>
+              </h3>
+              <p className="text-muted-foreground">
+                <TranslatedText text="Brief description of the affiliate marketing project. Include strategies and results."/>
+              </p>
+              <div
+                className="inline-block mt-4 px-4 py-2 bg-accent text-primary-foreground rounded-md hover:bg-accent/90 transition-colors"
+              >
+                <TranslatedText text="Learn More"/>
+              </div>
             </a>
-          </div>
+          </Link>
 
           {/* Hobbies */}
-          <div className="portfolio-item bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300">
-            <Image
-              src="https://picsum.photos/600/400?random=4"
-              data-ai-hint="music production"
-              alt="Hobbies"
-              width={600}
-              height={400}
-              className="rounded-md mb-2 w-full h-auto object-cover"
-            />
-            <h3 className="text-xl font-semibold text-foreground mb-2"><TranslatedText text="Hobbies"/></h3>
-            <p className="text-muted-foreground"><TranslatedText text="Brief description of the music track or project."/></p>
-            <a
-              href="#"
-              className="inline-block mt-4 px-4 py-2 bg-accent text-primary-foreground rounded-md hover:bg-red-600 hover:animate-pulse transition-colors"
-            >
-              <TranslatedText text="Listen Now"/>
+          <Link href="/hobbies" passHref legacyBehavior>
+            <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
+              <Image
+                src="https://picsum.photos/607/400?random=4"
+                data-ai-hint="creative hobbies"
+                alt="Hobbies"
+                width={600}
+                height={400}
+                className="rounded-md mb-2 w-full h-auto object-cover"
+              />
+              <h3 className="text-xl font-semibold text-foreground mb-2"><TranslatedText text="Hobbies"/></h3>
+              <p className="text-muted-foreground"><TranslatedText text="Brief description of the music track or project."/></p>
+              <div
+                className="inline-block mt-4 px-4 py-2 bg-accent text-primary-foreground rounded-md hover:bg-accent/90 transition-colors"
+              >
+                <TranslatedText text="Explore More"/>
+              </div>
             </a>
-          </div>
+          </Link>
         </div>
       </section>
        {/* Leave a comment section */}
@@ -259,7 +264,7 @@ export default function Home() {
                   <textarea id="comment-text" rows={4} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary"></textarea>
                 </div>
                 <div className="flex items-center justify-end">
-                  <button className="bg-accent hover:bg-red-600 text-primary-foreground font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors" type="button">
+                  <button className="bg-accent hover:bg-accent/90 text-primary-foreground font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors" type="button">
                   <TranslatedText text="Post Comment"/>
                   </button>
                 </div>
@@ -293,7 +298,7 @@ export default function Home() {
                   <textarea id="order-details" rows={4} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary"></textarea>
                 </div>
                 <div className="flex items-center justify-end">
-                  <button className="bg-accent hover:bg-red-600 text-primary-foreground font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors" type="button">
+                  <button className="bg-accent hover:bg-accent/90 text-primary-foreground font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors" type="button">
                   <TranslatedText text="Place Order"/>
                   </button>
                 </div>
@@ -360,3 +365,4 @@ export default function Home() {
     </div>
   );
 }
+

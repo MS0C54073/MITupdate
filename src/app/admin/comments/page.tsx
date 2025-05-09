@@ -18,9 +18,9 @@ export default function AdminCommentsPage() {
     <div className="container mx-auto py-12 px-4 md:px-6 lg:px-8 min-h-screen flex flex-col">
       <header className="mb-8">
         <Button variant="outline" asChild className="mb-4">
-          <Link href="/">
+          <Link href="/admin/dashboard">
             <ArrowLeft className="mr-2 h-4 w-4" />
-            <TranslatedText text="Back to Home" />
+            <TranslatedText text="Back to Dashboard" />
           </Link>
         </Button>
         <div className="flex items-center space-x-3">
@@ -69,8 +69,8 @@ export default function AdminCommentsPage() {
       </main>
       <footer className="text-center py-6 border-t border-border">
         <Button variant="link" asChild>
-          <Link href="/">
-            <TranslatedText text="Return to Homepage" />
+          <Link href="/admin/dashboard">
+            <TranslatedText text="Return to Dashboard" />
           </Link>
         </Button>
       </footer>

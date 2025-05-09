@@ -8,10 +8,10 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { db } from '@/lib/firebase';
 import { collection, getDocs, orderBy, query, Timestamp } from 'firebase/firestore';
-import type { Comment } from '@/lib/types';
+import type { DisplayComment } from '@/lib/types'; // Updated type import
 
 export default function AdminCommentsPage() {
-  const [comments, setComments] = useState<Comment[]>([]);
+  const [comments, setComments] = useState<DisplayComment[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -25,21 +25,20 @@ export default function AdminCommentsPage() {
         const querySnapshot = await getDocs(q);
         const fetchedComments = querySnapshot.docs.map((doc) => {
           const data = doc.data();
-          // Ensure timestamp is correctly handled
           let formattedTimestamp = 'N/A';
           if (data.timestamp && typeof (data.timestamp as Timestamp).toDate === 'function') {
             formattedTimestamp = (data.timestamp as Timestamp).toDate().toLocaleString();
-          } else if (data.timestamp && data.timestamp.seconds) { // Handle cases where it might already be partially structured
+          } else if (data.timestamp && data.timestamp.seconds) {
             formattedTimestamp = new Date(data.timestamp.seconds * 1000).toLocaleString();
           }
           
           return {
             id: doc.id,
             name: data.name || 'Anonymous',
-            email: data.email || 'No email',
-            comment: data.comment || 'No comment',
-            timestamp: formattedTimestamp, // Store as string after formatting
-          } as unknown as Comment; // Cast to Comment after processing
+            email: data.email || 'Not Provided', // More explicit default
+            comment: data.comment || 'No comment provided', // More explicit default
+            timestamp: formattedTimestamp,
+          } as DisplayComment; // Use DisplayComment type
         });
         setComments(fetchedComments);
       } catch (err) {
@@ -95,10 +94,10 @@ export default function AdminCommentsPage() {
                       <p className="text-xs text-muted-foreground">{comment.email}</p>
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      {typeof comment.timestamp === 'string' ? comment.timestamp : (comment.timestamp as Timestamp)?.toDate?.().toLocaleString() || 'Invalid Date'}
+                      {comment.timestamp} {/* Already a string */}
                     </p>
                   </div>
-                  <p className="text-sm text-foreground italic">"<TranslatedText text={comment.comment || ''} />"</p>
+                  <p className="text-sm text-foreground italic">"<TranslatedText text={comment.comment} />"</p>
                 </div>
               ))}
             </div>

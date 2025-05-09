@@ -8,10 +8,10 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { db } from '@/lib/firebase';
 import { collection, getDocs, orderBy, query, Timestamp } from 'firebase/firestore';
-import type { Order } from '@/lib/types';
+import type { DisplayOrder } from '@/lib/types'; // Updated type import
 
 export default function AdminOrdersPage() {
-  const [orders, setOrders] = useState<Order[]>([]);
+  const [orders, setOrders] = useState<DisplayOrder[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -35,12 +35,12 @@ export default function AdminOrdersPage() {
           return {
             id: doc.id,
             name: data.name || 'N/A',
-            email: data.email || 'N/A',
-            phone: data.phone || 'N/A',
-            details: data.details || 'No details provided.',
+            email: data.email || 'Not Provided', // More explicit default
+            phone: data.phone || 'Not Provided', // More explicit default
+            details: data.details || 'No details provided.', // More explicit default
             attachmentName: data.attachmentName || null,
-            timestamp: formattedTimestamp, // Store as string after formatting
-          } as unknown as Order; // Cast to Order after processing
+            timestamp: formattedTimestamp,
+          } as DisplayOrder; // Use DisplayOrder type
         });
         setOrders(fetchedOrders);
       } catch (err) {
@@ -98,10 +98,10 @@ export default function AdminOrdersPage() {
                       <p className="text-sm text-muted-foreground"><TranslatedText text="Phone:" /> {order.phone}</p>
                     </div>
                      <p className="text-xs text-muted-foreground">
-                       {typeof order.timestamp === 'string' ? order.timestamp : (order.timestamp as Timestamp)?.toDate?.().toLocaleString() || 'Invalid Date'}
+                       {order.timestamp} {/* Already a string */}
                     </p>
                   </div>
-                  <p className="text-sm text-foreground mb-2"><span className="font-semibold"><TranslatedText text="Details:" /></span> <TranslatedText text={order.details || ''} /></p>
+                  <p className="text-sm text-foreground mb-2"><span className="font-semibold"><TranslatedText text="Details:" /></span> <TranslatedText text={order.details} /></p>
                   {order.attachmentName && (
                     <Button variant="outline" size="sm" disabled> {/* Download functionality not implemented */}
                       <Download className="mr-2 h-3 w-3" />

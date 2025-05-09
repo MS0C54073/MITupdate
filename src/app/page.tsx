@@ -4,6 +4,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Github, Linkedin, Youtube } from 'lucide-react';
+import { useRouter } from 'next/navigation'; // Added import
 
 // Custom Icons
 import { WhatsappIcon, TelegramIcon } from '@/components/icons';
@@ -15,6 +16,7 @@ import AuthModal from '@/app/components/auth-modal';
 
 
 export default function Home() {
+  const router = useRouter(); // Initialize useRouter
   // State to manage client-side rendering for AI background
   const [isClient, setIsClient] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -24,12 +26,9 @@ export default function Home() {
   }, []);
 
   const handleAdminLoginSuccess = () => {
-    // Handle successful admin login, e.g., redirect to admin panel or set auth state
     console.log("Admin login successful");
     setIsAuthModalOpen(false);
-    // For now, we'll just close the modal.
-    // In a real app, you'd likely navigate to an admin dashboard:
-    // router.push('/admin-dashboard'); 
+    router.push('/admin/dashboard'); // Navigate to admin dashboard
   };
 
 
@@ -172,7 +171,7 @@ export default function Home() {
           <Link href="/software-engineering" passHref legacyBehavior>
             <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
               <Image
-                src="https://picsum.photos/600/400?random=software"
+                src="https://picsum.photos/600/400?random=se"
                 data-ai-hint="software development"
                 alt="Software Engineering"
                 width={600}

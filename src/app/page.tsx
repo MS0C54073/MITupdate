@@ -37,7 +37,7 @@ const orderSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }).optional().or(z.literal('')),
   phone: z.string().optional(),
   details: z.string().optional(),
-  attachment: z.any().optional(), // Changed from z.instanceof(FileList)
+  attachment: z.any().optional(), 
 });
 type OrderFormData = z.infer<typeof orderSchema>;
 
@@ -73,7 +73,7 @@ export default function Home() {
         timestamp: serverTimestamp(),
       };
       await addDoc(collection(db, 'comments'), commentData);
-      toast({ title: 'Success', description: 'Comment submitted successfully!' });
+      toast({ title: 'Success', description: 'Comment submitted successfully! Muzo will get back to you!' });
       resetCommentForm();
     } catch (error) {
       console.error("Error submitting comment: ", error);
@@ -83,12 +83,9 @@ export default function Home() {
 
   const onOrderSubmit: SubmitHandler<OrderFormData> = async (data) => {
     try {
-      // The 'data.attachment' will be a FileList on the client-side if a file was selected.
       const file = data.attachment && data.attachment.length > 0 ? data.attachment[0] : null;
       const attachmentName = file ? (file as File).name : null;
-      // In a real app, you'd upload the file to Firebase Storage here and get a URL.
-      // For now, we're just storing the name.
-
+      
       const orderData: Omit<Order, 'id'> = {
         name: data.name,
         email: data.email,
@@ -98,7 +95,7 @@ export default function Home() {
         timestamp: serverTimestamp(),
       };
       await addDoc(collection(db, 'orders'), orderData);
-      toast({ title: 'Success', description: 'Order submitted successfully!' });
+      toast({ title: 'Success', description: 'Order submitted successfully! Muzo will get back to you!' });
       resetOrderForm();
     } catch (error) {
       console.error("Error submitting order: ", error);
@@ -241,7 +238,7 @@ export default function Home() {
           <Link href="/software-engineering" passHref legacyBehavior>
             <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
               <Image
-                src="https://picsum.photos/600/400?random=se"
+                src="https://picsum.photos/600/400?random=software"
                 data-ai-hint="software development"
                 alt="Software Engineering"
                 width={600}
@@ -263,7 +260,7 @@ export default function Home() {
           <Link href="/teaching-experience" passHref legacyBehavior>
             <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
               <Image
-                src="https://picsum.photos/600/400?random=education"
+                src="https://picsum.photos/600/400?random=classroom"
                 data-ai-hint="education classroom"
                 alt="Teaching Experience"
                 width={600}
@@ -309,7 +306,7 @@ export default function Home() {
           <Link href="/hobbies" passHref legacyBehavior>
             <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
               <Image
-                src="https://picsum.photos/600/400?random=creative"
+                src="https://picsum.photos/600/400?random=hobbies"
                 data-ai-hint="creative hobbies"
                 alt="Hobbies"
                 width={600}

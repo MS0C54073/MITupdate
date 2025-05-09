@@ -6,6 +6,8 @@ import {ModeToggle} from '@/components/mode-toggle';
 import {ThemeProvider} from '@/components/theme-provider';
 import {TranslationProvider} from './translator';
 import {LanguageSelector} from '@/app/components/language-selector';
+import { Toaster } from "@/components/ui/toaster";
+
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -92,6 +94,7 @@ export default function RootLayout({
             <LanguageSelector />
           </div>
             {children}
+            <Toaster />
           </TranslationProvider>
         </ThemeProvider>
       </body>

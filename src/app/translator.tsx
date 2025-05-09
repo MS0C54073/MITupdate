@@ -17,7 +17,7 @@ async function sha256(message: string): Promise<string> {
     console.error('SHA-256 hashing failed, falling back to plain text (not recommended for all inputs):', error);
     // Fallback for environments where crypto.subtle might not be available (e.g., non-secure contexts)
     // Replace non-alphanumeric characters. This is a basic fallback.
-    return message.replace(/[^a-zA-Z0-9]/g, '_') + '_fallback';
+    return message.replace(/[^a-zA-Z0-9]/g, '_') + '_fallback_sha256_error';
   }
 }
 
@@ -43,12 +43,10 @@ interface TranslationProviderProps {
 }
 
 export const TranslationProvider: React.FC<TranslationProviderProps> = ({ children }) => {
-  const [language, setLanguage] = useState<'en' | 'ru'>('en'); // Default language set to English
+  const [language, setLanguage] = useState<'en' | 'ru'>('en');
   const [sessionTranslationsCache, setSessionTranslationsCache] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
-    // Clear the session cache when the language changes,
-    // as cached translations are for the previous language or might be stale.
     setSessionTranslationsCache({});
   }, [language]);
 
@@ -62,7 +60,7 @@ export const TranslationProvider: React.FC<TranslationProviderProps> = ({ childr
         return englishText;
       }
 
-      const cacheKey = englishText; // Keyed by the English text
+      const cacheKey = englishText; 
 
       if (sessionTranslationsCache[cacheKey]) {
         return sessionTranslationsCache[cacheKey];
@@ -70,10 +68,10 @@ export const TranslationProvider: React.FC<TranslationProviderProps> = ({ childr
 
       let docId;
       try {
-        docId = await sha256(englishText);
+        docId = await sha256(`${language}_${englishText}`); // Make docId language-specific for cache key
       } catch (e) {
-        console.error(`Failed to generate docId for "${englishText}".`, e);
-        return englishText; // Fallback if ID generation fails
+        console.error(`Failed to generate docId for "${englishText}" (lang: ${language}).`, e);
+        return englishText; 
       }
       
       const docRef = doc(db, "translations", docId);
@@ -82,8 +80,10 @@ export const TranslationProvider: React.FC<TranslationProviderProps> = ({ childr
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           const data = docSnap.data();
-          if (data && data[language]) {
-            const cachedTranslatedText = data[language];
+          // The document ID is now language-specific, so we just need to check for 'translated' field or similar
+          // if (data && data[language]) { // This was when docId was only based on englishText
+          if (data && data.translatedText) { // Assuming we store the translation in a field named 'translatedText'
+            const cachedTranslatedText = data.translatedText as string;
             setSessionTranslationsCache(prev => ({ ...prev, [cacheKey]: cachedTranslatedText }));
             return cachedTranslatedText;
           }
@@ -95,17 +95,31 @@ export const TranslationProvider: React.FC<TranslationProviderProps> = ({ childr
         };
         const apiResult = await genkitTranslate(translateFlowInput);
         
-        if (!apiResult || !apiResult.translatedText) {
-          console.error(`API call for "${englishText}" to "${language}" returned no translated text. Falling back to English.`);
+        if (!apiResult || typeof apiResult.translatedText !== 'string' || apiResult.translatedText.trim() === '') {
+          console.warn(
+            `Translation API call for "${englishText}" to "${language}" returned invalid, empty, or no translated text. Result:`,
+            apiResult,
+            'Falling back to English and caching original text for this language key.'
+          );
+          // Store the original English text as the "translation" for this specific language key if API fails.
+          // This prevents repeated failed API calls for the same text-language pair.
+          await setDoc(docRef, { 
+            originalText: englishText, 
+            targetLanguage: language,
+            translatedText: englishText, // Store original as fallback
+            lastTranslated: serverTimestamp() 
+          }, { merge: true });
+          setSessionTranslationsCache(prev => ({ ...prev, [cacheKey]: englishText }));
           return englishText;
         }
         const apiTranslatedText = apiResult.translatedText;
 
-        const firestoreDataToSet: { [key: string]: any } = {
-          en: englishText, // Always store/update the original English text
+        const firestoreDataToSet = {
+          originalText: englishText,
+          targetLanguage: language,
+          translatedText: apiTranslatedText,
           lastTranslated: serverTimestamp()
         };
-        firestoreDataToSet[language] = apiTranslatedText; // Store the new translation
         
         await setDoc(docRef, firestoreDataToSet, { merge: true });
 
@@ -114,7 +128,8 @@ export const TranslationProvider: React.FC<TranslationProviderProps> = ({ childr
 
       } catch (error) {
         console.error(`Translation process error for "${englishText}" to "${language}" (docId: ${docId}):`, error);
-        return englishText; // Fallback to original English text if API call or Firestore operation fails
+        setSessionTranslationsCache(prev => ({ ...prev, [cacheKey]: englishText }));
+        return englishText; 
       }
     },
     [language, sessionTranslationsCache]
@@ -142,12 +157,10 @@ export const useTranslated = (englishText: string): string => {
         return;
       }
       
-      if (currentLanguage === 'en') {
-        if (isMounted) setTranslatedText(englishText);
-      } else {
-        // For other languages, call the translate function.
-        const result = await translate(englishText);
-        if (isMounted) setTranslatedText(result);
+      // The translate function (memoizedTranslate) already handles the "if language is 'en'" case.
+      const result = await translate(englishText);
+      if (isMounted) {
+        setTranslatedText(result);
       }
     }
     
@@ -160,4 +173,3 @@ export const useTranslated = (englishText: string): string => {
 
   return translatedText;
 };
-

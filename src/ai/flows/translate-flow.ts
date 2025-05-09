@@ -23,22 +23,53 @@ const TranslateOutputSchema = z.object({
 export type TranslateOutput = z.infer<typeof TranslateOutputSchema>;
 
 export async function translate(input: TranslateInput): Promise<TranslateOutput> {
+  // If the input text is empty or only whitespace, return it directly.
+  if (!input.text.trim()) {
+    return { translatedText: input.text };
+  }
+  // If target language is English, and we assume input is English, no translation needed.
+  if (input.targetLanguage === 'en') {
+     return { translatedText: input.text };
+  }
   return translateFlow(input);
 }
 
 const prompt = ai.definePrompt({
   name: 'translatePrompt',
   input: {
-    schema: TranslateInputSchema, // Use the defined schema
+    schema: TranslateInputSchema,
   },
   output: {
-    schema: TranslateOutputSchema, // Use the defined schema
+    schema: TranslateOutputSchema,
   },
-  prompt: `You are a professional translator, fluent in English and Russian.
+  prompt: `You are a professional translator. Translate the following text from English to {{targetLanguage}}.
+If the text is already in {{targetLanguage}}, return it as is.
+If the text cannot be translated or is nonsensical, return the original text.
 
-Translate the following text to {{targetLanguage}}:
+Original text:
+{{text}}
 
-{{text}}`,
+Translated text to {{targetLanguage}}:`,
+  config: {
+    safetySettings: [
+      {
+        category: 'HARM_CATEGORY_HATE_SPEECH',
+        threshold: 'BLOCK_ONLY_HIGH',
+      },
+      {
+        category: 'HARM_CATEGORY_DANGEROUS_CONTENT',
+        threshold: 'BLOCK_MEDIUM_AND_ABOVE',
+      },
+      {
+        category: 'HARM_CATEGORY_HARASSMENT',
+        threshold: 'BLOCK_MEDIUM_AND_ABOVE',
+      },
+      {
+        category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT',
+        threshold: 'BLOCK_MEDIUM_AND_ABOVE',
+      },
+    ],
+  }
 });
 
 const translateFlow = ai.defineFlow(
@@ -47,8 +78,26 @@ const translateFlow = ai.defineFlow(
     inputSchema: TranslateInputSchema,
     outputSchema: TranslateOutputSchema,
   },
-  async input => {
-    const {output} = await prompt(input);
-    return output!;
+  async (input): Promise<TranslateOutput> => {
+    try {
+      // Directly await the prompt, Genkit 1.x handles the schema mapping.
+      const output = await prompt(input);
+
+      if (output && typeof output.translatedText === 'string' && output.translatedText.trim() !== '') {
+        return output;
+      } else {
+        console.warn(
+          'Translation prompt did not return expected output structure or returned empty. Input:',
+          input,
+          'Raw output from prompt:', output
+        );
+        // Fallback if output structure is not as expected or translated text is empty
+        return { translatedText: input.text };
+      }
+    } catch (error) {
+      console.error('Error in translateFlow during prompt execution:', error);
+      // Fallback to original text on error
+      return { translatedText: input.text };
+    }
   }
 );

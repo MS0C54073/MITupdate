@@ -1,4 +1,3 @@
-
 'use client';
 
 import Image from 'next/image';
@@ -54,10 +53,19 @@ export default function Home() {
 
   const { register: registerComment, handleSubmit: handleSubmitComment, reset: resetCommentForm, formState: { errors: commentErrors } } = useForm<CommentFormData>({
     resolver: zodResolver(commentSchema),
+    defaultValues: { // Ensure optional fields start empty if not provided
+      email: '',
+      comment: '',
+    }
   });
 
   const { register: registerOrder, handleSubmit: handleSubmitOrder, reset: resetOrderForm, formState: { errors: orderErrors } } = useForm<OrderFormData>({
     resolver: zodResolver(orderSchema),
+    defaultValues: { // Ensure optional fields start empty if not provided
+      email: '',
+      phone: '',
+      details: '',
+    }
   });
 
 
@@ -73,14 +81,17 @@ export default function Home() {
   const onCommentSubmit: SubmitHandler<CommentFormData> = async (data) => {
     setCommentStatus('submitting');
     try {
-      const commentData: Omit<Comment, 'id'> = {
-        ...data,
+      // Prepare data ensuring optional fields are handled (empty strings are fine for Firestore)
+      const commentPayload: Omit<Comment, 'id'> = {
+        name: data.name,
+        email: data.email || '', // Store as empty string if not provided
+        comment: data.comment || '', // Store as empty string if not provided
         timestamp: serverTimestamp(),
       };
-      await addDoc(collection(db, 'comments'), commentData);
+      await addDoc(collection(db, 'comments'), commentPayload);
       toast({ variant: 'success', title: 'Success', description: 'Comment submitted successfully! Muzo will get back to you!' });
       setCommentStatus('success');
-      resetCommentForm();
+      resetCommentForm(); // Reset form to default values
       setTimeout(() => setCommentStatus('idle'), 3000);
     } catch (error) {
       console.error("Error submitting comment: ", error);
@@ -96,18 +107,19 @@ export default function Home() {
       const file = data.attachment && data.attachment.length > 0 ? data.attachment[0] : null;
       const attachmentName = file ? (file as File).name : null;
       
-      const orderData: Omit<Order, 'id'> = {
+      // Prepare data ensuring optional fields are handled
+      const orderPayload: Omit<Order, 'id'> = {
         name: data.name,
-        email: data.email,
-        phone: data.phone,
-        details: data.details,
-        attachmentName: attachmentName,
+        email: data.email || '', // Store as empty string if not provided
+        phone: data.phone || '', // Store as empty string if not provided
+        details: data.details || '', // Store as empty string if not provided
+        attachmentName: attachmentName, // This will be null if no file
         timestamp: serverTimestamp(),
       };
-      await addDoc(collection(db, 'orders'), orderData);
+      await addDoc(collection(db, 'orders'), orderPayload);
       toast({ variant: 'success', title: 'Success', description: 'Order submitted successfully! Muzo will get back to you!' });
       setOrderStatus('success');
-      resetOrderForm();
+      resetOrderForm(); // Reset form to default values
       setTimeout(() => setOrderStatus('idle'), 3000);
     } catch (error) {
       console.error("Error submitting order: ", error);
@@ -485,4 +497,3 @@ export default function Home() {
     </div>
   );
 }
-

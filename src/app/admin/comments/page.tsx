@@ -8,7 +8,7 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { db } from '@/lib/firebase';
 import { collection, getDocs, orderBy, query, Timestamp } from 'firebase/firestore';
-import type { DisplayComment } from '@/lib/types'; // Updated type import
+import type { DisplayComment } from '@/lib/types'; 
 
 export default function AdminCommentsPage() {
   const [comments, setComments] = useState<DisplayComment[]>([]);
@@ -17,28 +17,35 @@ export default function AdminCommentsPage() {
 
   useEffect(() => {
     const fetchComments = async () => {
+      setLoading(true);
+      setError(null);
       try {
-        setLoading(true);
-        setError(null);
         const commentsCollection = collection(db, 'comments');
         const q = query(commentsCollection, orderBy('timestamp', 'desc'));
         const querySnapshot = await getDocs(q);
         const fetchedComments = querySnapshot.docs.map((doc) => {
           const data = doc.data();
           let formattedTimestamp = 'N/A';
+          
+          // Check if data.timestamp exists and is a Firestore Timestamp
           if (data.timestamp && typeof (data.timestamp as Timestamp).toDate === 'function') {
             formattedTimestamp = (data.timestamp as Timestamp).toDate().toLocaleString();
-          } else if (data.timestamp && data.timestamp.seconds) {
-            formattedTimestamp = new Date(data.timestamp.seconds * 1000).toLocaleString();
+          } else if (data.timestamp && typeof data.timestamp === 'object' && 'seconds' in data.timestamp && 'nanoseconds' in data.timestamp) {
+            // Handle cases where timestamp might be a plain object from Firestore (less common with serverTimestamp)
+             const ts = new Timestamp(data.timestamp.seconds, data.timestamp.nanoseconds);
+             formattedTimestamp = ts.toDate().toLocaleString();
+          } else if (typeof data.timestamp === 'string') {
+            // If it's already a string, use it (though not expected with serverTimestamp)
+            formattedTimestamp = data.timestamp;
           }
           
           return {
             id: doc.id,
-            name: data.name || 'Anonymous',
-            email: data.email || 'Not Provided', // More explicit default
-            comment: data.comment || 'No comment provided', // More explicit default
+            name: data.name || 'Anonymous', // Default if name is missing or empty
+            email: data.email || 'Not Provided', // Default if email is missing or empty
+            comment: data.comment || 'No comment provided', // Default if comment is missing or empty
             timestamp: formattedTimestamp,
-          } as DisplayComment; // Use DisplayComment type
+          } as DisplayComment; 
         });
         setComments(fetchedComments);
       } catch (err) {
@@ -94,7 +101,7 @@ export default function AdminCommentsPage() {
                       <p className="text-xs text-muted-foreground">{comment.email}</p>
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      {comment.timestamp} {/* Already a string */}
+                      {comment.timestamp}
                     </p>
                   </div>
                   <p className="text-sm text-foreground italic">"<TranslatedText text={comment.comment} />"</p>

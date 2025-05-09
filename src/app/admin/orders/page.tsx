@@ -8,7 +8,7 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { db } from '@/lib/firebase';
 import { collection, getDocs, orderBy, query, Timestamp } from 'firebase/firestore';
-import type { DisplayOrder } from '@/lib/types'; // Updated type import
+import type { DisplayOrder } from '@/lib/types'; 
 
 export default function AdminOrdersPage() {
   const [orders, setOrders] = useState<DisplayOrder[]>([]);
@@ -17,30 +17,37 @@ export default function AdminOrdersPage() {
 
   useEffect(() => {
     const fetchOrders = async () => {
+      setLoading(true);
+      setError(null);
       try {
-        setLoading(true);
-        setError(null);
         const ordersCollection = collection(db, 'orders');
         const q = query(ordersCollection, orderBy('timestamp', 'desc'));
         const querySnapshot = await getDocs(q);
         const fetchedOrders = querySnapshot.docs.map((doc) => {
           const data = doc.data();
           let formattedTimestamp = 'N/A';
+
+          // Check if data.timestamp exists and is a Firestore Timestamp
           if (data.timestamp && typeof (data.timestamp as Timestamp).toDate === 'function') {
             formattedTimestamp = (data.timestamp as Timestamp).toDate().toLocaleString();
-          } else if (data.timestamp && data.timestamp.seconds) {
-             formattedTimestamp = new Date(data.timestamp.seconds * 1000).toLocaleString();
+          } else if (data.timestamp && typeof data.timestamp === 'object' && 'seconds' in data.timestamp && 'nanoseconds' in data.timestamp) {
+            // Handle cases where timestamp might be a plain object from Firestore
+             const ts = new Timestamp(data.timestamp.seconds, data.timestamp.nanoseconds);
+             formattedTimestamp = ts.toDate().toLocaleString();
+          } else if (typeof data.timestamp === 'string') {
+            // If it's already a string, use it
+            formattedTimestamp = data.timestamp;
           }
 
           return {
             id: doc.id,
-            name: data.name || 'N/A',
-            email: data.email || 'Not Provided', // More explicit default
-            phone: data.phone || 'Not Provided', // More explicit default
-            details: data.details || 'No details provided.', // More explicit default
-            attachmentName: data.attachmentName || null,
+            name: data.name || 'N/A', // Default if name is missing or empty
+            email: data.email || 'Not Provided', // Default if email is missing or empty
+            phone: data.phone || 'Not Provided', // Default if phone is missing or empty
+            details: data.details || 'No details provided.', // Default if details are missing or empty
+            attachmentName: data.attachmentName || null, // Will be null if missing or empty
             timestamp: formattedTimestamp,
-          } as DisplayOrder; // Use DisplayOrder type
+          } as DisplayOrder; 
         });
         setOrders(fetchedOrders);
       } catch (err) {
@@ -98,7 +105,7 @@ export default function AdminOrdersPage() {
                       <p className="text-sm text-muted-foreground"><TranslatedText text="Phone:" /> {order.phone}</p>
                     </div>
                      <p className="text-xs text-muted-foreground">
-                       {order.timestamp} {/* Already a string */}
+                       {order.timestamp}
                     </p>
                   </div>
                   <p className="text-sm text-foreground mb-2"><span className="font-semibold"><TranslatedText text="Details:" /></span> <TranslatedText text={order.details} /></p>

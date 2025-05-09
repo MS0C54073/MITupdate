@@ -89,7 +89,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <TranslationProvider>
-          <div className="fixed top-4 right-4 z-50 flex flex-col gap-2">
+          <div className="fixed top-4 right-4 z-50 flex flex-col items-end space-y-2">
             <ModeToggle />
             <LanguageSelector />
           </div>
@@ -101,5 +101,3 @@ export default function RootLayout({
     </html>
   );
 }
-
-

@@ -29,15 +29,10 @@ export async function translate(input: TranslateInput): Promise<TranslateOutput>
 const prompt = ai.definePrompt({
   name: 'translatePrompt',
   input: {
-    schema: z.object({
-      text: z.string().describe('The text to translate.'),
-      targetLanguage: z.enum(['en', 'ru']).describe('The target language.'),
-    }),
+    schema: TranslateInputSchema, // Use the defined schema
   },
   output: {
-    schema: z.object({
-      translatedText: z.string().describe('The translated text.'),
-    }),
+    schema: TranslateOutputSchema, // Use the defined schema
   },
   prompt: `You are a professional translator, fluent in English and Russian.
 
@@ -46,7 +41,7 @@ Translate the following text to {{targetLanguage}}:
 {{text}}`,
 });
 
-const translateFlow = ai.defineFlow<typeof TranslateInputSchema, typeof TranslateOutputSchema>(
+const translateFlow = ai.defineFlow(
   {
     name: 'translateFlow',
     inputSchema: TranslateInputSchema,
@@ -57,4 +52,3 @@ const translateFlow = ai.defineFlow<typeof TranslateInputSchema, typeof Translat
     return output!;
   }
 );
-

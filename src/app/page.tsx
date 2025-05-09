@@ -8,15 +8,9 @@ import { Github, Linkedin, Youtube } from 'lucide-react';
 // Custom Icons
 import { WhatsappIcon, TelegramIcon } from '@/components/icons';
 import './ai.css';
-import { useTranslated } from './translator';
+import TranslatedText from '@/app/components/translated-text'; // Updated import
 import { useState, useEffect } from 'react';
 
-
-// This component ensures that useTranslated is only called on the client-side.
-const TranslatedText = ({ text }: { text: string }) => {
-  const translatedText = useTranslated(text);
-  return <>{translatedText}</>;
-};
 
 export default function Home() {
   // State to manage client-side rendering for AI background
@@ -80,7 +74,7 @@ export default function Home() {
       <section className="mb-12 relative z-10">
         <div className="flex flex-col items-center text-center md:flex-row md:text-left gap-8 p-6 bg-card/80 backdrop-blur-sm rounded-xl shadow-xl">
           <Image
-            src="https://picsum.photos/200"
+            src="https://picsum.photos/200/200"
             data-ai-hint="profile portrait"
             alt="Muzo's Profile Picture"
             width={200}
@@ -228,7 +222,7 @@ export default function Home() {
           <Link href="/hobbies" passHref legacyBehavior>
             <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
               <Image
-                src="https://picsum.photos/607/400?random=4"
+                src="https://picsum.photos/600/400?random=ho"
                 data-ai-hint="creative hobbies"
                 alt="Hobbies"
                 width={600}

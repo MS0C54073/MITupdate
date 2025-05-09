@@ -1,5 +1,6 @@
+
 import React from 'react';
-import {useTranslated} from '../translator';
+import { useTranslated } from '@/app/translator';
 
 // HOC for translating components
 export function withTranslation<P extends object>(WrappedComponent: React.ComponentType<P>) {

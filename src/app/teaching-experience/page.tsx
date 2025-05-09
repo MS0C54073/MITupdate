@@ -1,7 +1,8 @@
+
 'use client';
 
 import Link from 'next/link';
-import { TranslatedText } from '@/app/translator';
+import TranslatedText from '@/app/components/translated-text'; // Updated import
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
@@ -84,3 +85,4 @@ export default function TeachingExperiencePage() {
     </div>
   );
 }
+

@@ -25,6 +25,10 @@ body {
     --accent-foreground: 0 0% 98%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
+    --success: 120 60% 90%; /* Light green background for toast */
+    --success-foreground: 120 60% 25%; /* Dark green text for toast */
+    --button-success-background: 130 50% 45%; /* Solid green for button bg */
+    --button-success-foreground: 0 0% 98%; /* White/light text for button */
     --border: 0 0% 89.8%;
     --input: 0 0% 89.8%;
     --ring: 0 0% 3.9%;
@@ -61,6 +65,10 @@ body {
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
+    --success: 120 40% 25%; /* Dark green background for toast */
+    --success-foreground: 120 60% 90%; /* Light green text for toast */
+    --button-success-background: 130 50% 55%; /* Solid green for button bg in dark mode */
+    --button-success-foreground: 0 0% 98%; /* White/light text for button */
     --border: 0 0% 14.9%;
     --input: 0 0% 14.9%;
     --ring: 0 0% 83.1%;
@@ -88,4 +96,25 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Custom success styles for Tailwind JIT */
+.bg-button-success {
+  background-color: hsl(var(--button-success-background));
+}
+.text-button-success-foreground {
+  color: hsl(var(--button-success-foreground));
+}
+.hover\:bg-button-success\/90:hover {
+  background-color: hsla(var(--button-success-background), 0.9);
+}
+
+.border-success {
+  border-color: hsl(var(--success)) !important; /* Ensure high specificity if needed */
+}
+.bg-success {
+  background-color: hsl(var(--success)) !important;
+}
+.text-success-foreground {
+  color: hsl(var(--success-foreground)) !important;
 }

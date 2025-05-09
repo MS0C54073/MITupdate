@@ -11,6 +11,7 @@ import * as z from 'zod';
 import { db } from '@/lib/firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
+import { cn } from '@/lib/utils';
 
 // Custom Icons
 import { WhatsappIcon, TelegramIcon } from '@/components/icons';
@@ -48,6 +49,9 @@ export default function Home() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const { toast } = useToast();
 
+  const [commentStatus, setCommentStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const [orderStatus, setOrderStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+
   const { register: registerComment, handleSubmit: handleSubmitComment, reset: resetCommentForm, formState: { errors: commentErrors } } = useForm<CommentFormData>({
     resolver: zodResolver(commentSchema),
   });
@@ -67,21 +71,27 @@ export default function Home() {
   };
 
   const onCommentSubmit: SubmitHandler<CommentFormData> = async (data) => {
+    setCommentStatus('submitting');
     try {
       const commentData: Omit<Comment, 'id'> = {
         ...data,
         timestamp: serverTimestamp(),
       };
       await addDoc(collection(db, 'comments'), commentData);
-      toast({ title: 'Success', description: 'Comment submitted successfully! Muzo will get back to you!' });
+      toast({ variant: 'success', title: 'Success', description: 'Comment submitted successfully! Muzo will get back to you!' });
+      setCommentStatus('success');
       resetCommentForm();
+      setTimeout(() => setCommentStatus('idle'), 3000);
     } catch (error) {
       console.error("Error submitting comment: ", error);
-      toast({ title: 'Error', description: 'Failed to submit comment.', variant: 'destructive' });
+      toast({ variant: 'destructive', title: 'Error', description: 'Failed to submit comment.'});
+      setCommentStatus('error');
+      setTimeout(() => setCommentStatus('idle'), 3000);
     }
   };
 
   const onOrderSubmit: SubmitHandler<OrderFormData> = async (data) => {
+    setOrderStatus('submitting');
     try {
       const file = data.attachment && data.attachment.length > 0 ? data.attachment[0] : null;
       const attachmentName = file ? (file as File).name : null;
@@ -95,11 +105,15 @@ export default function Home() {
         timestamp: serverTimestamp(),
       };
       await addDoc(collection(db, 'orders'), orderData);
-      toast({ title: 'Success', description: 'Order submitted successfully! Muzo will get back to you!' });
+      toast({ variant: 'success', title: 'Success', description: 'Order submitted successfully! Muzo will get back to you!' });
+      setOrderStatus('success');
       resetOrderForm();
+      setTimeout(() => setOrderStatus('idle'), 3000);
     } catch (error) {
       console.error("Error submitting order: ", error);
-      toast({ title: 'Error', description: 'Failed to submit order.', variant: 'destructive' });
+      toast({ variant: 'destructive', title: 'Error', description: 'Failed to submit order.'});
+      setOrderStatus('error');
+      setTimeout(() => setOrderStatus('idle'), 3000);
     }
   };
 
@@ -349,8 +363,16 @@ export default function Home() {
                   <Textarea id="comment-text" rows={4} {...registerComment("comment")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary"></Textarea>
                 </div>
                 <div className="flex items-center justify-end">
-                  <Button type="submit" className="bg-accent hover:bg-accent/90 text-primary-foreground font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors">
-                    <TranslatedText text="Post Comment"/>
+                  <Button 
+                    type="submit" 
+                    disabled={commentStatus === 'submitting'}
+                    className={cn(
+                      "font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors",
+                      commentStatus === 'submitting' && "opacity-50 cursor-not-allowed",
+                      commentStatus === 'success' ? "bg-button-success text-button-success-foreground hover:bg-button-success/90" : "bg-accent hover:bg-accent/90 text-primary-foreground"
+                    )}
+                  >
+                    {commentStatus === 'submitting' ? <TranslatedText text="Posting..."/> : commentStatus === 'success' ? <TranslatedText text="Sent!"/> : <TranslatedText text="Post Comment"/>}
                   </Button>
                 </div>
               </form>
@@ -389,8 +411,16 @@ export default function Home() {
                   <Textarea id="order-details" rows={4} {...registerOrder("details")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary"></Textarea>
                 </div>
                 <div className="flex items-center justify-end">
-                  <Button type="submit" className="bg-accent hover:bg-accent/90 text-primary-foreground font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors">
-                    <TranslatedText text="Place Order"/>
+                   <Button 
+                    type="submit" 
+                    disabled={orderStatus === 'submitting'}
+                    className={cn(
+                      "font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors",
+                      orderStatus === 'submitting' && "opacity-50 cursor-not-allowed",
+                      orderStatus === 'success' ? "bg-button-success text-button-success-foreground hover:bg-button-success/90" : "bg-accent hover:bg-accent/90 text-primary-foreground"
+                    )}
+                  >
+                    {orderStatus === 'submitting' ? <TranslatedText text="Placing..."/> : orderStatus === 'success' ? <TranslatedText text="Sent!"/> :<TranslatedText text="Place Order"/>}
                   </Button>
                 </div>
               </form>

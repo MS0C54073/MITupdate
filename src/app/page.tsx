@@ -8,17 +8,29 @@ import { Github, Linkedin, Youtube } from 'lucide-react';
 // Custom Icons
 import { WhatsappIcon, TelegramIcon } from '@/components/icons';
 import './ai.css';
-import TranslatedText from '@/app/components/translated-text'; // Updated import
+import TranslatedText from '@/app/components/translated-text';
 import { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import AuthModal from '@/app/components/auth-modal';
 
 
 export default function Home() {
   // State to manage client-side rendering for AI background
   const [isClient, setIsClient] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  const handleAdminLoginSuccess = () => {
+    // Handle successful admin login, e.g., redirect to admin panel or set auth state
+    console.log("Admin login successful");
+    setIsAuthModalOpen(false);
+    // For now, we'll just close the modal.
+    // In a real app, you'd likely navigate to an admin dashboard:
+    // router.push('/admin-dashboard'); 
+  };
 
 
   return (
@@ -81,7 +93,7 @@ export default function Home() {
             height={200}
             className="rounded-full shadow-lg border-4 border-primary"
           />
-          <div className="text-center md:text-left">
+          <div className="text-center md:text-left flex-grow">
             <h1 className="text-3xl font-bold mb-2 text-primary"><TranslatedText text="Musonda Salimu (Muzo)"/></h1>
             <p className="text-muted-foreground mb-4">
               <TranslatedText text="Tech Enthusiast, English Teacher, Affiliate Marketer, and Music Lover"/>
@@ -140,8 +152,17 @@ export default function Home() {
               </a>
             </div>
           </div>
+          <Button variant="outline" onClick={() => setIsAuthModalOpen(true)} className="self-start md:self-center mt-4 md:mt-0">
+            <TranslatedText text="Admin" />
+          </Button>
         </div>
       </section>
+
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        onLoginSuccess={handleAdminLoginSuccess}
+      />
 
       {/* Portfolio Showcase */}
       <section  className="relative z-10">
@@ -151,7 +172,7 @@ export default function Home() {
           <Link href="/software-engineering" passHref legacyBehavior>
             <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
               <Image
-                src="https://picsum.photos/600/400?random=se"
+                src="https://picsum.photos/600/400?random=software"
                 data-ai-hint="software development"
                 alt="Software Engineering"
                 width={600}
@@ -174,7 +195,7 @@ export default function Home() {
           <Link href="/teaching-experience" passHref legacyBehavior>
             <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
               <Image
-                src="https://picsum.photos/600/400?random=te"
+                src="https://picsum.photos/600/400?random=classroom"
                 data-ai-hint="education classroom"
                 alt="Teaching Experience"
                 width={600}
@@ -197,7 +218,7 @@ export default function Home() {
           <Link href="/affiliate-marketing-manager" passHref legacyBehavior>
             <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
               <Image
-                src="https://picsum.photos/600/400?random=am"
+                src="https://picsum.photos/600/400?random=marketing"
                 data-ai-hint="marketing analytics"
                 alt="Affiliate Marketing Project"
                 width={600}
@@ -222,7 +243,7 @@ export default function Home() {
           <Link href="/hobbies" passHref legacyBehavior>
             <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
               <Image
-                src="https://picsum.photos/600/400?random=ho"
+                src="https://picsum.photos/600/400?random=hobbies"
                 data-ai-hint="creative hobbies"
                 alt="Hobbies"
                 width={600}
@@ -243,6 +264,11 @@ export default function Home() {
        {/* Leave a comment section */}
        <section className="mt-12 py-8 border-t border-border relative z-10">
         <h2 className="text-2xl font-semibold mb-6 text-primary text-center"><TranslatedText text="Leave a comment"/></h2>
+       <Button variant="link" asChild>
+          <Link href="/admin/comments">
+            <TranslatedText text="View Comments" />
+          </Link>
+        </Button>
          <div className="max-w-xl mx-auto p-6 bg-card/80 backdrop-blur-sm rounded-xl shadow-xl">
          <form>
             <div className="mb-4">
@@ -269,6 +295,11 @@ export default function Home() {
        {/* Leave an order section */}
        <section className="mt-12 py-8 border-t border-border relative z-10">
         <h2 className="text-2xl font-semibold mb-6 text-primary text-center"><TranslatedText text="Leave an order"/></h2>
+       <Button variant="link" asChild>
+          <Link href="/admin/orders">
+            <TranslatedText text="View Orders" />
+          </Link>
+        </Button>
          <div className="max-w-xl mx-auto p-6 bg-card/80 backdrop-blur-sm rounded-xl shadow-xl">
          <form>
             <div className="mb-4">

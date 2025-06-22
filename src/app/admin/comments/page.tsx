@@ -92,7 +92,7 @@ export default function AdminCommentsPage() {
           {!loading && !error && comments.length > 0 ? (
             <div className="space-y-6">
               {comments.map((comment) => (
-                <div key={comment.id} className="p-4 bg-background/50 rounded-lg border shadow-md">
+                <div id={comment.id} key={comment.id} className="p-4 bg-background/50 rounded-lg border shadow-md scroll-mt-20 target:ring-2 target:ring-primary transition-all duration-300">
                   <div className="flex justify-between items-start mb-2">
                     <div>
                       <h3 className="text-lg font-semibold text-accent">{comment.name}</h3>

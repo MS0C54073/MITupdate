@@ -94,10 +94,10 @@ export default function AdminOrdersPage() {
           {!loading && !error && orders.length > 0 ? (
             <div className="space-y-6">
               {orders.map((order) => (
-                <div key={order.id} className="p-4 bg-background/50 rounded-lg border shadow-md">
+                <div id={order.id} key={order.id} className="p-4 bg-background/50 rounded-lg border shadow-md scroll-mt-20 target:ring-2 target:ring-primary transition-all duration-300">
                   <div className="flex justify-between items-start mb-2">
                     <div>
-                      <h3 className="text-lg font-semibold text-accent"><TranslatedText text="Order ID:" /> {order.id}</h3>
+                      <h3 className="text-lg font-semibold text-accent"><TranslatedText text="Order ID:" /> {order.id.substring(0, 8)}...</h3>
                       <p className="text-sm text-muted-foreground"><TranslatedText text="Name:" /> {order.name}</p>
                       <p className="text-sm text-muted-foreground"><TranslatedText text="Email:" /> {order.email}</p>
                       <p className="text-sm text-muted-foreground"><TranslatedText text="Phone:" /> {order.phone}</p>

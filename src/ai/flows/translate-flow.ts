@@ -80,8 +80,8 @@ const translateFlow = ai.defineFlow(
   },
   async (input): Promise<TranslateOutput> => {
     try {
-      // Directly await the prompt, Genkit 1.x handles the schema mapping.
-      const output = await prompt(input);
+      const response = await prompt(input);
+      const output = response.output;
 
       if (output && typeof output.translatedText === 'string' && output.translatedText.trim() !== '') {
         return output;
@@ -89,7 +89,7 @@ const translateFlow = ai.defineFlow(
         console.warn(
           'Translation prompt did not return expected output structure or returned empty. Input:',
           input,
-          'Raw output from prompt:', output
+          'Raw response from prompt:', response
         );
         // Fallback if output structure is not as expected or translated text is empty
         return { translatedText: input.text };

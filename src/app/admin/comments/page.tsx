@@ -7,7 +7,7 @@ import { ArrowLeft, MessageSquare, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { db } from '@/lib/firebase';
-import { collection, getDocs, orderBy, query, Timestamp } from 'firebase/firestore';
+import { collection, onSnapshot, orderBy, query, Timestamp } from 'firebase/firestore';
 import type { DisplayComment } from '@/lib/types'; 
 
 export default function AdminCommentsPage() {
@@ -16,47 +16,44 @@ export default function AdminCommentsPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchComments = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const commentsCollection = collection(db, 'comments');
-        const q = query(commentsCollection, orderBy('timestamp', 'desc'));
-        const querySnapshot = await getDocs(q);
+    setLoading(true);
+    setError(null);
+    try {
+      const commentsCollection = collection(db, 'comments');
+      const q = query(commentsCollection, orderBy('timestamp', 'desc'));
+      
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
         const fetchedComments = querySnapshot.docs.map((doc) => {
           const data = doc.data();
-          let formattedTimestamp = 'N/A';
+          let formattedTimestamp = 'Pending...';
           
-          // Check if data.timestamp exists and is a Firestore Timestamp
           if (data.timestamp && typeof (data.timestamp as Timestamp).toDate === 'function') {
             formattedTimestamp = (data.timestamp as Timestamp).toDate().toLocaleString();
-          } else if (data.timestamp && typeof data.timestamp === 'object' && 'seconds' in data.timestamp && 'nanoseconds' in data.timestamp) {
-            // Handle cases where timestamp might be a plain object from Firestore (less common with serverTimestamp)
-             const ts = new Timestamp(data.timestamp.seconds, data.timestamp.nanoseconds);
-             formattedTimestamp = ts.toDate().toLocaleString();
-          } else if (typeof data.timestamp === 'string') {
-            // If it's already a string, use it (though not expected with serverTimestamp)
-            formattedTimestamp = data.timestamp;
           }
           
           return {
             id: doc.id,
-            name: data.name || 'Anonymous', // Default if name is missing or empty
-            email: data.email || 'Not Provided', // Default if email is missing or empty
-            comment: data.comment || 'No comment provided', // Default if comment is missing or empty
+            name: data.name || 'Anonymous',
+            email: data.email || 'Not Provided',
+            comment: data.comment || 'No comment provided',
             timestamp: formattedTimestamp,
           } as DisplayComment; 
         });
         setComments(fetchedComments);
-      } catch (err) {
-        console.error("Error fetching comments: ", err);
-        setError('Failed to load comments.');
-      } finally {
         setLoading(false);
-      }
-    };
+      }, (err) => {
+        console.error("Error with snapshot listener: ", err);
+        setError('Failed to load comments in real-time. Please check console for errors and ensure you have the correct Firestore security rules and indexes.');
+        setLoading(false);
+      });
 
-    fetchComments();
+      // Cleanup subscription on unmount
+      return () => unsubscribe();
+    } catch (err) {
+      console.error("Error setting up snapshot listener: ", err);
+      setError('Failed to initialize comments listener.');
+      setLoading(false);
+    }
   }, []);
 
   return (
@@ -87,8 +84,9 @@ export default function AdminCommentsPage() {
             </div>
           )}
           {error && (
-            <div className="text-center py-10 text-destructive">
-              <p className="text-lg"><TranslatedText text={error} /></p>
+            <div className="text-center py-10 text-destructive bg-destructive/10 rounded-md p-4">
+              <p className="text-lg font-semibold"><TranslatedText text="An Error Occurred" /></p>
+              <p className="text-sm"><TranslatedText text={error} /></p>
             </div>
           )}
           {!loading && !error && comments.length > 0 ? (
@@ -112,7 +110,7 @@ export default function AdminCommentsPage() {
           {!loading && !error && comments.length === 0 && (
             <div className="text-center py-10">
               <Image
-                src="https://picsum.photos/400/300?random=emptycomments"
+                src="https://placehold.co/400x300.png"
                 data-ai-hint="empty state"
                 alt="No comments yet"
                 width={400}

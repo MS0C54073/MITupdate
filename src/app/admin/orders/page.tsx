@@ -7,7 +7,7 @@ import { ArrowLeft, ShoppingCart, Download, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { db } from '@/lib/firebase';
-import { collection, getDocs, orderBy, query, Timestamp } from 'firebase/firestore';
+import { collection, onSnapshot, orderBy, query, Timestamp } from 'firebase/firestore';
 import type { DisplayOrder } from '@/lib/types'; 
 
 export default function AdminOrdersPage() {
@@ -16,49 +16,46 @@ export default function AdminOrdersPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchOrders = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const ordersCollection = collection(db, 'orders');
-        const q = query(ordersCollection, orderBy('timestamp', 'desc'));
-        const querySnapshot = await getDocs(q);
+    setLoading(true);
+    setError(null);
+
+    try {
+      const ordersCollection = collection(db, 'orders');
+      const q = query(ordersCollection, orderBy('timestamp', 'desc'));
+      
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
         const fetchedOrders = querySnapshot.docs.map((doc) => {
           const data = doc.data();
-          let formattedTimestamp = 'N/A';
+          let formattedTimestamp = 'Pending...';
 
-          // Check if data.timestamp exists and is a Firestore Timestamp
           if (data.timestamp && typeof (data.timestamp as Timestamp).toDate === 'function') {
             formattedTimestamp = (data.timestamp as Timestamp).toDate().toLocaleString();
-          } else if (data.timestamp && typeof data.timestamp === 'object' && 'seconds' in data.timestamp && 'nanoseconds' in data.timestamp) {
-            // Handle cases where timestamp might be a plain object from Firestore
-             const ts = new Timestamp(data.timestamp.seconds, data.timestamp.nanoseconds);
-             formattedTimestamp = ts.toDate().toLocaleString();
-          } else if (typeof data.timestamp === 'string') {
-            // If it's already a string, use it
-            formattedTimestamp = data.timestamp;
           }
 
           return {
             id: doc.id,
-            name: data.name || 'N/A', // Default if name is missing or empty
-            email: data.email || 'Not Provided', // Default if email is missing or empty
-            phone: data.phone || 'Not Provided', // Default if phone is missing or empty
-            details: data.details || 'No details provided.', // Default if details are missing or empty
-            attachmentName: data.attachmentName || null, // Will be null if missing or empty
+            name: data.name || 'N/A',
+            email: data.email || 'Not Provided',
+            phone: data.phone || 'Not Provided',
+            details: data.details || 'No details provided.',
+            attachmentName: data.attachmentName || null,
             timestamp: formattedTimestamp,
           } as DisplayOrder; 
         });
         setOrders(fetchedOrders);
-      } catch (err) {
-        console.error("Error fetching orders: ", err);
-        setError('Failed to load orders.');
-      } finally {
         setLoading(false);
-      }
-    };
+      }, (err) => {
+        console.error("Error with snapshot listener: ", err);
+        setError('Failed to load orders in real-time. Please check console for errors and ensure you have the correct Firestore security rules and indexes.');
+        setLoading(false);
+      });
 
-    fetchOrders();
+      return () => unsubscribe();
+    } catch (err) {
+        console.error("Error setting up snapshot listener: ", err);
+        setError('Failed to initialize orders listener.');
+        setLoading(false);
+    }
   }, []);
 
   return (
@@ -89,8 +86,9 @@ export default function AdminOrdersPage() {
             </div>
           )}
           {error && (
-            <div className="text-center py-10 text-destructive">
-              <p className="text-lg"><TranslatedText text={error} /></p>
+             <div className="text-center py-10 text-destructive bg-destructive/10 rounded-md p-4">
+              <p className="text-lg font-semibold"><TranslatedText text="An Error Occurred" /></p>
+              <p className="text-sm"><TranslatedText text={error} /></p>
             </div>
           )}
           {!loading && !error && orders.length > 0 ? (
@@ -122,7 +120,7 @@ export default function AdminOrdersPage() {
           {!loading && !error && orders.length === 0 && (
              <div className="text-center py-10">
               <Image
-                src="https://picsum.photos/400/300?random=emptyorders"
+                src="https://placehold.co/400x300.png"
                 data-ai-hint="empty box"
                 alt="No orders yet"
                 width={400}

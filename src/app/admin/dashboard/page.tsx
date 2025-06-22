@@ -7,32 +7,51 @@ import { ArrowLeft, Bell, MessageSquare, ShoppingCart, Loader2 } from 'lucide-re
 import TranslatedText from '@/app/components/translated-text';
 import { useEffect, useState } from 'react';
 import { db } from '@/lib/firebase';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, onSnapshot } from 'firebase/firestore';
 
 export default function AdminDashboardPage() {
   const [newCommentsCount, setNewCommentsCount] = useState(0);
   const [newOrdersCount, setNewOrdersCount] = useState(0);
   const [loadingCounts, setLoadingCounts] = useState(true);
+  
   const totalNotifications = newCommentsCount + newOrdersCount;
 
   useEffect(() => {
-    const fetchCounts = async () => {
-      setLoadingCounts(true);
-      try {
-        const commentsSnapshot = await getDocs(collection(db, "comments"));
-        setNewCommentsCount(commentsSnapshot.size);
+    let initialCommentsLoaded = false;
+    let initialOrdersLoaded = false;
 
-        const ordersSnapshot = await getDocs(collection(db, "orders"));
-        setNewOrdersCount(ordersSnapshot.size);
-      } catch (error) {
-        console.error("Error fetching counts for dashboard:", error);
-        // Optionally, set an error state and display a message
-      } finally {
-        setLoadingCounts(false);
+    const commentsUnsubscribe = onSnapshot(collection(db, "comments"), (snapshot) => {
+      setNewCommentsCount(snapshot.size);
+      if (!initialCommentsLoaded) {
+        initialCommentsLoaded = true;
+        if (initialOrdersLoaded) setLoadingCounts(false);
       }
-    };
+    }, (error) => {
+      console.error("Error fetching comments count:", error);
+      if (!initialCommentsLoaded) {
+        initialCommentsLoaded = true;
+        if (initialOrdersLoaded) setLoadingCounts(false);
+      }
+    });
 
-    fetchCounts();
+    const ordersUnsubscribe = onSnapshot(collection(db, "orders"), (snapshot) => {
+      setNewOrdersCount(snapshot.size);
+      if (!initialOrdersLoaded) {
+        initialOrdersLoaded = true;
+        if (initialCommentsLoaded) setLoadingCounts(false);
+      }
+    }, (error) => {
+      console.error("Error fetching orders count:", error);
+      if (!initialOrdersLoaded) {
+        initialOrdersLoaded = true;
+        if (initialCommentsLoaded) setLoadingCounts(false);
+      }
+    });
+
+    return () => {
+      commentsUnsubscribe();
+      ordersUnsubscribe();
+    }
   }, []);
 
 

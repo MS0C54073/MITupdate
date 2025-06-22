@@ -91,12 +91,12 @@ export default function Home() {
       toast({ variant: 'success', title: 'Success', description: 'Comment submitted successfully! Muzo will get back to you!' });
       setCommentStatus('success');
       resetCommentForm(); 
-      setTimeout(() => setCommentStatus('idle'), 2000); // Reduced timeout
+      setTimeout(() => setCommentStatus('idle'), 3000);
     } catch (error) {
       console.error("Error submitting comment: ", error);
       toast({ variant: 'destructive', title: 'Error', description: 'Failed to submit comment.'});
       setCommentStatus('error');
-      setTimeout(() => setCommentStatus('idle'), 2000); // Reduced timeout
+      setTimeout(() => setCommentStatus('idle'), 3000);
     }
   };
 
@@ -118,12 +118,12 @@ export default function Home() {
       toast({ variant: 'success', title: 'Success', description: 'Order submitted successfully! Muzo will get back to you!' });
       setOrderStatus('success');
       resetOrderForm(); 
-      setTimeout(() => setOrderStatus('idle'), 2000); // Reduced timeout
+      setTimeout(() => setOrderStatus('idle'), 3000);
     } catch (error) {
       console.error("Error submitting order: ", error);
       toast({ variant: 'destructive', title: 'Error', description: 'Failed to submit order.'});
       setOrderStatus('error');
-      setTimeout(() => setOrderStatus('idle'), 2000); // Reduced timeout
+      setTimeout(() => setOrderStatus('idle'), 3000);
     }
   };
 
@@ -179,7 +179,7 @@ export default function Home() {
       <section className="mb-12 relative z-10">
         <div className="flex flex-col items-center text-center md:flex-row md:text-left gap-8 p-6 bg-card/80 backdrop-blur-sm rounded-xl shadow-xl">
           <Image
-            src="https://picsum.photos/200/200"
+            src="https://placehold.co/200x200.png"
             data-ai-hint="profile portrait"
             alt="Muzo's Profile Picture"
             width={200}
@@ -262,7 +262,7 @@ export default function Home() {
           <Link href="/software-engineering" passHref legacyBehavior>
             <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
               <Image
-                src="https://picsum.photos/600/400?random=software"
+                src="https://placehold.co/600x400.png"
                 data-ai-hint="software development"
                 alt="Software Engineering"
                 width={600}
@@ -284,7 +284,7 @@ export default function Home() {
           <Link href="/teaching-experience" passHref legacyBehavior>
             <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
               <Image
-                src="https://picsum.photos/600/400?random=classroom"
+                src="https://placehold.co/600x400.png"
                 data-ai-hint="education classroom"
                 alt="Teaching Experience"
                 width={600}
@@ -306,7 +306,7 @@ export default function Home() {
           <Link href="/affiliate-marketing-manager" passHref legacyBehavior>
             <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
               <Image
-                src="https://picsum.photos/600/400?random=analytics"
+                src="https://placehold.co/600x400.png"
                 data-ai-hint="marketing analytics"
                 alt="Affiliate Marketing Project"
                 width={600}
@@ -330,7 +330,7 @@ export default function Home() {
           <Link href="/hobbies" passHref legacyBehavior>
             <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
               <Image
-                src="https://picsum.photos/600/400?random=hobbies"
+                src="https://placehold.co/600x400.png"
                 data-ai-hint="creative hobbies"
                 alt="Hobbies"
                 width={600}

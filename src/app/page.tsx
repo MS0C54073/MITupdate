@@ -3,7 +3,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { Github, Linkedin, Youtube } from 'lucide-react';
+import { Github, Linkedin, Youtube, Loader2, Check } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -374,16 +374,30 @@ export default function Home() {
                   <Textarea id="comment-text" rows={4} {...registerComment("comment")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary"></Textarea>
                 </div>
                 <div className="flex items-center justify-end">
-                  <Button 
-                    type="submit" 
-                    disabled={commentStatus === 'submitting'}
+                  <Button
+                    type="submit"
+                    disabled={commentStatus === 'submitting' || commentStatus === 'success'}
                     className={cn(
-                      "font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors",
-                      commentStatus === 'submitting' && "opacity-50 cursor-not-allowed",
-                      commentStatus === 'success' ? "bg-button-success text-button-success-foreground hover:bg-button-success/90" : "bg-accent hover:bg-accent/90 text-primary-foreground"
+                      'font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors min-w-[160px] justify-center',
+                      commentStatus === 'submitting' && 'opacity-50 cursor-not-allowed',
+                      commentStatus === 'success'
+                        ? 'bg-button-success text-button-success-foreground hover:bg-button-success/90'
+                        : 'bg-accent hover:bg-accent/90 text-primary-foreground'
                     )}
                   >
-                    {commentStatus === 'submitting' ? <TranslatedText text="Posting..."/> : commentStatus === 'success' ? <TranslatedText text="Sent!"/> : <TranslatedText text="Post Comment"/>}
+                    {commentStatus === 'submitting' ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        <TranslatedText text="Posting..." />
+                      </>
+                    ) : commentStatus === 'success' ? (
+                      <>
+                        <Check className="mr-2 h-4 w-4" />
+                        <TranslatedText text="Sent!" />
+                      </>
+                    ) : (
+                      <TranslatedText text="Post Comment" />
+                    )}
                   </Button>
                 </div>
               </form>
@@ -422,16 +436,30 @@ export default function Home() {
                   <Textarea id="order-details" rows={4} {...registerOrder("details")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary"></Textarea>
                 </div>
                 <div className="flex items-center justify-end">
-                   <Button 
-                    type="submit" 
-                    disabled={orderStatus === 'submitting'}
+                   <Button
+                    type="submit"
+                    disabled={orderStatus === 'submitting' || orderStatus === 'success'}
                     className={cn(
-                      "font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors",
-                      orderStatus === 'submitting' && "opacity-50 cursor-not-allowed",
-                      orderStatus === 'success' ? "bg-button-success text-button-success-foreground hover:bg-button-success/90" : "bg-accent hover:bg-accent/90 text-primary-foreground"
+                      'font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors min-w-[160px] justify-center',
+                      orderStatus === 'submitting' && 'opacity-50 cursor-not-allowed',
+                      orderStatus === 'success'
+                        ? 'bg-button-success text-button-success-foreground hover:bg-button-success/90'
+                        : 'bg-accent hover:bg-accent/90 text-primary-foreground'
                     )}
                   >
-                    {orderStatus === 'submitting' ? <TranslatedText text="Placing..."/> : orderStatus === 'success' ? <TranslatedText text="Sent!"/> :<TranslatedText text="Place Order"/>}
+                    {orderStatus === 'submitting' ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        <TranslatedText text="Placing..." />
+                      </>
+                    ) : orderStatus === 'success' ? (
+                      <>
+                        <Check className="mr-2 h-4 w-4" />
+                        <TranslatedText text="Sent!" />
+                      </>
+                    ) : (
+                      <TranslatedText text="Place Order" />
+                    )}
                   </Button>
                 </div>
               </form>
@@ -496,5 +524,7 @@ export default function Home() {
     </div>
   );
 }
+
+    
 
     

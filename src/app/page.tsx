@@ -1,3 +1,4 @@
+
 'use client';
 
 import Image from 'next/image';
@@ -88,13 +89,13 @@ export default function Home() {
         timestamp: serverTimestamp(),
       };
       await addDoc(collection(db, 'comments'), commentPayload);
-      toast({ variant: 'success', title: 'Success', description: 'Comment submitted successfully! Muzo will get back to you!' });
+      toast({ variant: 'success', title: 'Success!', description: 'Comment submitted successfully! Muzo will get back to you!' });
       setCommentStatus('success');
       resetCommentForm(); 
       setTimeout(() => setCommentStatus('idle'), 3000);
     } catch (error) {
       console.error("Error submitting comment: ", error);
-      toast({ variant: 'destructive', title: 'Error', description: 'Failed to submit comment.'});
+      toast({ variant: 'destructive', title: 'Error', description: 'Failed to submit comment. Please try again.'});
       setCommentStatus('error');
       setTimeout(() => setCommentStatus('idle'), 3000);
     }
@@ -115,13 +116,13 @@ export default function Home() {
         timestamp: serverTimestamp(),
       };
       await addDoc(collection(db, 'orders'), orderPayload);
-      toast({ variant: 'success', title: 'Success', description: 'Order submitted successfully! Muzo will get back to you!' });
+      toast({ variant: 'success', title: 'Success!', description: 'Order submitted successfully! Muzo will get back to you!' });
       setOrderStatus('success');
       resetOrderForm(); 
       setTimeout(() => setOrderStatus('idle'), 3000);
     } catch (error) {
       console.error("Error submitting order: ", error);
-      toast({ variant: 'destructive', title: 'Error', description: 'Failed to submit order.'});
+      toast({ variant: 'destructive', title: 'Error', description: 'Failed to submit order. Please try again.'});
       setOrderStatus('error');
       setTimeout(() => setOrderStatus('idle'), 3000);
     }
@@ -495,3 +496,5 @@ export default function Home() {
     </div>
   );
 }
+
+    

@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -7,53 +8,85 @@ import { ArrowLeft, MessageSquare, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { db } from '@/lib/firebase';
-import { collection, onSnapshot, orderBy, query, Timestamp } from 'firebase/firestore';
+import { collection, getDocs, orderBy, query, Timestamp, limit, startAfter, type QueryDocumentSnapshot, type DocumentData } from 'firebase/firestore';
 import type { DisplayComment } from '@/lib/types'; 
 
 export default function AdminCommentsPage() {
   const [comments, setComments] = useState<DisplayComment[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [lastVisible, setLastVisible] = useState<QueryDocumentSnapshot<DocumentData> | null>(null);
+  const [hasMore, setHasMore] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    setLoading(true);
+  const commentsPerPage = 15;
+
+  const mapDocToComment = (doc: QueryDocumentSnapshot<DocumentData>): DisplayComment => {
+    const data = doc.data();
+    let formattedTimestamp = 'Pending...';
+    
+    if (data.timestamp && typeof (data.timestamp as Timestamp).toDate === 'function') {
+      formattedTimestamp = (data.timestamp as Timestamp).toDate().toLocaleString();
+    }
+    
+    return {
+      id: doc.id,
+      name: data.name || 'Anonymous',
+      email: data.email || 'Not Provided',
+      comment: data.comment || 'No comment provided',
+      timestamp: formattedTimestamp,
+    };
+  };
+
+  const fetchComments = async (isInitial = true) => {
+    if (!hasMore && !isInitial) return;
+    if(isInitial) {
+      setLoading(true);
+    } else {
+      setLoadingMore(true);
+    }
     setError(null);
+    
     try {
       const commentsCollection = collection(db, 'comments');
-      const q = query(commentsCollection, orderBy('timestamp', 'desc'));
+      let q;
+      if (isInitial) {
+        q = query(commentsCollection, orderBy('timestamp', 'desc'), limit(commentsPerPage));
+      } else if (lastVisible) {
+        q = query(commentsCollection, orderBy('timestamp', 'desc'), startAfter(lastVisible), limit(commentsPerPage));
+      } else {
+        // Should not happen if hasMore is true
+        if(isInitial) setLoading(false); else setLoadingMore(false);
+        return;
+      }
       
-      const unsubscribe = onSnapshot(q, (querySnapshot) => {
-        const fetchedComments = querySnapshot.docs.map((doc) => {
-          const data = doc.data();
-          let formattedTimestamp = 'Pending...';
-          
-          if (data.timestamp && typeof (data.timestamp as Timestamp).toDate === 'function') {
-            formattedTimestamp = (data.timestamp as Timestamp).toDate().toLocaleString();
-          }
-          
-          return {
-            id: doc.id,
-            name: data.name || 'Anonymous',
-            email: data.email || 'Not Provided',
-            comment: data.comment || 'No comment provided',
-            timestamp: formattedTimestamp,
-          } as DisplayComment; 
-        });
-        setComments(fetchedComments);
-        setLoading(false);
-      }, (err) => {
-        console.error("Error with snapshot listener: ", err);
-        setError('Failed to load comments in real-time. Please check console for errors and ensure you have the correct Firestore security rules and indexes.');
-        setLoading(false);
-      });
+      const documentSnapshots = await getDocs(q);
+      
+      const fetchedComments = documentSnapshots.docs.map(mapDocToComment);
 
-      // Cleanup subscription on unmount
-      return () => unsubscribe();
+      if (isInitial) {
+        setComments(fetchedComments);
+      } else {
+        setComments(prevComments => [...prevComments, ...fetchedComments]);
+      }
+      
+      const lastDoc = documentSnapshots.docs[documentSnapshots.docs.length - 1];
+      setLastVisible(lastDoc);
+
+      if (documentSnapshots.docs.length < commentsPerPage) {
+        setHasMore(false);
+      }
+
     } catch (err) {
-      console.error("Error setting up snapshot listener: ", err);
-      setError('Failed to initialize comments listener.');
-      setLoading(false);
+      console.error("Error fetching comments: ", err);
+      setError('Failed to load comments. Please try again.');
+    } finally {
+      if(isInitial) setLoading(false); else setLoadingMore(false);
     }
+  };
+
+  useEffect(() => {
+    fetchComments(true);
   }, []);
 
   return (
@@ -120,6 +153,20 @@ export default function AdminCommentsPage() {
               <p className="text-muted-foreground text-lg">
                 <TranslatedText text="No comments have been left yet." />
               </p>
+            </div>
+          )}
+           {!loading && hasMore && (
+            <div className="mt-8 text-center">
+              <Button onClick={() => fetchComments(false)} disabled={loadingMore}>
+                {loadingMore ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    <TranslatedText text="Loading..." />
+                  </>
+                ) : (
+                  <TranslatedText text="Load More Comments" />
+                )}
+              </Button>
             </div>
           )}
         </section>

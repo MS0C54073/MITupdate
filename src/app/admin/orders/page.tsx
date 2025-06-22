@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -7,55 +8,86 @@ import { ArrowLeft, ShoppingCart, Download, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { db } from '@/lib/firebase';
-import { collection, onSnapshot, orderBy, query, Timestamp } from 'firebase/firestore';
+import { collection, getDocs, orderBy, query, Timestamp, limit, startAfter, type QueryDocumentSnapshot, type DocumentData } from 'firebase/firestore';
 import type { DisplayOrder } from '@/lib/types'; 
 
 export default function AdminOrdersPage() {
   const [orders, setOrders] = useState<DisplayOrder[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [lastVisible, setLastVisible] = useState<QueryDocumentSnapshot<DocumentData> | null>(null);
+  const [hasMore, setHasMore] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    setLoading(true);
-    setError(null);
+  const ordersPerPage = 15;
 
+  const mapDocToOrder = (doc: QueryDocumentSnapshot<DocumentData>): DisplayOrder => {
+    const data = doc.data();
+    let formattedTimestamp = 'Pending...';
+
+    if (data.timestamp && typeof (data.timestamp as Timestamp).toDate === 'function') {
+      formattedTimestamp = (data.timestamp as Timestamp).toDate().toLocaleString();
+    }
+
+    return {
+      id: doc.id,
+      name: data.name || 'N/A',
+      email: data.email || 'Not Provided',
+      phone: data.phone || 'Not Provided',
+      details: data.details || 'No details provided.',
+      attachmentName: data.attachmentName || null,
+      timestamp: formattedTimestamp,
+    };
+  };
+
+  const fetchOrders = async (isInitial = true) => {
+    if (!hasMore && !isInitial) return;
+    if(isInitial) {
+      setLoading(true);
+    } else {
+      setLoadingMore(true);
+    }
+    setError(null);
+    
     try {
       const ordersCollection = collection(db, 'orders');
-      const q = query(ordersCollection, orderBy('timestamp', 'desc'));
+      let q;
+      if (isInitial) {
+        q = query(ordersCollection, orderBy('timestamp', 'desc'), limit(ordersPerPage));
+      } else if (lastVisible) {
+        q = query(ordersCollection, orderBy('timestamp', 'desc'), startAfter(lastVisible), limit(ordersPerPage));
+      } else {
+        if(isInitial) setLoading(false); else setLoadingMore(false);
+        return;
+      }
       
-      const unsubscribe = onSnapshot(q, (querySnapshot) => {
-        const fetchedOrders = querySnapshot.docs.map((doc) => {
-          const data = doc.data();
-          let formattedTimestamp = 'Pending...';
+      const documentSnapshots = await getDocs(q);
+      
+      const fetchedOrders = documentSnapshots.docs.map(mapDocToOrder);
 
-          if (data.timestamp && typeof (data.timestamp as Timestamp).toDate === 'function') {
-            formattedTimestamp = (data.timestamp as Timestamp).toDate().toLocaleString();
-          }
-
-          return {
-            id: doc.id,
-            name: data.name || 'N/A',
-            email: data.email || 'Not Provided',
-            phone: data.phone || 'Not Provided',
-            details: data.details || 'No details provided.',
-            attachmentName: data.attachmentName || null,
-            timestamp: formattedTimestamp,
-          } as DisplayOrder; 
-        });
+      if (isInitial) {
         setOrders(fetchedOrders);
-        setLoading(false);
-      }, (err) => {
-        console.error("Error with snapshot listener: ", err);
-        setError('Failed to load orders in real-time. Please check console for errors and ensure you have the correct Firestore security rules and indexes.');
-        setLoading(false);
-      });
+      } else {
+        setOrders(prevOrders => [...prevOrders, ...fetchedOrders]);
+      }
+      
+      const lastDoc = documentSnapshots.docs[documentSnapshots.docs.length - 1];
+      setLastVisible(lastDoc);
 
-      return () => unsubscribe();
+      if (documentSnapshots.docs.length < ordersPerPage) {
+        setHasMore(false);
+      }
+
     } catch (err) {
-        console.error("Error setting up snapshot listener: ", err);
-        setError('Failed to initialize orders listener.');
-        setLoading(false);
+      console.error("Error fetching orders: ", err);
+      setError('Failed to load orders. Please try again.');
+    } finally {
+      if(isInitial) setLoading(false); else setLoadingMore(false);
     }
+  };
+
+  useEffect(() => {
+    fetchOrders(true);
   }, []);
 
   return (
@@ -130,6 +162,20 @@ export default function AdminOrdersPage() {
               <p className="text-muted-foreground text-lg">
                 <TranslatedText text="No orders have been placed yet." />
               </p>
+            </div>
+          )}
+          {!loading && hasMore && (
+            <div className="mt-8 text-center">
+              <Button onClick={() => fetchOrders(false)} disabled={loadingMore}>
+                {loadingMore ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    <TranslatedText text="Loading..." />
+                  </>
+                ) : (
+                  <TranslatedText text="Load More Orders" />
+                )}
+              </Button>
             </div>
           )}
         </section>

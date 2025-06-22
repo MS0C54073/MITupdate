@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -7,7 +8,7 @@ import { ArrowLeft, Bell, MessageSquare, ShoppingCart, Loader2 } from 'lucide-re
 import TranslatedText from '@/app/components/translated-text';
 import { useEffect, useState } from 'react';
 import { db } from '@/lib/firebase';
-import { collection, onSnapshot, query, orderBy, limit } from 'firebase/firestore';
+import { collection, onSnapshot, query, orderBy, limit, getCountFromServer } from 'firebase/firestore';
 import type { DisplayComment, DisplayOrder } from '@/lib/types';
 import {
   DropdownMenu,
@@ -23,68 +24,59 @@ export default function AdminDashboardPage() {
   const [newOrdersCount, setNewOrdersCount] = useState(0);
   const [latestComments, setLatestComments] = useState<DisplayComment[]>([]);
   const [latestOrders, setLatestOrders] = useState<DisplayOrder[]>([]);
-  const [loadingCounts, setLoadingCounts] = useState(true);
+  const [loading, setLoading] = useState(true);
   
   const totalNotifications = newCommentsCount + newOrdersCount;
 
   useEffect(() => {
-    let initialCommentsLoaded = false;
-    let initialOrdersLoaded = false;
-    let initialLatestCommentsLoaded = false;
-    let initialLatestOrdersLoaded = false;
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const commentsCollection = collection(db, "comments");
+        const ordersCollection = collection(db, "orders");
+        const [commentsSnapshot, ordersSnapshot] = await Promise.all([
+          getCountFromServer(commentsCollection),
+          getCountFromServer(ordersCollection)
+        ]);
+        setNewCommentsCount(commentsSnapshot.data().count);
+        setNewOrdersCount(ordersSnapshot.data().count);
+      } catch (error) {
+        console.error("Error fetching counts:", error);
+        // counts will be 0, but we shouldn't hang
+      }
+    };
 
-    const checkAllLoaded = () => {
-        if (initialCommentsLoaded && initialOrdersLoaded && initialLatestCommentsLoaded && initialLatestOrdersLoaded) {
-            setLoadingCounts(false);
-        }
-    }
+    fetchData();
 
-    const commentsUnsubscribe = onSnapshot(collection(db, "comments"), (snapshot) => {
-      setNewCommentsCount(snapshot.size);
-      if (!initialCommentsLoaded) { initialCommentsLoaded = true; checkAllLoaded(); }
-    }, (error) => {
-      console.error("Error fetching comments count:", error);
-      if (!initialCommentsLoaded) { initialCommentsLoaded = true; checkAllLoaded(); }
-    });
-
-    const ordersUnsubscribe = onSnapshot(collection(db, "orders"), (snapshot) => {
-      setNewOrdersCount(snapshot.size);
-      if (!initialOrdersLoaded) { initialOrdersLoaded = true; checkAllLoaded(); }
-    }, (error) => {
-      console.error("Error fetching orders count:", error);
-      if (!initialOrdersLoaded) { initialOrdersLoaded = true; checkAllLoaded(); }
-    });
-
-    const latestCommentsUnsubscribe = onSnapshot(query(collection(db, "comments"), orderBy("timestamp", "desc"), limit(5)), (snapshot) => {
+    // Listen for latest comments and orders in real-time for notifications
+    const latestCommentsQuery = query(collection(db, "comments"), orderBy("timestamp", "desc"), limit(5));
+    const latestCommentsUnsubscribe = onSnapshot(latestCommentsQuery, (snapshot) => {
         setLatestComments(snapshot.docs.map(doc => ({
             id: doc.id,
             name: doc.data().name || 'Anonymous',
             comment: doc.data().comment || 'No comment provided',
-            email: '', // not needed
-            timestamp: '' // not needed
+            email: '',
+            timestamp: ''
         } as DisplayComment)));
-        if (!initialLatestCommentsLoaded) { initialLatestCommentsLoaded = true; checkAllLoaded(); }
+        setLoading(false); // Set loading false after we get the first batch of latest comments
     }, (error) => {
       console.error("Error fetching latest comments:", error);
-      if (!initialLatestCommentsLoaded) { initialLatestCommentsLoaded = true; checkAllLoaded(); }
+      setLoading(false);
     });
 
-    const latestOrdersUnsubscribe = onSnapshot(query(collection(db, "orders"), orderBy("timestamp", "desc"), limit(5)), (snapshot) => {
+    const latestOrdersQuery = query(collection(db, "orders"), orderBy("timestamp", "desc"), limit(5));
+    const latestOrdersUnsubscribe = onSnapshot(latestOrdersQuery, (snapshot) => {
         setLatestOrders(snapshot.docs.map(doc => ({
             id: doc.id,
             name: doc.data().name || 'N/A',
             details: doc.data().details || 'No details provided.',
             email: '', phone: '', attachmentName: null, timestamp: ''
         } as DisplayOrder)));
-        if (!initialLatestOrdersLoaded) { initialLatestOrdersLoaded = true; checkAllLoaded(); }
     }, (error) => {
         console.error("Error fetching latest orders:", error);
-        if (!initialLatestOrdersLoaded) { initialLatestOrdersLoaded = true; checkAllLoaded(); }
     });
 
     return () => {
-      commentsUnsubscribe();
-      ordersUnsubscribe();
       latestCommentsUnsubscribe();
       latestOrdersUnsubscribe();
     }
@@ -105,7 +97,7 @@ export default function AdminDashboardPage() {
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="relative">
                 <Bell className="h-6 w-6 text-primary" />
-                 {loadingCounts ? (
+                 {loading ? (
                   <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-xs text-destructive-foreground">
                     <Loader2 className="h-2 w-2 animate-spin" />
                   </span>
@@ -121,7 +113,7 @@ export default function AdminDashboardPage() {
                 <TranslatedText text="Notifications" />
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              {loadingCounts ? (
+              {loading ? (
                 <div className="p-2 text-center text-sm text-muted-foreground flex items-center justify-center">
                   <Loader2 className="h-4 w-4 animate-spin mr-2" />
                   <TranslatedText text="Loading..."/>
@@ -186,7 +178,7 @@ export default function AdminDashboardPage() {
             <MessageSquare className="h-6 w-6 text-accent" />
           </CardHeader>
           <CardContent>
-            {loadingCounts ? (
+            {loading ? (
               <Loader2 className="h-8 w-8 animate-spin text-primary my-1" />
             ) : (
               <div className="text-3xl font-bold text-primary" data-ai-hint="dynamic comment count">
@@ -194,7 +186,7 @@ export default function AdminDashboardPage() {
               </div>
             )}
             <p className="text-xs text-muted-foreground mb-4">
-              <TranslatedText text="New feedback messages" />
+              <TranslatedText text="Total feedback messages" />
             </p>
             <Button asChild>
               <Link href="/admin/comments">
@@ -212,7 +204,7 @@ export default function AdminDashboardPage() {
             <ShoppingCart className="h-6 w-6 text-accent" />
           </CardHeader>
           <CardContent>
-             {loadingCounts ? (
+             {loading ? (
               <Loader2 className="h-8 w-8 animate-spin text-primary my-1" />
             ) : (
               <div className="text-3xl font-bold text-primary" data-ai-hint="dynamic order count">
@@ -220,7 +212,7 @@ export default function AdminDashboardPage() {
               </div>
             )}
             <p className="text-xs text-muted-foreground mb-4">
-              <TranslatedText text="New client requests" />
+              <TranslatedText text="Total client requests" />
             </p>
             <Button asChild>
               <Link href="/admin/orders">

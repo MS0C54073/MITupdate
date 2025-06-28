@@ -1,13 +1,74 @@
-
 'use client';
 
 import Link from 'next/link';
 import TranslatedText from '@/app/components/translated-text';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, BrainCircuit, Globe, Smartphone, Server, Network, Shield } from 'lucide-react';
+import { ArrowLeft, BrainCircuit, Globe, Smartphone, Server, Network, Shield, Loader2, Check } from 'lucide-react';
 import Image from 'next/image';
+import { useForm, type SubmitHandler } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { db } from '@/lib/firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { useToast } from '@/hooks/use-toast';
+import { cn } from '@/lib/utils';
+import { useState } from 'react';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import type { Order } from '@/lib/types';
+
+
+const orderSchema = z.object({
+  name: z.string().min(1, { message: 'Name is required' }),
+  email: z.string().email({ message: 'Invalid email address' }).optional().or(z.literal('')),
+  phone: z.string().optional(),
+  details: z.string().optional(),
+  attachment: z.any().optional(), 
+});
+type OrderFormData = z.infer<typeof orderSchema>;
+
 
 export default function MITServicesPage() {
+  const { toast } = useToast();
+  const [orderStatus, setOrderStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+
+  const { register: registerOrder, handleSubmit: handleSubmitOrder, reset: resetOrderForm, formState: { errors: orderErrors } } = useForm<OrderFormData>({
+    resolver: zodResolver(orderSchema),
+    defaultValues: { 
+      email: '',
+      phone: '',
+      details: '',
+    }
+  });
+
+  const onOrderSubmit: SubmitHandler<OrderFormData> = async (data) => {
+    setOrderStatus('submitting');
+    try {
+      const file = data.attachment && data.attachment.length > 0 ? data.attachment[0] : null;
+      const attachmentName = file ? (file as File).name : null;
+      
+      const orderPayload: Omit<Order, 'id'> = {
+        name: data.name,
+        email: data.email || '', 
+        phone: data.phone || '', 
+        details: data.details || '', 
+        attachmentName: attachmentName, 
+        timestamp: serverTimestamp(),
+      };
+      await addDoc(collection(db, 'orders'), orderPayload);
+      toast({ variant: 'success', title: 'Success!', description: 'Order submitted successfully! Muzo will get back to you!' });
+      setOrderStatus('success');
+      resetOrderForm(); 
+      setTimeout(() => setOrderStatus('idle'), 3000);
+    } catch (error) {
+      console.error("Error submitting order: ", error);
+      toast({ variant: 'destructive', title: 'Error', description: 'Failed to submit order. Please try again.'});
+      setOrderStatus('error');
+      setTimeout(() => setOrderStatus('idle'), 3000);
+    }
+  };
+
   return (
     <div className="container mx-auto py-12 px-4 md:px-6 lg:px-8 min-h-screen flex flex-col">
       <header className="mb-8">
@@ -24,7 +85,7 @@ export default function MITServicesPage() {
       <main className="flex-grow">
         <section className="mb-8 p-6 bg-card/90 backdrop-blur-md rounded-xl shadow-xl">
           <Image
-            src="https://picsum.photos/800/400"
+            src="https://picsum.photos/seed/tech/800/400"
             data-ai-hint="modern office technology"
             alt="MIT Services Showcase"
             width={800}
@@ -101,6 +162,64 @@ export default function MITServicesPage() {
             </div>
           </div>
         </section>
+
+        <section className="mt-12 py-8 border-t border-border relative z-10">
+          <h2 className="text-2xl font-semibold mb-6 text-primary text-center"><TranslatedText text="Request a Service"/></h2>
+          <div className="max-w-xl mx-auto p-6 bg-card/80 backdrop-blur-sm rounded-xl shadow-xl">
+          <form onSubmit={handleSubmitOrder(onOrderSubmit)}>
+              <div className="mb-4">
+                <Label htmlFor="order-name" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Name:"/></Label>
+                <Input type="text" id="order-name" {...registerOrder("name")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary"/>
+                {orderErrors.name && <p className="text-destructive text-xs italic mt-1"><TranslatedText text={orderErrors.name.message || ""} /></p>}
+              </div>
+                <div className="mb-4">
+                  <Label htmlFor="order-email" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Email (Optional):"/></Label>
+                  <Input type="email" id="order-email" {...registerOrder("email")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary"/>
+                  {orderErrors.email && <p className="text-destructive text-xs italic mt-1"><TranslatedText text={orderErrors.email.message || ""} /></p>}
+                </div>
+                <div className="mb-4">
+                  <Label htmlFor="order-phone" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Phone (Optional):"/></Label>
+                  <Input type="tel" id="order-phone" {...registerOrder("phone")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary"/>
+                </div>
+                <div className="mb-4">
+                  <Label htmlFor="order-attachment" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Attach File (Optional):"/></Label>
+                  <Input type="file" id="order-attachment" {...registerOrder("attachment")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90 focus:ring-2 focus:ring-primary"/>
+                </div>
+                  <div className="mb-6">
+                    <Label htmlFor="order-details" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Order Details (Optional):"/></Label>
+                    <Textarea id="order-details" rows={4} {...registerOrder("details")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary"></Textarea>
+                  </div>
+                  <div className="flex items-center justify-end">
+                    <Button
+                      type="submit"
+                      disabled={orderStatus === 'submitting' || orderStatus === 'success'}
+                      className={cn(
+                        'font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors min-w-[160px] justify-center',
+                        orderStatus === 'submitting' && 'opacity-50 cursor-not-allowed',
+                        orderStatus === 'success'
+                          ? 'bg-button-success text-button-success-foreground hover:bg-button-success/90'
+                          : 'bg-accent hover:bg-accent/90 text-primary-foreground'
+                      )}
+                    >
+                      {orderStatus === 'submitting' ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          <TranslatedText text="Placing..." />
+                        </>
+                      ) : orderStatus === 'success' ? (
+                        <>
+                          <Check className="mr-2 h-4 w-4" />
+                          <TranslatedText text="Sent!" />
+                        </>
+                      ) : (
+                        <TranslatedText text="Place Order" />
+                      )}
+                    </Button>
+                  </div>
+                </form>
+            </div>
+        </section>
+
       </main>
       <footer className="text-center py-6 border-t border-border">
          <Button variant="link" asChild>

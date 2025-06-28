@@ -28,6 +28,45 @@ const orderSchema = z.object({
 });
 type OrderFormData = z.infer<typeof orderSchema>;
 
+const services = [
+  {
+    slug: 'ai-consultation',
+    icon: BrainCircuit,
+    title: 'AI Consultation',
+    description: 'Leverage the power of Artificial Intelligence. We provide expert guidance on integrating AI solutions, like Genkit-powered agents and translation services, to automate processes and enhance user experience.',
+  },
+  {
+    slug: 'web-development',
+    icon: Globe,
+    title: 'Web Development',
+    description: 'Building modern, responsive, and high-performance websites using technologies like Next.js, React, and TypeScript. We focus on creating seamless user experiences with clean, scalable code.',
+  },
+  {
+    slug: 'app-development',
+    icon: Smartphone,
+    title: 'App Development',
+    description: 'Creating custom mobile applications for iOS and Android. Our focus is on user-centric design, robust functionality, and delivering a native-like performance for your target audience.',
+  },
+  {
+    slug: 'system-development',
+    icon: Server,
+    title: 'System Development',
+    description: 'Designing and building custom software systems tailored to your specific business needs. From internal tools to complex platforms, we ensure security, scalability, and efficiency.',
+  },
+  {
+    slug: 'networking',
+    icon: Network,
+    title: 'Networking',
+    description: 'Providing solutions for robust and secure network infrastructure. We cover network design, implementation, and management to ensure reliable connectivity for your operations.',
+  },
+  {
+    slug: 'cybersecurity',
+    icon: Shield,
+    title: 'Cybersecurity',
+    description: 'Protecting your digital assets with comprehensive cybersecurity services. We offer threat analysis, security audits, and implementation of protective measures to safeguard your systems.',
+  },
+];
+
 
 export default function MITServicesPage() {
   const { toast } = useToast();
@@ -36,9 +75,10 @@ export default function MITServicesPage() {
   const { register: registerOrder, handleSubmit: handleSubmitOrder, reset: resetOrderForm, formState: { errors: orderErrors } } = useForm<OrderFormData>({
     resolver: zodResolver(orderSchema),
     defaultValues: { 
+      name: '',
       email: '',
       phone: '',
-      details: '',
+      details: 'I would like to inquire about your services.',
     }
   });
 
@@ -100,66 +140,19 @@ export default function MITServicesPage() {
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* AI Consultation */}
-            <div className="p-6 bg-background/50 rounded-lg border flex flex-col items-center text-center">
-              <BrainCircuit className="h-12 w-12 text-accent mb-3" />
-              <h3 className="text-xl font-semibold text-foreground mb-2">
-                <TranslatedText text="AI Consultation" />
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                <TranslatedText text="Leverage the power of Artificial Intelligence. We provide expert guidance on integrating AI solutions, like Genkit-powered agents and translation services, to automate processes and enhance user experience." />
-              </p>
-            </div>
-            {/* Web Development */}
-            <div className="p-6 bg-background/50 rounded-lg border flex flex-col items-center text-center">
-              <Globe className="h-12 w-12 text-accent mb-3" />
-              <h3 className="text-xl font-semibold text-foreground mb-2">
-                <TranslatedText text="Web Development" />
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                <TranslatedText text="Building modern, responsive, and high-performance websites using technologies like Next.js, React, and TypeScript. We focus on creating seamless user experiences with clean, scalable code." />
-              </p>
-            </div>
-            {/* App Development */}
-            <div className="p-6 bg-background/50 rounded-lg border flex flex-col items-center text-center">
-              <Smartphone className="h-12 w-12 text-accent mb-3" />
-              <h3 className="text-xl font-semibold text-foreground mb-2">
-                <TranslatedText text="App Development" />
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                <TranslatedText text="Creating custom mobile applications for iOS and Android. Our focus is on user-centric design, robust functionality, and delivering a native-like performance for your target audience." />
-              </p>
-            </div>
-            {/* System Development */}
-            <div className="p-6 bg-background/50 rounded-lg border flex flex-col items-center text-center">
-              <Server className="h-12 w-12 text-accent mb-3" />
-              <h3 className="text-xl font-semibold text-foreground mb-2">
-                <TranslatedText text="System Development" />
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                <TranslatedText text="Designing and building custom software systems tailored to your specific business needs. From internal tools to complex platforms, we ensure security, scalability, and efficiency." />
-              </p>
-            </div>
-            {/* Networking */}
-            <div className="p-6 bg-background/50 rounded-lg border flex flex-col items-center text-center">
-              <Network className="h-12 w-12 text-accent mb-3" />
-              <h3 className="text-xl font-semibold text-foreground mb-2">
-                <TranslatedText text="Networking" />
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                <TranslatedText text="Providing solutions for robust and secure network infrastructure. We cover network design, implementation, and management to ensure reliable connectivity for your operations." />
-              </p>
-            </div>
-            {/* Cybersecurity */}
-            <div className="p-6 bg-background/50 rounded-lg border flex flex-col items-center text-center">
-              <Shield className="h-12 w-12 text-accent mb-3" />
-              <h3 className="text-xl font-semibold text-foreground mb-2">
-                <TranslatedText text="Cybersecurity" />
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                <TranslatedText text="Protecting your digital assets with comprehensive cybersecurity services. We offer threat analysis, security audits, and implementation of protective measures to safeguard your systems." />
-              </p>
-            </div>
+            {services.map((service) => (
+              <Link key={service.slug} href={`/mit-services/${service.slug}`} passHref>
+                <div className="p-6 bg-background/50 rounded-lg border flex flex-col items-center text-center hover:shadow-xl hover:border-primary transition-all duration-300 h-full cursor-pointer">
+                  <service.icon className="h-12 w-12 text-accent mb-3" />
+                  <h3 className="text-xl font-semibold text-foreground mb-2">
+                    <TranslatedText text={service.title} />
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    <TranslatedText text={service.description} />
+                  </p>
+                </div>
+              </Link>
+            ))}
           </div>
         </section>
 

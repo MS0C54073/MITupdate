@@ -47,28 +47,24 @@ export const TranslationProvider: React.FC<TranslationProviderProps> = ({ childr
   const [sessionTranslationsCache, setSessionTranslationsCache] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
+    // Clear session cache when language changes
     setSessionTranslationsCache({});
   }, [language]);
 
   const memoizedTranslate = useCallback(
     async (englishText: string): Promise<string> => {
-      if (!englishText.trim()) {
-        return '';
-      }
-
-      if (language === 'en') {
+      if (!englishText.trim() || language === 'en') {
         return englishText;
       }
 
       const cacheKey = englishText; 
-
       if (sessionTranslationsCache[cacheKey]) {
         return sessionTranslationsCache[cacheKey];
       }
 
       let docId;
       try {
-        docId = await sha256(`${language}_${englishText}`); // Make docId language-specific for cache key
+        docId = await sha256(`${language}_${englishText}`);
       } catch (e) {
         console.error(`Failed to generate docId for "${englishText}" (lang: ${language}).`, e);
         return englishText; 
@@ -76,60 +72,55 @@ export const TranslationProvider: React.FC<TranslationProviderProps> = ({ childr
       
       const docRef = doc(db, "translations", docId);
 
+      // 1. Check Firestore cache first.
       try {
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           const data = docSnap.data();
-          // The document ID is now language-specific, so we just need to check for 'translated' field or similar
-          // if (data && data[language]) { // This was when docId was only based on englishText
-          if (data && data.translatedText) { // Assuming we store the translation in a field named 'translatedText'
+          if (data?.translatedText) {
             const cachedTranslatedText = data.translatedText as string;
             setSessionTranslationsCache(prev => ({ ...prev, [cacheKey]: cachedTranslatedText }));
             return cachedTranslatedText;
           }
         }
+      } catch (error) {
+        console.error(`Firestore read error for docId ${docId}. Proceeding to API call.`, error);
+      }
 
+      // 2. If not in Firestore, call the translation API.
+      try {
         const translateFlowInput: TranslateInput = {
           text: englishText,
           targetLanguage: language,
         };
         const apiResult = await genkitTranslate(translateFlowInput);
         
-        if (!apiResult || typeof apiResult.translatedText !== 'string' || apiResult.translatedText.trim() === '') {
-          console.warn(
-            `Translation API call for "${englishText}" to "${language}" returned invalid, empty, or no translated text. Result:`,
-            apiResult,
-            'Falling back to English and caching original text for this language key.'
-          );
-          // Store the original English text as the "translation" for this specific language key if API fails.
-          // This prevents repeated failed API calls for the same text-language pair.
-          await setDoc(docRef, { 
-            originalText: englishText, 
-            targetLanguage: language,
-            translatedText: englishText, // Store original as fallback
-            lastTranslated: serverTimestamp() 
-          }, { merge: true });
-          setSessionTranslationsCache(prev => ({ ...prev, [cacheKey]: englishText }));
-          return englishText;
+        const translatedText = apiResult.translatedText;
+
+        if (typeof translatedText !== 'string') {
+          console.warn(`Translation for "${englishText}" returned invalid result.`, apiResult);
+          return englishText; // Fallback, do not cache.
         }
-        const apiTranslatedText = apiResult.translatedText;
 
-        const firestoreDataToSet = {
-          originalText: englishText,
-          targetLanguage: language,
-          translatedText: apiTranslatedText,
-          lastTranslated: serverTimestamp()
-        };
+        // 3. Update caches with the new translation.
+        setSessionTranslationsCache(prev => ({ ...prev, [cacheKey]: translatedText }));
         
-        await setDoc(docRef, firestoreDataToSet, { merge: true });
+        // Asynchronously write to Firestore, don't block returning the translation.
+        setDoc(docRef, { 
+          originalText: englishText, 
+          targetLanguage: language,
+          translatedText: translatedText,
+          lastTranslated: serverTimestamp() 
+        }, { merge: true }).catch(firestoreError => {
+          console.error(`Non-blocking Firestore write error for docId ${docId}:`, firestoreError);
+        });
 
-        setSessionTranslationsCache(prev => ({ ...prev, [cacheKey]: apiTranslatedText }));
-        return apiTranslatedText;
+        return translatedText;
 
       } catch (error) {
-        console.error(`Translation process error for "${englishText}" to "${language}" (docId: ${docId}):`, error);
-        setSessionTranslationsCache(prev => ({ ...prev, [cacheKey]: englishText }));
-        return englishText; 
+        console.error(`Translation API process failed for "${englishText}" to "${language}":`, error);
+        // On API error, return original text and DO NOT cache the failure.
+        return englishText;
       }
     },
     [language, sessionTranslationsCache]

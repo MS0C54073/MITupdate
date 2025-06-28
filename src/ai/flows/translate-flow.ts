@@ -22,12 +22,13 @@ const TranslateOutputSchema = z.object({
 });
 export type TranslateOutput = z.infer<typeof TranslateOutputSchema>;
 
+// The exported function is the public API for the translation flow.
+// It handles simple cases and then calls the main flow.
+// Errors from translateFlow will propagate up from here.
 export async function translate(input: TranslateInput): Promise<TranslateOutput> {
-  // If the input text is empty or only whitespace, return it directly.
   if (!input.text.trim()) {
     return { translatedText: input.text };
   }
-  // If target language is English, and we assume input is English, no translation needed.
   if (input.targetLanguage === 'en') {
      return { translatedText: input.text };
   }
@@ -79,25 +80,22 @@ const translateFlow = ai.defineFlow(
     outputSchema: TranslateOutputSchema,
   },
   async (input): Promise<TranslateOutput> => {
-    try {
-      const response = await prompt(input);
-      const output = response.output;
+    // Let errors from the prompt execution propagate.
+    const response = await prompt(input);
+    const output = response.output;
 
-      if (output && typeof output.translatedText === 'string' && output.translatedText.trim() !== '') {
+    // Validate the output.
+    if (output && typeof output.translatedText === 'string') {
+        // If the model returns an empty string, we'll treat it as a valid (but empty) translation.
+        // The calling logic can decide if it wants to fall back.
         return output;
-      } else {
-        console.warn(
-          'Translation prompt did not return expected output structure or returned empty. Input:',
-          input,
-          'Raw response from prompt:', response
-        );
-        // Fallback if output structure is not as expected or translated text is empty
-        return { translatedText: input.text };
-      }
-    } catch (error) {
-      console.error('Error in translateFlow during prompt execution:', error);
-      // Fallback to original text on error
-      return { translatedText: input.text };
     }
+    
+    // If we get here, the model returned an invalid structure. This is an error condition.
+    console.error(
+        'Translation prompt did not return the expected output structure.',
+        { input, response }
+    );
+    throw new Error('Translation failed: Invalid output from model.');
   }
 );

@@ -144,7 +144,7 @@ export default function AdminCommentsPage() {
             <div className="text-center py-10">
               <Image
                 src="https://placehold.co/400x300.png"
-                data-ai-hint="empty state"
+                data-ai-hint="empty mailbox"
                 alt="No comments yet"
                 width={400}
                 height={300}

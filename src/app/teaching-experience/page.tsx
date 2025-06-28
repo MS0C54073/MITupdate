@@ -25,7 +25,7 @@ export default function TeachingExperiencePage() {
         <section className="mb-8 p-6 bg-card/90 backdrop-blur-md rounded-xl shadow-xl">
           <Image
             src="https://placehold.co/800x400.png"
-            data-ai-hint="education classroom"
+            data-ai-hint="teaching online"
             alt="Teaching Experience Showcase"
             width={800}
             height={400}

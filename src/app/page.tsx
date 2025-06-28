@@ -14,7 +14,7 @@ import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 
 // Custom Icons
-import { WhatsappIcon, TelegramIcon } from '@/components/icons';
+import { WhatsappIcon, TelegramIcon, MuzoInITLogo } from '@/components/icons';
 import './ai.css';
 import TranslatedText from '@/app/components/translated-text';
 import { useState, useEffect } from 'react';
@@ -181,14 +181,21 @@ export default function Home() {
         <div className="flex flex-col items-center text-center md:flex-row md:text-left gap-8 p-6 bg-card/80 backdrop-blur-sm rounded-xl shadow-xl">
           <Image
             src="https://placehold.co/200x200.png"
-            data-ai-hint="profile portrait"
+            data-ai-hint="man portrait"
             alt="Muzo's Profile Picture"
             width={200}
             height={200}
             className="rounded-full shadow-lg border-4 border-primary"
           />
           <div className="text-center md:text-left flex-grow">
-            <h1 className="text-3xl font-bold mb-2 text-primary"><TranslatedText text="Musonda Salimu (Muzo)"/></h1>
+            <div className="flex items-center gap-4 justify-center md:justify-start mb-2">
+              <MuzoInITLogo className="h-16 w-16" />
+              <div>
+                <h1 className="text-3xl font-bold text-primary"><TranslatedText text="Musonda Salimu (Muzo)"/></h1>
+                <p className="text-lg font-semibold text-accent"><TranslatedText text="MuzoInIT (MIT)"/></p>
+              </div>
+            </div>
+            
             <p className="text-muted-foreground mb-4">
               <TranslatedText text="Tech Enthusiast, English Teacher, Affiliate Marketer, and Music Lover"/>
             </p>
@@ -264,7 +271,7 @@ export default function Home() {
             <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
               <Image
                 src="https://placehold.co/600x400.png"
-                data-ai-hint="software development"
+                data-ai-hint="code laptop"
                 alt="Software Engineering"
                 width={600}
                 height={400}
@@ -286,7 +293,7 @@ export default function Home() {
             <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
               <Image
                 src="https://placehold.co/600x400.png"
-                data-ai-hint="education classroom"
+                data-ai-hint="teacher classroom"
                 alt="Teaching Experience"
                 width={600}
                 height={400}
@@ -308,7 +315,7 @@ export default function Home() {
             <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
               <Image
                 src="https://placehold.co/600x400.png"
-                data-ai-hint="marketing analytics"
+                data-ai-hint="marketing chart"
                 alt="Affiliate Marketing Project"
                 width={600}
                 height={400}
@@ -332,7 +339,7 @@ export default function Home() {
             <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
               <Image
                 src="https://placehold.co/600x400.png"
-                data-ai-hint="creative hobbies"
+                data-ai-hint="guitar piano"
                 alt="Hobbies"
                 width={600}
                 height={400}

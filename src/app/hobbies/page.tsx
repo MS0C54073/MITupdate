@@ -25,7 +25,7 @@ export default function HobbiesPage() {
         <section className="mb-8 p-6 bg-card/90 backdrop-blur-md rounded-xl shadow-xl">
           <Image
             src="https://placehold.co/800x400.png"
-            data-ai-hint="creative hobbies"
+            data-ai-hint="gaming controller"
             alt="Hobbies Showcase"
             width={800}
             height={400}

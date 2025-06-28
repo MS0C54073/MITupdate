@@ -153,7 +153,7 @@ export default function AdminOrdersPage() {
              <div className="text-center py-10">
               <Image
                 src="https://placehold.co/400x300.png"
-                data-ai-hint="empty box"
+                data-ai-hint="empty cart"
                 alt="No orders yet"
                 width={400}
                 height={300}

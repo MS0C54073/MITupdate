@@ -24,7 +24,7 @@ export default function AffiliateMarketingManagerPage() {
       <main className="flex-grow">
         <section className="mb-8 p-6 bg-card/90 backdrop-blur-md rounded-xl shadow-xl">
           <Image
-            src="https://placehold.co/800x400.png"
+            src="https://picsum.photos/800/400"
             data-ai-hint="business handshake"
             alt="Affiliate Marketing Showcase"
             width={800}

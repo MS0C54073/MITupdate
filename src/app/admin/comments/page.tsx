@@ -143,7 +143,7 @@ export default function AdminCommentsPage() {
           {!loading && !error && comments.length === 0 && (
             <div className="text-center py-10">
               <Image
-                src="https://placehold.co/400x300.png"
+                src="https://picsum.photos/400/300"
                 data-ai-hint="empty mailbox"
                 alt="No comments yet"
                 width={400}

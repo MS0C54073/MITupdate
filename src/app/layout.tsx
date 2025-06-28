@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     siteName: "Muzo's Niche",
     images: [
       {
-        url: 'https://placehold.co/1200x630.png',
+        url: 'https://picsum.photos/1200/630',
         width: 1200,
         height: 630,
         alt: "Muzo's Niche Portfolio",
@@ -57,7 +57,7 @@ export const metadata: Metadata = {
     title: "Muzo's Niche - Musonda Salimu's Portfolio",
     description:
       'Musonda Salimu (Muzo) - Tech Enthusiast, English Teacher, Affiliate Marketer, and Music Lover',
-    images: ['https://placehold.co/1200x630.png'],
+    images: ['https://picsum.photos/1200/630'],
     creator: '@MuzoSalimu',
   },
   robots: {

@@ -152,7 +152,7 @@ export default function AdminOrdersPage() {
           {!loading && !error && orders.length === 0 && (
              <div className="text-center py-10">
               <Image
-                src="https://placehold.co/400x300.png"
+                src="https://picsum.photos/400/300"
                 data-ai-hint="empty cart"
                 alt="No orders yet"
                 width={400}

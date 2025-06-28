@@ -25,7 +25,7 @@ export default function TeachingExperiencePage() {
         <section className="mb-8 p-6 bg-card/90 backdrop-blur-md rounded-xl shadow-xl">
           <Image
             src="https://picsum.photos/800/400"
-            data-ai-hint="teaching online"
+            data-ai-hint="online education"
             alt="Teaching Experience Showcase"
             width={800}
             height={400}

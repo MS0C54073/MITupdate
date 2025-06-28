@@ -181,7 +181,7 @@ export default function Home() {
         <div className="flex flex-col items-center text-center md:flex-row md:text-left gap-8 p-6 bg-card/80 backdrop-blur-sm rounded-xl shadow-xl">
           <Image
             src="https://picsum.photos/200/200"
-            data-ai-hint="man portrait"
+            data-ai-hint="professional portrait"
             alt="Muzo's Profile Picture"
             width={200}
             height={200}
@@ -267,17 +267,17 @@ export default function Home() {
       <section  className="relative z-10">
         <h2 className="text-2xl font-semibold mb-6 text-primary text-center"><TranslatedText text="Portfolio Showcase"/></h2>
         <div className="portfolio-rotation">
-          <Link href="/software-engineering" passHref legacyBehavior>
+          <Link href="/mit-services" passHref legacyBehavior>
             <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
               <Image
                 src="https://picsum.photos/600/400"
-                data-ai-hint="code laptop"
-                alt="Software Engineering"
+                data-ai-hint="tech service"
+                alt="MIT Services"
                 width={600}
                 height={400}
                 className="rounded-md mb-2 w-full h-auto object-cover"
               />
-              <h3 className="text-xl font-semibold text-foreground mb-2"><TranslatedText text="Software Engineering"/></h3>
+              <h3 className="text-xl font-semibold text-foreground mb-2"><TranslatedText text="MIT Services"/></h3>
               <p className="text-muted-foreground">
                 <TranslatedText text="Brief description of the tech project. Mention technologies used and outcomes."/>
               </p>
@@ -293,7 +293,7 @@ export default function Home() {
             <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
               <Image
                 src="https://picsum.photos/600/400"
-                data-ai-hint="teacher classroom"
+                data-ai-hint="online learning"
                 alt="Teaching Experience"
                 width={600}
                 height={400}
@@ -315,7 +315,7 @@ export default function Home() {
             <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
               <Image
                 src="https://picsum.photos/600/400"
-                data-ai-hint="marketing chart"
+                data-ai-hint="digital marketing"
                 alt="Affiliate Marketing Project"
                 width={600}
                 height={400}
@@ -339,7 +339,7 @@ export default function Home() {
             <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
               <Image
                 src="https://picsum.photos/600/400"
-                data-ai-hint="guitar piano"
+                data-ai-hint="creative hobby"
                 alt="Hobbies"
                 width={600}
                 height={400}

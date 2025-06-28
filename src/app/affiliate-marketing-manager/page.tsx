@@ -25,7 +25,7 @@ export default function AffiliateMarketingManagerPage() {
         <section className="mb-8 p-6 bg-card/90 backdrop-blur-md rounded-xl shadow-xl">
           <Image
             src="https://picsum.photos/800/400"
-            data-ai-hint="business handshake"
+            data-ai-hint="digital marketing"
             alt="Affiliate Marketing Showcase"
             width={800}
             height={400}

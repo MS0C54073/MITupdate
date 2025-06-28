@@ -153,7 +153,7 @@ export default function AdminOrdersPage() {
              <div className="text-center py-10">
               <Image
                 src="https://picsum.photos/400/300"
-                data-ai-hint="empty cart"
+                data-ai-hint="no orders"
                 alt="No orders yet"
                 width={400}
                 height={300}

@@ -144,7 +144,7 @@ export default function AdminCommentsPage() {
             <div className="text-center py-10">
               <Image
                 src="https://picsum.photos/400/300"
-                data-ai-hint="empty mailbox"
+                data-ai-hint="no messages"
                 alt="No comments yet"
                 width={400}
                 height={300}

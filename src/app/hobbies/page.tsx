@@ -25,7 +25,7 @@ export default function HobbiesPage() {
         <section className="mb-8 p-6 bg-card/90 backdrop-blur-md rounded-xl shadow-xl">
           <Image
             src="https://picsum.photos/800/400"
-            data-ai-hint="gaming controller"
+            data-ai-hint="creative technology"
             alt="Hobbies Showcase"
             width={800}
             height={400}

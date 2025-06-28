@@ -7,6 +7,9 @@ import {ThemeProvider} from '@/components/theme-provider';
 import {TranslationProvider} from './translator';
 import {LanguageSelector} from '@/app/components/language-selector';
 import { Toaster } from "@/components/ui/toaster";
+import { ViewModeProvider } from '@/app/components/view-mode-provider';
+import { ViewModeToggle } from '@/app/components/view-mode-toggle';
+import { ViewModeWrapper } from '@/app/components/view-mode-wrapper';
 
 
 const geistSans = Geist({
@@ -94,12 +97,17 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <TranslationProvider>
-          <div className="fixed top-4 right-4 z-50 flex flex-col items-end space-y-2">
-            <ModeToggle />
-            <LanguageSelector />
-          </div>
-            {children}
-            <Toaster />
+            <ViewModeProvider>
+              <div className="fixed top-4 right-4 z-50 flex flex-col items-end space-y-2">
+                <ModeToggle />
+                <LanguageSelector />
+                <ViewModeToggle />
+              </div>
+              <ViewModeWrapper>
+                {children}
+              </ViewModeWrapper>
+              <Toaster />
+            </ViewModeProvider>
           </TranslationProvider>
         </ThemeProvider>
       </body>

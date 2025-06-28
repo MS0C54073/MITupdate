@@ -118,3 +118,29 @@ body {
 .text-success-foreground {
   color: hsl(var(--success-foreground)) !important;
 }
+
+/* Custom view mode simulation styles */
+/* We only apply these styles on screens that are tablet-sized or larger. */
+@media (min-width: 768px) {
+  /* This creates a backdrop for the simulation */
+  body:has(.view-mode-mobile-simulation) {
+    background-color: hsl(var(--muted));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem;
+  }
+  
+  /* This is the container being simulated as a mobile device */
+  .view-mode-mobile-simulation {
+    max-width: 420px;
+    width: 100%;
+    height: clamp(600px, 85vh, 900px); /* A phone-like height */
+    border: 8px solid hsl(var(--border));
+    border-radius: 1.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    overflow-y: auto;
+    background-color: hsl(var(--background));
+  }
+}

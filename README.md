@@ -15,6 +15,5 @@ This project is a personal website that showcases various projects and skills, w
 ## Setup and Running the Project
 
 To set up and run the project locally, follow these steps:
-
 1. **Clone the repository:**
 

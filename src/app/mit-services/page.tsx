@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -35,7 +34,7 @@ export default function MITServicesPage() {
             <TranslatedText text="Technology Solutions & Services" />
           </h2>
           <p className="text-muted-foreground mb-4 text-lg">
-            <TranslatedText text="Explore the range of technology services offered by MIT (MuzoInIT). This section showcases a variety of solutions, demonstrating proficiency in modern web technologies, problem-solving capabilities, and a commitment to building efficient and scalable applications." />
+            <TranslatedText text="Explore the range of technology services offered by MIT (MuzoInTech). This section showcases a variety of solutions, demonstrating proficiency in modern web technologies, problem-solving capabilities, and a commitment to building efficient and scalable applications." />
           </p>
           <div className="grid md:grid-cols-2 gap-6 mb-6">
             <div className="p-4 bg-background/50 rounded-lg border">

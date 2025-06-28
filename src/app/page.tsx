@@ -1,4 +1,3 @@
-
 'use client';
 
 import Image from 'next/image';
@@ -14,7 +13,7 @@ import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 
 // Custom Icons
-import { WhatsappIcon, TelegramIcon, MuzoInITLogo } from '@/components/icons';
+import { WhatsappIcon, TelegramIcon, MuzoInTechLogo } from '@/components/icons';
 import './ai.css';
 import TranslatedText from '@/app/components/translated-text';
 import { useState, useEffect } from 'react';
@@ -189,10 +188,10 @@ export default function Home() {
           />
           <div className="text-center md:text-left flex-grow">
             <div className="flex items-center gap-4 justify-center md:justify-start mb-2">
-              <MuzoInITLogo className="h-16 w-16" />
+              <MuzoInTechLogo className="h-16 w-16" />
               <div>
                 <h1 className="text-3xl font-bold text-primary"><TranslatedText text="Musonda Salimu (Muzo)"/></h1>
-                <p className="text-lg font-semibold text-accent"><TranslatedText text="MuzoInIT (MIT)"/></p>
+                <p className="text-lg font-semibold text-accent"><TranslatedText text="MuzoInTech (MIT)"/></p>
               </div>
             </div>
             
@@ -270,7 +269,7 @@ export default function Home() {
           <Link href="/mit-services" passHref legacyBehavior>
             <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
               <Image
-                src="https://picsum.photos/600/400"
+                src="https://picsum.photos/seed/tech/600/400"
                 data-ai-hint="tech service"
                 alt="MIT Services"
                 width={600}
@@ -292,7 +291,7 @@ export default function Home() {
           <Link href="/teaching-experience" passHref legacyBehavior>
             <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
               <Image
-                src="https://picsum.photos/600/400"
+                src="https://picsum.photos/seed/education/600/400"
                 data-ai-hint="online learning"
                 alt="Teaching Experience"
                 width={600}
@@ -314,7 +313,7 @@ export default function Home() {
           <Link href="/affiliate-marketing-manager" passHref legacyBehavior>
             <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
               <Image
-                src="https://picsum.photos/600/400"
+                src="https://picsum.photos/seed/marketing/600/400"
                 data-ai-hint="digital marketing"
                 alt="Affiliate Marketing Project"
                 width={600}
@@ -338,7 +337,7 @@ export default function Home() {
           <Link href="/hobbies" passHref legacyBehavior>
             <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
               <Image
-                src="https://picsum.photos/600/400"
+                src="https://picsum.photos/seed/hobby/600/400"
                 data-ai-hint="creative hobby"
                 alt="Hobbies"
                 width={600}
@@ -531,7 +530,3 @@ export default function Home() {
     </div>
   );
 }
-
-    
-
-    

@@ -33,13 +33,13 @@ export function TelegramIcon(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
-export function MuzoInITLogo(props: React.SVGProps<SVGSVGElement>) {
+export function MuzoInTechLogo(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       {...props}
       viewBox="0 0 100 100"
       xmlns="http://www.w3.org/2000/svg"
-      aria-label="MuzoInIT Logo"
+      aria-label="MuzoInTech Logo"
     >
       <rect width="100" height="100" rx="15" fill="hsl(var(--primary))" />
       <text

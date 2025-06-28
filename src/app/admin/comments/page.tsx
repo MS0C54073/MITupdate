@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import { db } from '@/lib/firebase';
 import { collection, getDocs, orderBy, query, Timestamp, limit, startAfter, type QueryDocumentSnapshot, type DocumentData } from 'firebase/firestore';
 import type { DisplayComment } from '@/lib/types'; 
+import { SocialIcons } from '@/app/components/social-icons';
 
 export default function AdminCommentsPage() {
   const [comments, setComments] = useState<DisplayComment[]>([]);
@@ -172,11 +173,14 @@ export default function AdminCommentsPage() {
         </section>
       </main>
       <footer className="text-center py-6 border-t border-border">
-        <Button variant="link" asChild>
-          <Link href="/admin/dashboard">
-            <TranslatedText text="Return to Dashboard" />
-          </Link>
-        </Button>
+        <div className="flex flex-col items-center gap-4">
+            <SocialIcons className="flex space-x-4 justify-center" />
+            <Button variant="link" asChild>
+            <Link href="/admin/dashboard">
+                <TranslatedText text="Return to Dashboard" />
+            </Link>
+            </Button>
+        </div>
       </footer>
     </div>
   );

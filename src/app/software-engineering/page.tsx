@@ -6,6 +6,7 @@ import TranslatedText from '@/app/components/translated-text'; // Updated import
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
+import { SocialIcons } from '@/app/components/social-icons';
 
 export default function SoftwareEngineeringPage() {
   return (
@@ -74,11 +75,14 @@ export default function SoftwareEngineeringPage() {
         </section>
       </main>
       <footer className="text-center py-6 border-t border-border">
-         <Button variant="link" asChild>
-          <Link href="/">
-            <TranslatedText text="Return to Homepage" />
-          </Link>
-        </Button>
+        <div className="flex flex-col items-center gap-4">
+            <SocialIcons className="flex space-x-4 justify-center" />
+            <Button variant="link" asChild>
+            <Link href="/">
+                <TranslatedText text="Return to Homepage" />
+            </Link>
+            </Button>
+        </div>
       </footer>
     </div>
   );

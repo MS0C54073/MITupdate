@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -17,6 +18,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import type { Order } from '@/lib/types';
+import { SocialIcons } from '@/app/components/social-icons';
 
 
 const orderSchema = z.object({
@@ -215,11 +217,14 @@ export default function MITServicesPage() {
 
       </main>
       <footer className="text-center py-6 border-t border-border">
-         <Button variant="link" asChild>
-          <Link href="/">
-            <TranslatedText text="Return to Homepage" />
-          </Link>
-        </Button>
+         <div className="flex flex-col items-center gap-4">
+            <SocialIcons className="flex space-x-4 justify-center" />
+            <Button variant="link" asChild>
+                <Link href="/">
+                    <TranslatedText text="Return to Homepage" />
+                </Link>
+            </Button>
+         </div>
       </footer>
     </div>
   );

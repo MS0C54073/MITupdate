@@ -18,6 +18,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { SocialIcons } from '@/app/components/social-icons';
 
 export default function AdminDashboardPage() {
   const [newCommentsCount, setNewCommentsCount] = useState(0);
@@ -224,9 +225,12 @@ export default function AdminDashboardPage() {
       </main>
 
       <footer className="text-center py-6 mt-8 border-t border-border">
-        <p className="text-sm text-muted-foreground">
-          <TranslatedText text="Manage your website content and interactions." />
-        </p>
+        <div className="flex flex-col items-center gap-4">
+            <p className="text-sm text-muted-foreground">
+            <TranslatedText text="Manage your website content and interactions." />
+            </p>
+            <SocialIcons className="flex space-x-4 justify-center" />
+        </div>
       </footer>
     </div>
   );

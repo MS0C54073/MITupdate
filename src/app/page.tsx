@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { Github, Linkedin, Youtube, Loader2, Check } from 'lucide-react';
+import { Loader2, Check } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -13,7 +13,8 @@ import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 
 // Custom Icons
-import { WhatsappIcon, TelegramIcon, MuzoInTechLogo } from '@/components/icons';
+import { MuzoInTechLogo } from '@/components/icons';
+import { SocialIcons } from '@/components/social-icons';
 import './ai.css';
 import TranslatedText from '@/app/components/translated-text';
 import { useState, useEffect } from 'react';
@@ -203,53 +204,7 @@ export default function Home() {
               {' '}
               <TranslatedText text="Exploring the intersections of tech, teaching, marketing, and music."/>
             </p>
-            <div className="mt-4 flex space-x-4 justify-center md:justify-start">
-              <a
-                href="https://www.linkedin.com/in/musonda-salimu-a4a0b31b9/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary hover:text-highlight transition-colors"
-                aria-label="LinkedIn"
-              >
-                <Linkedin className="h-6 w-6"/>
-              </a>
-              <a
-                href="https://github.com/MS0C54073"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary hover:text-highlight transition-colors"
-                aria-label="GitHub"
-              >
-                <Github className="h-6 w-6"/>
-              </a>
-              <a
-                href="https://www.youtube.com/@musondasalimu2986"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary hover:text-highlight transition-colors"
-                aria-label="YouTube"
-              >
-                <Youtube className="h-6 w-6"/>
-              </a>
-              <a
-                href="https://wa.me/79014213578"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary hover:text-highlight transition-colors"
-                aria-label="Whatsapp"
-              >
-                <WhatsappIcon className="h-6 w-6"/>
-              </a>
-              <a
-                href="https://t.me/MuzoSalim"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary hover:text-highlight transition-colors"
-                aria-label="Telegram"
-              >
-                <TelegramIcon className="h-6 w-6"/>
-              </a>
-            </div>
+            <SocialIcons className="mt-4 flex space-x-4 justify-center md:justify-start" />
           </div>
           <Button variant="outline" onClick={() => setIsAuthModalOpen(true)} className="self-start md:self-center mt-4 md:mt-0">
             <TranslatedText text="Admin" />
@@ -478,53 +433,7 @@ export default function Home() {
         <p className="text-foreground mb-4">
           <TranslatedText text="I'm always open to new opportunities and collaborations. Feel free to reach out through any of the following channels:"/>
         </p>
-        <div className="flex space-x-6 justify-center">
-          <a
-            href="https://www.linkedin.com/in/musonda-salimu-a4a0b31b9/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-primary hover:text-highlight transition-colors"
-            aria-label="LinkedIn Profile"
-          >
-            <Linkedin className="h-8 w-8"/>
-          </a>
-          <a
-            href="https://github.com/MS0C54073"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-primary hover:text-highlight transition-colors"
-            aria-label="GitHub Profile"
-          >
-            <Github className="h-8 w-8"/>
-          </a>
-          <a
-            href="https://www.youtube.com/@musondasalimu2986"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-primary hover:text-highlight transition-colors"
-            aria-label="YouTube Channel"
-          >
-            <Youtube className="h-8 w-8"/>
-          </a>
-          <a
-            href="https://wa.me/79014213578"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-primary hover:text-highlight transition-colors"
-            aria-label="WhatsApp"
-          >
-            <WhatsappIcon className="h-8 w-8"/>
-          </a>
-          <a
-            href="https://t.me/MuzoSalim"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-primary hover:text-highlight transition-colors"
-            aria-label="Telegram"
-          >
-            <TelegramIcon className="h-8 w-8"/>
-          </a>
-        </div>
+        <SocialIcons className="flex space-x-6 justify-center" />
         </div>
       </section>
     </div>

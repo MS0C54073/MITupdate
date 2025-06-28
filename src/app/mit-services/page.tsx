@@ -1,9 +1,10 @@
+
 'use client';
 
 import Link from 'next/link';
 import TranslatedText from '@/app/components/translated-text';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, BrainCircuit, Globe, Smartphone, Server, Network, Shield } from 'lucide-react';
 import Image from 'next/image';
 
 export default function MITServicesPage() {
@@ -31,45 +32,74 @@ export default function MITServicesPage() {
             className="rounded-lg mb-6 w-full object-cover shadow-md"
           />
           <h2 className="text-3xl font-semibold text-foreground mb-4">
-            <TranslatedText text="Technology Solutions & Services" />
+            <TranslatedText text="Comprehensive Technology Solutions" />
           </h2>
-          <p className="text-muted-foreground mb-4 text-lg">
-            <TranslatedText text="Explore the range of technology services offered by MIT (MuzoInTech). This section showcases a variety of solutions, demonstrating proficiency in modern web technologies, problem-solving capabilities, and a commitment to building efficient and scalable applications." />
+          <p className="text-muted-foreground mb-8 text-lg">
+            <TranslatedText text="MuzoInTech (MIT) offers a wide spectrum of IT services designed to empower your business. From initial consultation to development and deployment, we provide end-to-end solutions to meet your unique technological needs." />
           </p>
-          <div className="grid md:grid-cols-2 gap-6 mb-6">
-            <div className="p-4 bg-background/50 rounded-lg border">
-              <h3 className="text-xl font-semibold text-accent mb-2">
-                <TranslatedText text="Web Development" />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* AI Consultation */}
+            <div className="p-6 bg-background/50 rounded-lg border flex flex-col items-center text-center">
+              <BrainCircuit className="h-12 w-12 text-accent mb-3" />
+              <h3 className="text-xl font-semibold text-foreground mb-2">
+                <TranslatedText text="AI Consultation" />
               </h3>
-              <p className="text-sm text-muted-foreground mb-2">
-                <TranslatedText text="Technologies: Next.js, React, TypeScript, Tailwind CSS, Firebase, Genkit (for AI)" />
-              </p>
-              <p className="text-sm text-foreground">
-                <TranslatedText text="Building modern, responsive websites and web applications. This portfolio itself is an example, featuring dark/light mode, real-time AI-powered language translation, and a clean, performant architecture." />
+              <p className="text-sm text-muted-foreground">
+                <TranslatedText text="Leverage the power of Artificial Intelligence. We provide expert guidance on integrating AI solutions, like Genkit-powered agents and translation services, to automate processes and enhance user experience." />
               </p>
             </div>
-            <div className="p-4 bg-background/50 rounded-lg border">
-              <h3 className="text-xl font-semibold text-accent mb-2">
-                <TranslatedText text="Custom Software Solutions" />
+            {/* Web Development */}
+            <div className="p-6 bg-background/50 rounded-lg border flex flex-col items-center text-center">
+              <Globe className="h-12 w-12 text-accent mb-3" />
+              <h3 className="text-xl font-semibold text-foreground mb-2">
+                <TranslatedText text="Web Development" />
               </h3>
-              <p className="text-sm text-muted-foreground mb-2">
-                <TranslatedText text="Technologies: Node.js, Express, MongoDB, React, Redux" />
+              <p className="text-sm text-muted-foreground">
+                <TranslatedText text="Building modern, responsive, and high-performance websites using technologies like Next.js, React, and TypeScript. We focus on creating seamless user experiences with clean, scalable code." />
               </p>
-              <p className="text-sm text-foreground">
-                <TranslatedText text="Designing and building custom applications tailored to specific business needs. From e-commerce platforms to internal tools, the focus is on creating secure, scalable, and user-friendly software." />
+            </div>
+            {/* App Development */}
+            <div className="p-6 bg-background/50 rounded-lg border flex flex-col items-center text-center">
+              <Smartphone className="h-12 w-12 text-accent mb-3" />
+              <h3 className="text-xl font-semibold text-foreground mb-2">
+                <TranslatedText text="App Development" />
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                <TranslatedText text="Creating custom mobile applications for iOS and Android. Our focus is on user-centric design, robust functionality, and delivering a native-like performance for your target audience." />
+              </p>
+            </div>
+            {/* System Development */}
+            <div className="p-6 bg-background/50 rounded-lg border flex flex-col items-center text-center">
+              <Server className="h-12 w-12 text-accent mb-3" />
+              <h3 className="text-xl font-semibold text-foreground mb-2">
+                <TranslatedText text="System Development" />
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                <TranslatedText text="Designing and building custom software systems tailored to your specific business needs. From internal tools to complex platforms, we ensure security, scalability, and efficiency." />
+              </p>
+            </div>
+            {/* Networking */}
+            <div className="p-6 bg-background/50 rounded-lg border flex flex-col items-center text-center">
+              <Network className="h-12 w-12 text-accent mb-3" />
+              <h3 className="text-xl font-semibold text-foreground mb-2">
+                <TranslatedText text="Networking" />
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                <TranslatedText text="Providing solutions for robust and secure network infrastructure. We cover network design, implementation, and management to ensure reliable connectivity for your operations." />
+              </p>
+            </div>
+            {/* Cybersecurity */}
+            <div className="p-6 bg-background/50 rounded-lg border flex flex-col items-center text-center">
+              <Shield className="h-12 w-12 text-accent mb-3" />
+              <h3 className="text-xl font-semibold text-foreground mb-2">
+                <TranslatedText text="Cybersecurity" />
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                <TranslatedText text="Protecting your digital assets with comprehensive cybersecurity services. We offer threat analysis, security audits, and implementation of protective measures to safeguard your systems." />
               </p>
             </div>
           </div>
-          <h3 className="text-2xl font-semibold text-foreground mb-3">
-            <TranslatedText text="Skills & Expertise" />
-          </h3>
-          <ul className="list-disc list-inside text-muted-foreground space-y-1">
-            <li><TranslatedText text="Frontend: React, Next.js, Vue.js, HTML5, CSS3, JavaScript (ES6+), TypeScript" /></li>
-            <li><TranslatedText text="Backend: Node.js, Express.js, Python (Flask/Django basics)" /></li>
-            <li><TranslatedText text="Databases: Firebase Firestore, MongoDB, PostgreSQL (basics)" /></li>
-            <li><TranslatedText text="Tools & Platforms: Git, Docker, Google Cloud Platform, Firebase, Vercel, Netlify" /></li>
-            <li><TranslatedText text="Others: Agile Methodologies, RESTful APIs, UI/UX Principles, AI Integration (Genkit)" /></li>
-          </ul>
         </section>
       </main>
       <footer className="text-center py-6 border-t border-border">

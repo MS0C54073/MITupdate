@@ -25,8 +25,8 @@ export default function HobbiesPage() {
       <main className="flex-grow">
         <section className="mb-8 p-6 bg-card/90 backdrop-blur-md rounded-xl shadow-xl">
           <Image
-            src="https://picsum.photos/800/400"
-            data-ai-hint="creative technology"
+            src="https://placehold.co/800x400.png"
+            data-ai-hint="video games"
             alt="Hobbies Showcase"
             width={800}
             height={400}

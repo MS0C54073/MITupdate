@@ -43,7 +43,7 @@ export default function WorkAndEducationPage() {
       <main className="flex-grow">
         <section className="mb-8 p-6 bg-card/90 backdrop-blur-md rounded-xl shadow-xl">
           <Image
-            src="https://picsum.photos/seed/work-education/800/400"
+            src="https://placehold.co/800x400.png"
             data-ai-hint="professional education"
             alt="A professional setting representing work and education"
             width={800}
@@ -179,11 +179,10 @@ export default function WorkAndEducationPage() {
                 </ul>
                 <h4 className="font-semibold text-foreground"><TranslatedText text="Technical Skills"/></h4>
                 <ul className="list-disc list-inside text-muted-foreground space-y-1">
-                  <li><TranslatedText text="Python"/></li>
-                  <li><TranslatedText text="Django Framework"/></li>
+                  <li><TranslatedText text="Python programming"/></li>
                   <li><TranslatedText text="Mathematical Programming"/></li>
-                  <li><TranslatedText text="General Information Technology"/></li>
-                  <li><TranslatedText text="Advanced PC User"/></li>
+                  <li><TranslatedText text="Information Technology"/></li>
+                  <li><TranslatedText text="Linux"/></li>
                 </ul>
             </div>
           </div>

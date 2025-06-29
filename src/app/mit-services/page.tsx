@@ -18,7 +18,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import type { Order } from '@/lib/types';
-import { SocialIcons } from '@/app/components/social-icons';
+import { SocialIcons } from '@/components/social-icons';
 
 
 const orderSchema = z.object({

@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { ArrowLeft, Briefcase, GraduationCap, Star, Award, Languages } from 'lucide-react';
 import Image from 'next/image';
-import { SocialIcons } from '@/app/components/social-icons';
+import { SocialIcons } from '@/components/social-icons';
 
 
 const ExperienceItem = ({ title, company, duration, details, link }: { title: string, company: string, duration: string, details: string[], link?: string }) => (

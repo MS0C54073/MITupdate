@@ -6,7 +6,7 @@ import TranslatedText from '@/app/components/translated-text'; // Updated import
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
-import { SocialIcons } from '@/app/components/social-icons';
+import { SocialIcons } from '@/components/social-icons';
 
 export default function SoftwareEngineeringPage() {
   return (

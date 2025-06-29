@@ -6,7 +6,7 @@ import TranslatedText from '@/app/components/translated-text'; // Updated import
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Music2, Gamepad2, Film } from 'lucide-react';
 import Image from 'next/image';
-import { SocialIcons } from '@/app/components/social-icons';
+import { SocialIcons } from '@/components/social-icons';
 
 export default function HobbiesPage() {
   return (

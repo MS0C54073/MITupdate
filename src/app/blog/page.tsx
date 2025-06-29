@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft, Loader2, Calendar, User } from 'lucide-react';
 import TranslatedText from '@/app/components/translated-text';
-import { SocialIcons } from '@/app/components/social-icons';
+import { SocialIcons } from '@/components/social-icons';
 
 function createExcerpt(text: string, maxLength = 150): string {
     if (text.length <= maxLength) return text;

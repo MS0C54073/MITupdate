@@ -11,7 +11,7 @@ import type { FullDisplayBlogPost } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Loader2, Calendar, User } from 'lucide-react';
 import TranslatedText from '@/app/components/translated-text';
-import { SocialIcons } from '@/app/components/social-icons';
+import { SocialIcons } from '@/components/social-icons';
 
 // Simple markdown to HTML renderer
 function renderContent(content: string) {

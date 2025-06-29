@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 import { db } from '@/lib/firebase';
 import { collection, getDocs, orderBy, query, Timestamp, limit, startAfter, type QueryDocumentSnapshot, type DocumentData } from 'firebase/firestore';
 import type { DisplayOrder } from '@/lib/types'; 
-import { SocialIcons } from '@/app/components/social-icons';
+import { SocialIcons } from '@/components/social-icons';
 
 export default function AdminOrdersPage() {
   const [orders, setOrders] = useState<DisplayOrder[]>([]);

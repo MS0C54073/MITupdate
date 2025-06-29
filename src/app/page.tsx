@@ -46,7 +46,6 @@ type OrderFormData = z.infer<typeof orderSchema>;
 
 export default function Home() {
   const router = useRouter();
-  const [isClient, setIsClient] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const { toast } = useToast();
 
@@ -75,11 +74,6 @@ export default function Home() {
     }
   });
 
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
   const checkArrows = useCallback(() => {
     const container = scrollContainerRef.current;
     if (container) {
@@ -105,7 +99,7 @@ export default function Home() {
               window.removeEventListener('resize', checkArrows);
           };
       }
-  }, [isClient, checkArrows]);
+  }, [checkArrows]);
 
   const handleScroll = (direction: 'left' | 'right') => {
       if (scrollContainerRef.current) {
@@ -177,52 +171,6 @@ export default function Home() {
 
   return (
     <div className="container mx-auto py-12 px-4 md:px-6 lg:px-8">
-      {isClient && (
-        <div className="ai-background">
-          <div className="neural-nodes">
-            {[...Array(10)].map((_, i) => (
-              <div
-                key={`node-${i}`}
-                className="node"
-                style={{
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                  animationDelay: `${Math.random() * 2}s`,
-                }}
-              />
-            ))}
-          </div>
-          <div className="data-stream">
-            {[...Array(30)].map((_, i) => (
-              <div
-                key={`particle-${i}`}
-                className="particle"
-                style={{
-                  left: `${Math.random() * 100}%`,
-                  animationDuration: `${2 + Math.random() * 3}s`,
-                  animationDelay: `${Math.random() * 5}s`,
-                }}
-              />
-            ))}
-          </div>
-          <div className="circuit-traces">
-            {[...Array(5)].map((_, i) => (
-              <div
-                key={`trace-${i}`}
-                className="trace"
-                style={{
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                  width: `${Math.random() * 200}px`,
-                  height: '2px',
-                  transform: `rotate(${Math.random() * 360}deg)`,
-                  animationDelay: `${Math.random() * 3}s`,
-                }}
-              />
-            ))}
-          </div>
-        </div>
-      )}
       <section className="mb-12 relative z-10">
         <div className="flex flex-col items-center text-center md:flex-row md:text-left gap-8 p-6 bg-card/80 backdrop-blur-sm rounded-xl shadow-xl">
           <Image

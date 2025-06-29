@@ -1,0 +1,164 @@
+/* src/app/backgrounds.css */
+
+/* Neural Network Nexus */
+.neural-network-nexus {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: radial-gradient(ellipse at center, hsl(var(--primary) / 0.1), transparent 70%);
+}
+
+.neural-network-nexus .node {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background-color: hsl(var(--accent) / 0.5);
+    border-radius: 50%;
+    box-shadow: 0 0 10px hsl(var(--accent) / 0.5), 0 0 20px hsl(var(--accent) / 0.3);
+    animation: float 10s infinite alternate ease-in-out;
+}
+
+@keyframes float {
+    0% { transform: translate(0, 0); }
+    25% { transform: translate(20px, -30px); }
+    50% { transform: translate(-25px, 25px); }
+    75% { transform: translate(30px, 30px); }
+    100% { transform: translate(0, 0); }
+}
+
+/* Adds a subtle connection effect */
+.neural-network-nexus::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 200%; height: 200%;
+    background: repeating-linear-gradient(45deg, hsl(var(--primary) / 0.02), hsl(var(--primary) / 0.02) 1px, transparent 1px, transparent 20px);
+    animation: slide 60s linear infinite;
+}
+
+@keyframes slide {
+    from { transform: translate(0, 0); }
+    to { transform: translate(-50%, -50%); }
+}
+
+
+/* Quantum Matrix Rain */
+.quantum-matrix-rain {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.rain-drop {
+    position: absolute;
+    top: -100%;
+    color: hsl(var(--primary));
+    font-family: monospace;
+    font-size: 14px;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    user-select: none;
+    animation: fall linear infinite;
+    opacity: 0;
+}
+
+.rain-drop::first-letter {
+    color: hsl(var(--foreground));
+    text-shadow: 0 0 5px hsl(var(--foreground));
+}
+
+@keyframes fall {
+    from { transform: translateY(0); opacity: 1; }
+    to { transform: translateY(100vh); opacity: 1; }
+}
+
+
+/* Circuit Board Topography */
+.circuit-board-topography {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 20% 20%, hsl(var(--accent) / 0.08) 0%, transparent 15%),
+        radial-gradient(circle at 80% 70%, hsl(var(--accent) / 0.08) 0%, transparent 15%);
+}
+
+.circuit-board-topography .trace {
+    position: absolute;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, hsl(var(--accent) / 0.5), transparent);
+    border-radius: 2px;
+    animation: pulse-circuit 7s infinite ease-in-out;
+}
+
+.trace::before, .trace::after {
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: hsl(var(--accent));
+    top: -2px;
+    box-shadow: 0 0 8px hsl(var(--accent));
+}
+.trace::before { left: 0; }
+.trace::after { right: 0; }
+
+
+@keyframes pulse-circuit {
+    0%, 100% { opacity: 0.1; }
+    50% { opacity: 0.8; }
+}
+
+
+/* Data Center Labyrinth */
+.datacenter-labyrinth {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: hsl(var(--background));
+    perspective: 500px;
+}
+
+.isometric-grid {
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transform: rotateX(60deg) rotateZ(-45deg);
+}
+
+.server-rack {
+    position: absolute;
+    width: 50px;
+    height: 100px;
+    background-color: hsl(var(--muted));
+    border: 1px solid hsl(var(--border));
+    transform-style: preserve-3d;
+    opacity: 0.5;
+    animation: float-rack 8s infinite ease-in-out alternate;
+}
+
+@keyframes float-rack {
+    from { transform: translateZ(-20px); }
+    to { transform: translateZ(20px); }
+}
+
+.server-rack .led {
+    position: absolute;
+    left: 5px;
+    top: 10%;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: hsl(var(--primary));
+    animation: blink 2s infinite;
+}
+
+@keyframes blink {
+    0%, 100% { box-shadow: 0 0 4px 2px hsl(var(--primary) / 0.7); opacity: 1; }
+    50% { box-shadow: none; opacity: 0.5; }
+}

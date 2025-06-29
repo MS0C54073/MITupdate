@@ -10,6 +10,9 @@ import { Toaster } from "@/components/ui/toaster";
 import { ViewModeProvider } from '@/app/components/view-mode-provider';
 import { ViewModeToggle } from '@/app/components/view-mode-toggle';
 import { ViewModeWrapper } from '@/app/components/view-mode-wrapper';
+import { BackgroundThemeProvider } from './components/background-theme-provider';
+import { BackgroundThemeToggle } from './components/background-theme-toggle';
+import { DynamicBackground } from './components/dynamic-background';
 
 
 const inter = Inter({
@@ -90,17 +93,21 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <TranslationProvider>
-            <ViewModeProvider>
-              <div className="fixed top-4 right-4 z-50 flex flex-col items-end space-y-2">
-                <ModeToggle />
-                <LanguageSelector />
-                <ViewModeToggle />
-              </div>
-              <ViewModeWrapper>
-                {children}
-              </ViewModeWrapper>
-              <Toaster />
-            </ViewModeProvider>
+            <BackgroundThemeProvider>
+              <ViewModeProvider>
+                <DynamicBackground />
+                <div className="fixed top-4 right-4 z-50 flex flex-col items-end space-y-2">
+                  <ModeToggle />
+                  <LanguageSelector />
+                  <ViewModeToggle />
+                  <BackgroundThemeToggle />
+                </div>
+                <ViewModeWrapper>
+                  {children}
+                </ViewModeWrapper>
+                <Toaster />
+              </ViewModeProvider>
+            </BackgroundThemeProvider>
           </TranslationProvider>
         </ThemeProvider>
       </body>

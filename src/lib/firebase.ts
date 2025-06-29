@@ -2,6 +2,7 @@
 // src/lib/firebase.ts
 import { initializeApp, getApps, FirebaseApp } from 'firebase/app';
 import { getFirestore, Firestore } from 'firebase/firestore';
+import { getStorage, FirebaseStorage } from 'firebase/storage';
 
 // Your web app's Firebase configuration
 // It's recommended to store these in environment variables
@@ -26,6 +27,7 @@ const firebaseConfig = {
 
 let app: FirebaseApp;
 let db: Firestore;
+let storage: FirebaseStorage;
 
 if (getApps().length === 0) {
   app = initializeApp(firebaseConfig);
@@ -34,5 +36,6 @@ if (getApps().length === 0) {
 }
 
 db = getFirestore(app);
+storage = getStorage(app);
 
-export { app, db };
+export { app, db, storage };

@@ -37,6 +37,7 @@ export default function AdminOrdersPage() {
       phone: data.phone || 'Not Provided',
       details: data.details || 'No details provided.',
       attachmentName: data.attachmentName || null,
+      attachmentUrl: data.attachmentUrl || null,
       timestamp: formattedTimestamp,
     };
   };
@@ -141,10 +142,19 @@ export default function AdminOrdersPage() {
                   </div>
                   <p className="text-sm text-foreground mb-2"><span className="font-semibold"><TranslatedText text="Details:" /></span> <TranslatedText text={order.details} /></p>
                   {order.attachmentName && (
-                    <Button variant="outline" size="sm" disabled> {/* Download functionality not implemented */}
-                      <Download className="mr-2 h-3 w-3" />
-                      <TranslatedText text="Download Attachment" /> ({order.attachmentName})
-                    </Button>
+                    order.attachmentUrl ? (
+                      <Button variant="outline" size="sm" asChild>
+                        <a href={order.attachmentUrl} target="_blank" rel="noopener noreferrer">
+                          <Download className="mr-2 h-3 w-3" />
+                          <TranslatedText text="Download Attachment" /> ({order.attachmentName})
+                        </a>
+                      </Button>
+                    ) : (
+                      <Button variant="outline" size="sm" disabled>
+                        <Download className="mr-2 h-3 w-3" />
+                        <TranslatedText text="Download Attachment" /> ({order.attachmentName})
+                      </Button>
+                    )
                   )}
                 </div>
               ))}

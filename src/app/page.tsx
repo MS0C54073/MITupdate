@@ -8,7 +8,8 @@ import { useRouter } from 'next/navigation';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { db } from '@/lib/firebase';
+import { db, storage } from '@/lib/firebase';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -60,6 +61,7 @@ export default function Home() {
   const { register: registerComment, handleSubmit: handleSubmitComment, reset: resetCommentForm, formState: { errors: commentErrors } } = useForm<CommentFormData>({
     resolver: zodResolver(commentSchema),
     defaultValues: { 
+      name: '',
       email: '',
       comment: '',
     }
@@ -68,9 +70,11 @@ export default function Home() {
   const { register: registerOrder, handleSubmit: handleSubmitOrder, reset: resetOrderForm, formState: { errors: orderErrors } } = useForm<OrderFormData>({
     resolver: zodResolver(orderSchema),
     defaultValues: { 
+      name: '',
       email: '',
       phone: '',
       details: '',
+      attachment: null
     }
   });
 
@@ -144,17 +148,29 @@ export default function Home() {
   const onOrderSubmit: SubmitHandler<OrderFormData> = async (data) => {
     setOrderStatus('submitting');
     try {
-      const file = data.attachment && data.attachment.length > 0 ? data.attachment[0] : null;
-      const attachmentName = file ? (file as File).name : null;
+      const file = data.attachment?.[0];
+      if (!file) {
+        throw new Error("Attachment is required.");
+      }
       
+      const attachmentName = file.name;
+      const storageRef = ref(storage, `orders/${Date.now()}_${attachmentName}`);
+      
+      // Upload file
+      const uploadTask = await uploadBytes(storageRef, file);
+      // Get download URL
+      const attachmentUrl = await getDownloadURL(uploadTask.ref);
+
       const orderPayload: Omit<Order, 'id'> = {
         name: data.name,
         email: data.email || '', 
         phone: data.phone || '', 
         details: data.details || '', 
-        attachmentName: attachmentName, 
+        attachmentName,
+        attachmentUrl,
         timestamp: serverTimestamp(),
       };
+
       await addDoc(collection(db, 'orders'), orderPayload);
       toast({ variant: 'success', title: 'Success!', description: 'Order submitted successfully! Muzo will get back to you!' });
       setOrderStatus('success');

@@ -5,12 +5,13 @@ import Link from 'next/link';
 import { useParams, notFound } from 'next/navigation';
 import TranslatedText from '@/app/components/translated-text';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, BrainCircuit, Globe, Smartphone, Server, Network, Shield, Loader2, Check } from 'lucide-react';
+import { ArrowLeft, BrainCircuit, Globe, Smartphone, Server, Network, Shield, Loader2, Check, Download } from 'lucide-react';
 import Image from 'next/image';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { db } from '@/lib/firebase';
+import { db, storage } from '@/lib/firebase';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -142,15 +143,24 @@ export default function ServiceDetailPage() {
   const onSubmit: SubmitHandler<OrderFormData> = async (data) => {
     setOrderStatus('submitting');
     try {
-      const file = data.attachment && data.attachment.length > 0 ? data.attachment[0] : null;
-      const attachmentName = file ? (file as File).name : null;
+      const file = data.attachment?.[0];
+      let attachmentName = null;
+      let attachmentUrl = null;
+
+      if (file) {
+        attachmentName = file.name;
+        const storageRef = ref(storage, `orders/${Date.now()}_${attachmentName}`);
+        const uploadTask = await uploadBytes(storageRef, file);
+        attachmentUrl = await getDownloadURL(uploadTask.ref);
+      }
       
       const orderPayload: Omit<Order, 'id'> = {
         name: data.name,
         email: data.email || '', 
         phone: data.phone || '', 
         details: data.details || '', 
-        attachmentName: attachmentName, 
+        attachmentName: attachmentName,
+        attachmentUrl: attachmentUrl,
         timestamp: serverTimestamp(),
       };
       await addDoc(collection(db, 'orders'), orderPayload);

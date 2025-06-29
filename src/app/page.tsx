@@ -248,14 +248,14 @@ export default function Home() {
               <Image
                 src="https://picsum.photos/seed/education/600/400"
                 data-ai-hint="online learning"
-                alt="Teaching Experience"
+                alt="Work and Education"
                 width={600}
                 height={400}
                 className="rounded-md mb-2 w-full h-auto object-cover"
               />
-              <h3 className="text-xl font-semibold text-foreground mb-2"><TranslatedText text="Teaching Experience"/></h3>
+              <h3 className="text-xl font-semibold text-foreground mb-2"><TranslatedText text="Work and Education"/></h3>
               <p className="text-muted-foreground">
-                <TranslatedText text="Brief description of the teaching experience. Highlight subjects taught and achievements."/>
+                <TranslatedText text="A detailed look at professional experience, educational background, and certifications."/>
               </p>
               <div
                 className="inline-block mt-4 px-4 py-2 bg-accent text-primary-foreground rounded-md hover:bg-accent/90 transition-colors"

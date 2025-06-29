@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -44,9 +43,9 @@ export default function WorkAndEducationPage() {
       <main className="flex-grow">
         <section className="mb-8 p-6 bg-card/90 backdrop-blur-md rounded-xl shadow-xl">
           <Image
-            src="https://placehold.co/800x400.png"
-            data-ai-hint="professional workspace"
-            alt="Work and Education Showcase"
+            src="https://picsum.photos/seed/work-education/800/400"
+            data-ai-hint="professional education"
+            alt="A professional setting representing work and education"
             width={800}
             height={400}
             className="rounded-lg mb-6 w-full object-cover shadow-md"

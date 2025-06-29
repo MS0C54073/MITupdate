@@ -15,23 +15,23 @@ body {
     --card-foreground: 0 0% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 3.9%;
-    --primary: 207 100% 17.6%;  /* Deep blue (#003049) in HSL */
+    --primary: 217.2 91.2% 59.8%;  /* Blue */
     --primary-foreground: 0 0% 98%;
     --secondary: 0 0% 96.1%;
     --secondary-foreground: 0 0% 9%;
     --muted: 0 0% 96.1%;
     --muted-foreground: 0 0% 45.1%;
-    --accent: 9 83% 50%;        /* Orange (#D62828) in HSL */
+    --accent: 28.1 96.5% 54.9%; /* Orange */
     --accent-foreground: 0 0% 98%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --success: 120 60% 90%; /* Light green background for toast */
-    --success-foreground: 120 60% 25%; /* Dark green text for toast */
-    --button-success-background: 130 50% 45%; /* Solid green for button bg */
+    --success: 140 70% 90%; /* Light green background for toast */
+    --success-foreground: 140 70% 25%; /* Dark green text for toast */
+    --button-success-background: 142.1 76.2% 36.3%; /* Solid green for button bg */
     --button-success-foreground: 0 0% 98%; /* White/light text for button */
     --border: 0 0% 89.8%;
     --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
+    --ring: 217.2 91.2% 59.8%;
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
@@ -55,23 +55,23 @@ body {
     --card-foreground: 0 0% 98%;
     --popover: 0 0% 3.9%;
     --popover-foreground: 0 0% 98%;
-    --primary: 207 100% 82.4%; /* Lightened deep blue for dark mode */
+    --primary: 217.2 91.2% 59.8%; /* Blue */
     --primary-foreground: 0 0% 9%;
     --secondary: 0 0% 14.9%;
     --secondary-foreground: 0 0% 98%;
     --muted: 0 0% 14.9%;
     --muted-foreground: 0 0% 63.9%;
-    --accent: 9 83% 50%;        /* Orange (#D62828) in HSL */
+    --accent: 28.1 96.5% 54.9%; /* Orange */
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --success: 120 40% 25%; /* Dark green background for toast */
-    --success-foreground: 120 60% 90%; /* Light green text for toast */
-    --button-success-background: 130 50% 55%; /* Solid green for button bg in dark mode */
+    --success: 140 40% 25%; /* Dark green background for toast */
+    --success-foreground: 140 70% 90%; /* Light green text for toast */
+    --button-success-background: 142.1 76.2% 36.3%; /* Solid green for button bg in dark mode */
     --button-success-foreground: 0 0% 98%; /* White/light text for button */
     --border: 0 0% 14.9%;
     --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
+    --ring: 217.2 91.2% 59.8%;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
@@ -95,6 +95,7 @@ body {
   }
   body {
     @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
 

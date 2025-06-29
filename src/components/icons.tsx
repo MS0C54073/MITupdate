@@ -41,7 +41,8 @@ export function MuzoInTechLogo(props: React.SVGProps<SVGSVGElement>) {
         dy=".1em"
         fill="hsl(var(--primary-foreground))"
         fontSize="40"
-        fontFamily="monospace, sans-serif"
+        fontFamily="system-ui, sans-serif"
+        fontWeight="bold"
         textAnchor="middle"
         dominantBaseline="middle"
       >

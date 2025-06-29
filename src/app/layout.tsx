@@ -1,6 +1,6 @@
 
 import type {Metadata, Viewport} from 'next';
-import {Geist, Geist_Mono} from 'next/font/google';
+import { Inter } from 'next/font/google';
 import './globals.css';
 import {ModeToggle} from '@/components/mode-toggle';
 import {ThemeProvider} from '@/components/theme-provider';
@@ -12,17 +12,10 @@ import { ViewModeToggle } from '@/app/components/view-mode-toggle';
 import { ViewModeWrapper } from '@/app/components/view-mode-wrapper';
 
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const inter = Inter({
   subsets: ['latin'],
-  display: 'swap',
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-  display: 'swap',
-});
+  variable: '--font-sans',
+})
 
 export const metadata: Metadata = {
   title: "Muzo's Niche - Musonda Salimu's Portfolio",
@@ -89,7 +82,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${inter.variable} antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

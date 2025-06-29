@@ -51,14 +51,33 @@ export default function AffiliateMarketingManagerPage() {
               <p className="font-bold text-2xl text-foreground text-center">
                 <TranslatedText text="🔥 Exclusive FIFA Club World Cup Offer! 🔥" />
               </p>
-              <div className="my-4">
+              
+              <div className="my-4 space-y-4">
+                {/* Main Image */}
                 <Image
-                  src="https://drive.google.com/uc?export=view&id=1AfHoEiCMTsO8akNZ0F34WAsKkD8iy4Y-"
-                  alt="PSG vs Inter Miami"
+                  src="https://drive.google.com/uc?export=view&id=1zXu6UN8XztuTdFNCRIPMi9Tn5gDzkBbZ"
+                  alt="PSG vs Inter Miami - Betwinner Promotion"
                   width={800}
                   height={400}
                   className="rounded-lg mx-auto shadow-md w-full object-cover"
                 />
+                {/* Two smaller images */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Image
+                      src="https://drive.google.com/uc?export=view&id=1CQ8-t2ejOZR450cZq0lwq394HgJ6zHaa"
+                      alt="Betwinner Bonus Offer"
+                      width={400}
+                      height={200}
+                      className="rounded-lg mx-auto shadow-md w-full object-cover"
+                    />
+                    <Image
+                      src="https://drive.google.com/uc?export=view&id=13IA5TdCwTAbiCqLK36slEyl7798aG0o0"
+                      alt="Bet on the match"
+                      width={400}
+                      height={200}
+                      className="rounded-lg mx-auto shadow-md w-full object-cover"
+                    />
+                </div>
               </div>
 
               <h4 className="text-lg font-semibold text-center text-primary">

@@ -226,7 +226,7 @@ export default function Home() {
       <section className="mb-12 relative z-10">
         <div className="flex flex-col items-center text-center md:flex-row md:text-left gap-8 p-6 bg-card/80 backdrop-blur-sm rounded-xl shadow-xl">
           <Image
-            src="https://drive.google.com/uc?export=view&id=1SEG-a3e_1xHx0-P7gD6MUysCSt6kg96U"
+            src="https://drive.google.com/uc?export=view&id=17Vtoqp0jhBSYHrrstnCDCMBUzcrhuGfG"
             alt="Muzo's Profile Picture"
             width={200}
             height={200}

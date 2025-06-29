@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -39,7 +38,7 @@ export default function AffiliateMarketingManagerPage() {
             <TranslatedText text="Expert Affiliate Marketing Management" />
           </h2>
           <p className="text-muted-foreground mb-4 text-lg">
-            <TranslatedText text="🔥 Join Betwinner & claim your 200% welcome bonus up to $300! Register, deposit & use promocode BWZED to activate your bonus. Need help with Bonus activation? Click our social icons below and contact afmin to assist you! Enjoy best odds, fast payouts & 24/7 support. 🎉 Sign up now!" />
+            <TranslatedText text="Triple your chances to win! 🚀 Join Betwinner now and get a massive 200% welcome bonus up to $300 on your first deposit. Use promo code BWZED to lock in your offer. Enjoy the best odds, instant payouts, and 24/7 support. Need help activating your bonus? Click our social icons below to contact our admin for fast assistance. Don't miss out—sign up today and start your winning streak! 🎯" />
           </p>
 
           <div className="mt-8 pt-6 border-t border-border">

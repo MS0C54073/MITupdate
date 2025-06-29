@@ -271,8 +271,7 @@ export default function Home() {
             <Link href="/affiliate-marketing-manager" passHref legacyBehavior>
               <a className="portfolio-item flex flex-col items-center text-center bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
                 <Image
-                  src="https://placehold.co/150x150.png"
-                  data-ai-hint="crypto money"
+                  src="https://drive.google.com/uc?export=view&id=1zXu6UN8XztuTdFNCRIPMi9Tn5gDzkBbZ"
                   alt="Affiliate Marketing Project"
                   width={150}
                   height={150}

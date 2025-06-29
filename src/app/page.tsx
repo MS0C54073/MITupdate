@@ -39,7 +39,7 @@ const orderSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }).optional().or(z.literal('')),
   phone: z.string().optional(),
   details: z.string().optional(),
-  attachment: z.any().optional(), 
+  attachment: z.any().refine((files) => files?.length > 0, "Attachment is required."),
 });
 type OrderFormData = z.infer<typeof orderSchema>;
 
@@ -271,7 +271,8 @@ export default function Home() {
             <Link href="/affiliate-marketing-manager" passHref legacyBehavior>
               <a className="portfolio-item flex flex-col items-center text-center bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
                 <Image
-                  src="https://drive.google.com/uc?export=view&id=1zXu6UN8XztuTdFNCRIPMi9Tn5gDzkBbZ"
+                  src="https://placehold.co/150x150.png"
+                  data-ai-hint="crypto money"
                   alt="Affiliate Marketing Project"
                   width={150}
                   height={150}
@@ -402,8 +403,9 @@ export default function Home() {
                 <Input type="tel" id="order-phone" {...registerOrder("phone")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary"/>
               </div>
                <div className="mb-4">
-                <Label htmlFor="order-attachment" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Attach File (Optional):"/></Label>
+                <Label htmlFor="order-attachment" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Attach File:"/></Label>
                 <Input type="file" id="order-attachment" {...registerOrder("attachment")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90 focus:ring-2 focus:ring-primary"/>
+                {orderErrors.attachment && <p className="text-destructive text-xs italic mt-1"><TranslatedText text={orderErrors.attachment.message as string} /></p>}
               </div>
                 <div className="mb-6">
                   <Label htmlFor="order-details" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Order Details (Optional):"/></Label>

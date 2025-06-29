@@ -39,7 +39,7 @@ export default function AffiliateMarketingManagerPage() {
             <TranslatedText text="Expert Affiliate Marketing Management" />
           </h2>
           <p className="text-muted-foreground mb-4 text-lg">
-            <TranslatedText text="Muzo excels in affiliate marketing by building strategic partnerships, managing data-driven campaigns, and leveraging industry tools to drive growth and maximize ROI." />
+            <TranslatedText text="join Betwinner:" />
           </p>
 
           <div className="mt-8 pt-6 border-t border-border">

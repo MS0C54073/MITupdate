@@ -28,8 +28,8 @@ export default function AffiliateMarketingManagerPage() {
             <Image
               src="https://drive.google.com/uc?export=view&id=1zXu6UN8XztuTdFNCRIPMi9Tn5gDzkBbZ"
               alt="Affiliate Marketing Showcase"
-              width={200}
-              height={200}
+              width={250}
+              height={250}
               className="rounded-full shadow-lg border-4 border-primary object-cover"
             />
           </div>

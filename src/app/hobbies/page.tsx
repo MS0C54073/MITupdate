@@ -28,8 +28,8 @@ export default function HobbiesPage() {
             <Image
               src="https://drive.google.com/uc?export=view&id=1k6DbCourwAGd8mH4TcFG0w2DatVJ0PyN"
               alt="Hobbies Showcase"
-              width={200}
-              height={200}
+              width={250}
+              height={250}
               className="rounded-full shadow-lg border-4 border-primary object-cover"
             />
           </div>

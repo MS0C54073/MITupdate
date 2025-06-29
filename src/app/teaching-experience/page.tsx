@@ -47,8 +47,8 @@ export default function WorkAndEducationPage() {
             <Image
               src="https://drive.google.com/uc?export=view&id=1AocH_Dpl2QbXhusfosqZEr21AFDNmJPW"
               alt="A professional setting representing work and education"
-              width={200}
-              height={200}
+              width={250}
+              height={250}
               className="rounded-full shadow-lg border-4 border-primary object-cover"
             />
           </div>

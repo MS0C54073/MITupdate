@@ -89,7 +89,16 @@ export default function AffiliateMarketingManagerPage() {
                 <TranslatedText text="Get a 200% BONUS on your first deposit! 🎉💰" />
               </p>
               <p className="text-lg text-foreground">
-                <TranslatedText text="Use Promo Code:" /> <span className="font-bold bg-accent text-accent-foreground px-2 py-1 rounded">BWZED</span> ✅
+                <TranslatedText text="Use Promo Code:" />{' '}
+                <a
+                  href="https://h5lwvwj.top/2bi1"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-bold bg-accent text-accent-foreground px-2 py-1 rounded hover:bg-accent/90 transition-colors"
+                >
+                  BWZED
+                </a>{' '}
+                ✅
               </p>
 
               <TooltipProvider>

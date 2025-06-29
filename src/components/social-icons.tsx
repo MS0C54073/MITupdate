@@ -1,6 +1,6 @@
 
 import { Github, Linkedin, Youtube } from 'lucide-react';
-import { WhatsappIcon, TelegramIcon } from '@/components/icons';
+import { WhatsappIcon, TelegramIcon, CourseraIcon } from '@/components/icons';
 
 export function SocialIcons({ className }: { className?: string }) {
   const iconWrapperClasses = "h-9 w-9 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110";
@@ -52,6 +52,15 @@ export function SocialIcons({ className }: { className?: string }) {
         aria-label="Telegram"
       >
         <TelegramIcon className={`${iconClasses} text-white`} />
+      </a>
+      <a
+        href="https://www.coursera.org/user/d5bf15915278f56a6f96c3b5195c6d11"
+        target="_blank"
+        rel="noopener noreferrer"
+        className={`${iconWrapperClasses} bg-[#0056d2] hover:bg-[#003b8f]`}
+        aria-label="Coursera"
+      >
+        <CourseraIcon className={`${iconClasses} text-white`} />
       </a>
     </div>
   );

@@ -130,6 +130,7 @@ export default function AdminCommentsPage() {
                   <div className="flex justify-between items-start mb-2">
                     <div>
                       <h3 className="text-lg font-semibold text-accent">{comment.name}</h3>
+                      <p className="text-xs text-muted-foreground">ID: {comment.id}</p>
                       <p className="text-xs text-muted-foreground">{comment.email}</p>
                     </div>
                     <p className="text-xs text-muted-foreground">

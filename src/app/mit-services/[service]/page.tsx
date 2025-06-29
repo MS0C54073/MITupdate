@@ -159,12 +159,17 @@ export default function ServiceDetailPage() {
         email: data.email || '', 
         phone: data.phone || '', 
         details: data.details || '', 
+        status: 'pending',
         attachmentName: attachmentName,
         attachmentUrl: attachmentUrl,
         timestamp: serverTimestamp(),
       };
-      await addDoc(collection(db, 'orders'), orderPayload);
-      toast({ variant: 'success', title: 'Success!', description: 'Order submitted successfully! Muzo will get back to you!' });
+      const docRef = await addDoc(collection(db, 'orders'), orderPayload);
+      toast({ 
+        variant: 'success', 
+        title: 'Success!', 
+        description: `Order submitted! Your Order ID is: ${docRef.id}` 
+      });
       setOrderStatus('success');
       reset(); 
       setTimeout(() => setOrderStatus('idle'), 3000);

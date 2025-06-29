@@ -132,8 +132,12 @@ export default function Home() {
         comment: data.comment || '', 
         timestamp: serverTimestamp(),
       };
-      await addDoc(collection(db, 'comments'), commentPayload);
-      toast({ variant: 'success', title: 'Success!', description: 'Comment submitted successfully! Muzo will get back to you!' });
+      const docRef = await addDoc(collection(db, 'comments'), commentPayload);
+      toast({ 
+        variant: 'success', 
+        title: 'Success!', 
+        description: `Comment submitted! Your ID is: ${docRef.id}` 
+      });
       setCommentStatus('success');
       resetCommentForm(); 
       setTimeout(() => setCommentStatus('idle'), 3000);
@@ -166,13 +170,18 @@ export default function Home() {
         email: data.email || '', 
         phone: data.phone || '', 
         details: data.details || '', 
+        status: 'pending',
         attachmentName,
         attachmentUrl,
         timestamp: serverTimestamp(),
       };
 
-      await addDoc(collection(db, 'orders'), orderPayload);
-      toast({ variant: 'success', title: 'Success!', description: 'Order submitted successfully! Muzo will get back to you!' });
+      const docRef = await addDoc(collection(db, 'orders'), orderPayload);
+      toast({ 
+        variant: 'success', 
+        title: 'Success!', 
+        description: `Order submitted! Your Order ID is: ${docRef.id}` 
+      });
       setOrderStatus('success');
       resetOrderForm(); 
       setTimeout(() => setOrderStatus('idle'), 3000);

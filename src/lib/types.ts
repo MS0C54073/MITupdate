@@ -15,6 +15,7 @@ export interface Order {
   email?: string;
   phone?: string;
   details?: string;
+  status: string;
   attachmentName?: string | null;
   attachmentUrl?: string | null;
   timestamp: Timestamp | ReturnType<typeof import('firebase/firestore').serverTimestamp>; // Firestore Timestamp or ServerTimestamp sentinel
@@ -47,6 +48,7 @@ export interface DisplayOrder {
   email: string; // Defaulted if not present
   phone: string; // Defaulted if not present
   details: string; // Defaulted if not present
+  status: string;
   attachmentName: string | null;
   attachmentUrl: string | null;
   timestamp: string; // Formatted timestamp string

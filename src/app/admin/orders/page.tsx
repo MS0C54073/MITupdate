@@ -4,6 +4,7 @@
 import Link from 'next/link';
 import TranslatedText from '@/app/components/translated-text';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, ShoppingCart, Download, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
@@ -36,6 +37,7 @@ export default function AdminOrdersPage() {
       email: data.email || 'Not Provided',
       phone: data.phone || 'Not Provided',
       details: data.details || 'No details provided.',
+      status: data.status || 'pending',
       attachmentName: data.attachmentName || null,
       attachmentUrl: data.attachmentUrl || null,
       timestamp: formattedTimestamp,
@@ -131,8 +133,8 @@ export default function AdminOrdersPage() {
                 <div id={order.id} key={order.id} className="p-4 bg-background/50 rounded-lg border shadow-md scroll-mt-20 target:ring-2 target:ring-primary transition-all duration-300">
                   <div className="flex justify-between items-start mb-2">
                     <div>
-                      <h3 className="text-lg font-semibold text-accent"><TranslatedText text="Order ID:" /> {order.id.substring(0, 8)}...</h3>
-                      <p className="text-sm text-muted-foreground"><TranslatedText text="Name:" /> {order.name}</p>
+                      <h3 className="text-lg font-semibold text-accent"><TranslatedText text="Order from" /> {order.name}</h3>
+                      <p className="text-xs text-muted-foreground break-all">ID: {order.id}</p>
                       <p className="text-sm text-muted-foreground"><TranslatedText text="Email:" /> {order.email}</p>
                       <p className="text-sm text-muted-foreground"><TranslatedText text="Phone:" /> {order.phone}</p>
                     </div>
@@ -140,22 +142,30 @@ export default function AdminOrdersPage() {
                        {order.timestamp}
                     </p>
                   </div>
-                  <p className="text-sm text-foreground mb-2"><span className="font-semibold"><TranslatedText text="Details:" /></span> <TranslatedText text={order.details} /></p>
-                  {order.attachmentName && (
-                    order.attachmentUrl ? (
-                      <Button variant="outline" size="sm" asChild>
-                        <a href={order.attachmentUrl} target="_blank" rel="noopener noreferrer">
+                  <div className="space-y-2">
+                    <p className="text-sm text-foreground"><span className="font-semibold"><TranslatedText text="Details:" /></span> <TranslatedText text={order.details} /></p>
+                    <div className="flex items-center text-sm">
+                      <span className="font-semibold mr-2"><TranslatedText text="Status:" /></span>
+                      <Badge variant={order.status === 'pending' ? 'secondary' : 'default'} className="capitalize">
+                        <TranslatedText text={order.status} />
+                      </Badge>
+                    </div>
+                    {order.attachmentName && (
+                      order.attachmentUrl ? (
+                        <Button variant="outline" size="sm" asChild>
+                          <a href={order.attachmentUrl} target="_blank" rel="noopener noreferrer">
+                            <Download className="mr-2 h-3 w-3" />
+                            <TranslatedText text="Download Attachment" /> ({order.attachmentName})
+                          </a>
+                        </Button>
+                      ) : (
+                        <Button variant="outline" size="sm" disabled>
                           <Download className="mr-2 h-3 w-3" />
                           <TranslatedText text="Download Attachment" /> ({order.attachmentName})
-                        </a>
-                      </Button>
-                    ) : (
-                      <Button variant="outline" size="sm" disabled>
-                        <Download className="mr-2 h-3 w-3" />
-                        <TranslatedText text="Download Attachment" /> ({order.attachmentName})
-                      </Button>
-                    )
-                  )}
+                        </Button>
+                      )
+                    )}
+                  </div>
                 </div>
               ))}
             </div>

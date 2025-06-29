@@ -2,9 +2,9 @@
 'use client';
 
 import Link from 'next/link';
-import TranslatedText from '@/app/components/translated-text'; // Updated import
+import TranslatedText from '@/app/components/translated-text';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Music2, Gamepad2, Film } from 'lucide-react';
+import { ArrowLeft, Music2, Gamepad2, Film, Camera, Headphones, Lightbulb } from 'lucide-react';
 import Image from 'next/image';
 import { SocialIcons } from '@/components/social-icons';
 
@@ -37,44 +37,62 @@ export default function HobbiesPage() {
             <TranslatedText text="Beyond Work: Passions & Pastimes" />
           </h2>
           <p className="text-muted-foreground mb-6 text-lg">
-            <TranslatedText text="Exploring personal interests and hobbies is crucial for a well-rounded life. This section offers a glimpse into Musonda Salimu's activities outside of professional pursuits, highlighting a love for music, gaming, and film." />
+            <TranslatedText text="Exploring personal interests and hobbies is crucial for a well-rounded life. This section offers a glimpse into my activities outside of professional pursuits, showcasing a love for technology, creativity, and continuous learning." />
           </p>
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="p-4 bg-background/50 rounded-lg border flex flex-col items-center text-center">
-              <Music2 className="h-12 w-12 text-accent mb-3" />
-              <h3 className="text-xl font-semibold text-foreground mb-2">
-                <TranslatedText text="Music Lover" />
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                <TranslatedText text="Passionate about various music genres, from classical to electronic. Enjoys discovering new artists, attending concerts, and occasionally dabbling in music creation tools." />
-              </p>
-              <Button variant="link" className="mt-3 text-accent">
-                <TranslatedText text="Explore Playlists (Example)" />
-              </Button>
-            </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="p-4 bg-background/50 rounded-lg border flex flex-col items-center text-center">
               <Gamepad2 className="h-12 w-12 text-accent mb-3" />
               <h3 className="text-xl font-semibold text-foreground mb-2">
                 <TranslatedText text="Gaming Enthusiast" />
               </h3>
               <p className="text-sm text-muted-foreground">
-                <TranslatedText text="Enjoys immersive storytelling and strategic challenges in video games. Favorite genres include RPGs, strategy games, and indie titles." />
+                <TranslatedText text="Adept at gaming on PS, Xbox, and PC. Enjoys a variety of genres, with a particular love for FC25." />
               </p>
-               <Button variant="link" className="mt-3 text-accent">
-                <TranslatedText text="Favorite Games (Example)" />
-              </Button>
+            </div>
+             <div className="p-4 bg-background/50 rounded-lg border flex flex-col items-center text-center">
+              <Music2 className="h-12 w-12 text-accent mb-3" />
+              <h3 className="text-xl font-semibold text-foreground mb-2">
+                <TranslatedText text="Music Creator" />
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                <TranslatedText text="Passionate about creating music, from composing original pieces to rapping." />
+              </p>
+            </div>
+            <div className="p-4 bg-background/50 rounded-lg border flex flex-col items-center text-center">
+              <Camera className="h-12 w-12 text-accent mb-3" />
+              <h3 className="text-xl font-semibold text-foreground mb-2">
+                <TranslatedText text="Photography" />
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                <TranslatedText text="Capturing moments and telling stories through the lens of a camera." />
+              </p>
+            </div>
+            <div className="p-4 bg-background/50 rounded-lg border flex flex-col items-center text-center">
+              <Headphones className="h-12 w-12 text-accent mb-3" />
+              <h3 className="text-xl font-semibold text-foreground mb-2">
+                <TranslatedText text="Audio Books & Podcasts" />
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                <TranslatedText text="Constantly learning and exploring new ideas through engaging audio books and insightful podcasts." />
+              </p>
             </div>
             <div className="p-4 bg-background/50 rounded-lg border flex flex-col items-center text-center">
               <Film className="h-12 w-12 text-accent mb-3" />
               <h3 className="text-xl font-semibold text-foreground mb-2">
-                <TranslatedText text="Film Buff" />
+                <TranslatedText text="Film & Documentaries" />
               </h3>
               <p className="text-sm text-muted-foreground">
-                <TranslatedText text="Appreciates the art of filmmaking and storytelling through cinema. Enjoys a wide range of movies, from critically acclaimed dramas to blockbuster action films." />
+                <TranslatedText text="An avid viewer of films and documentaries, appreciating the art of storytelling and learning about new subjects." />
               </p>
-               <Button variant="link" className="mt-3 text-accent">
-                <TranslatedText text="Movie Watchlist (Example)" />
-              </Button>
+            </div>
+             <div className="p-4 bg-background/50 rounded-lg border flex flex-col items-center text-center">
+              <Lightbulb className="h-12 w-12 text-accent mb-3" />
+              <h3 className="text-xl font-semibold text-foreground mb-2">
+                <TranslatedText text="Tech Insights" />
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                <TranslatedText text="Dedicated to staying on the cutting edge by reading about new tech information and trends." />
+              </p>
             </div>
           </div>
           <p className="text-muted-foreground mt-8 text-center">

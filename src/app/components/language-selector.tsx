@@ -6,10 +6,12 @@ import { useTranslation } from '../translator';
 import { Button } from '@/components/ui/button';
 import TranslatedText from './translated-text';
 
+type LanguageCode = 'en' | 'ru' | 'ar' | 'zh' | 'fr' | 'es';
+
 export function LanguageSelector() {
   const { language, setLanguage } = useTranslation();
   // Local buffer for language selection before applying
-  const [selectedLanguageBuffer, setSelectedLanguageBuffer] = useState<'en' | 'ru'>(language);
+  const [selectedLanguageBuffer, setSelectedLanguageBuffer] = useState<LanguageCode>(language);
 
   // Update buffer when the global language changes (e.g., initial load)
   useEffect(() => {
@@ -17,7 +19,7 @@ export function LanguageSelector() {
   }, [language]);
 
   const handleLanguageBufferChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedLanguageBuffer(event.target.value as 'en' | 'ru');
+    setSelectedLanguageBuffer(event.target.value as LanguageCode);
   };
 
   const handleApplyTranslation = () => {
@@ -33,7 +35,11 @@ export function LanguageSelector() {
         aria-label="Select language"
       >
         <option value="en">English</option>
-        <option value="ru">Русский</option>
+        <option value="ru">Русский (Russian)</option>
+        <option value="ar">العربية (Arabic)</option>
+        <option value="zh">中文 (Chinese)</option>
+        <option value="fr">Français (French)</option>
+        <option value="es">Español (Spanish)</option>
       </select>
       <Button 
         onClick={handleApplyTranslation} 

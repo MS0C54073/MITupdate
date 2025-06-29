@@ -13,7 +13,7 @@ import {z} from 'zod';
 
 const TranslateInputSchema = z.object({
   text: z.string().describe('The text to translate.'),
-  targetLanguage: z.enum(['en', 'ru']).describe('The target language.'),
+  targetLanguage: z.enum(['en', 'ru', 'ar', 'zh', 'fr', 'es']).describe('The target language.'),
 });
 export type TranslateInput = z.infer<typeof TranslateInputSchema>;
 

@@ -21,10 +21,11 @@ async function sha256(message: string): Promise<string> {
   }
 }
 
+type LanguageCode = 'en' | 'ru' | 'ar' | 'zh' | 'fr' | 'es';
 
 interface TranslationContextProps {
-  language: 'en' | 'ru';
-  setLanguage: (language: 'en' | 'ru') => void;
+  language: LanguageCode;
+  setLanguage: (language: LanguageCode) => void;
   translate: (text: string) => Promise<string>;
 }
 
@@ -43,7 +44,7 @@ interface TranslationProviderProps {
 }
 
 export const TranslationProvider: React.FC<TranslationProviderProps> = ({ children }) => {
-  const [language, setLanguage] = useState<'en' | 'ru'>('en');
+  const [language, setLanguage] = useState<LanguageCode>('en');
   const [sessionTranslationsCache, setSessionTranslationsCache] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {

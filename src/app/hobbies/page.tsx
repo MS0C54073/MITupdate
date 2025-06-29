@@ -24,13 +24,15 @@ export default function HobbiesPage() {
       </header>
       <main className="flex-grow">
         <section className="mb-8 p-6 bg-card/90 backdrop-blur-md rounded-xl shadow-xl">
-          <Image
-            src="https://drive.google.com/uc?export=view&id=1SEG-a3e_1xHx0-P7gD6MUysCSt6kg96U"
-            alt="Hobbies Showcase"
-            width={800}
-            height={400}
-            className="rounded-lg mb-6 w-full object-cover shadow-md"
-          />
+          <div className="flex justify-center mb-6">
+            <Image
+              src="https://drive.google.com/uc?export=view&id=1k6DbCourwAGd8mH4TcFG0w2DatVJ0PyN"
+              alt="Hobbies Showcase"
+              width={200}
+              height={200}
+              className="rounded-full shadow-lg border-4 border-primary object-cover"
+            />
+          </div>
           <h2 className="text-3xl font-semibold text-foreground mb-4">
             <TranslatedText text="Beyond Work: Passions & Pastimes" />
           </h2>

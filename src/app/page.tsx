@@ -346,7 +346,7 @@ export default function Home() {
             <Link href="/hobbies" passHref legacyBehavior>
               <a className="portfolio-item flex flex-col items-center text-center bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
                 <Image
-                  src="https://drive.google.com/uc?export=view&id=1SEG-a3e_1xHx0-P7gD6MUysCSt6kg96U"
+                  src="https://drive.google.com/uc?export=view&id=1k6DbCourwAGd8mH4TcFG0w2DatVJ0PyN"
                   alt="Hobbies"
                   width={150}
                   height={150}

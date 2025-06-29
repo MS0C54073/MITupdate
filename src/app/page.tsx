@@ -279,16 +279,16 @@ export default function Home() {
           )}
           <div className="portfolio-rotation" ref={scrollContainerRef}>
             <Link href="/mit-services" passHref legacyBehavior>
-              <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
+              <a className="portfolio-item flex flex-col items-center text-center bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
                 <Image
                   src="https://drive.google.com/uc?export=view&id=17Vtoqp0jhBSYHrrstnCDCMBUzcrhuGfG"
                   alt="MIT Services"
-                  width={600}
-                  height={400}
-                  className="rounded-md mb-2 w-full h-auto object-cover"
+                  width={150}
+                  height={150}
+                  className="rounded-full mb-4 w-36 h-36 border-4 border-primary shadow-lg object-cover"
                 />
                 <h3 className="text-xl font-semibold text-foreground mb-2"><TranslatedText text="MIT Services"/></h3>
-                <p className="text-muted-foreground">
+                <p className="text-muted-foreground flex-grow">
                   <TranslatedText text="Brief description of the tech project. Mention technologies used and outcomes."/>
                 </p>
                 <div
@@ -300,16 +300,16 @@ export default function Home() {
             </Link>
 
             <Link href="/teaching-experience" passHref legacyBehavior>
-              <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
+              <a className="portfolio-item flex flex-col items-center text-center bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
                 <Image
                   src="https://drive.google.com/uc?export=view&id=1AocH_Dpl2QbXhusfosqZEr21AFDNmJPW"
                   alt="Work and Education"
-                  width={600}
-                  height={400}
-                  className="rounded-md mb-2 w-full h-auto object-cover"
+                  width={150}
+                  height={150}
+                  className="rounded-full mb-4 w-36 h-36 border-4 border-primary shadow-lg object-cover"
                 />
                 <h3 className="text-xl font-semibold text-foreground mb-2"><TranslatedText text="Work and Education"/></h3>
-                <p className="text-muted-foreground">
+                <p className="text-muted-foreground flex-grow">
                   <TranslatedText text="A detailed look at professional experience, educational background, and certifications."/>
                 </p>
                 <div
@@ -321,18 +321,18 @@ export default function Home() {
             </Link>
 
             <Link href="/affiliate-marketing-manager" passHref legacyBehavior>
-              <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
+              <a className="portfolio-item flex flex-col items-center text-center bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
                 <Image
                   src="https://drive.google.com/uc?export=view&id=1zXu6UN8XztuTdFNCRIPMi9Tn5gDzkBbZ"
                   alt="Affiliate Marketing Project"
-                  width={600}
-                  height={400}
-                  className="rounded-md mb-2 w-full h-auto object-cover"
+                  width={150}
+                  height={150}
+                  className="rounded-full mb-4 w-36 h-36 border-4 border-primary shadow-lg object-cover"
                 />
                 <h3 className="text-xl font-semibold text-foreground mb-2">
                   <TranslatedText text="Affiliate Marketing Manager"/>
                 </h3>
-                <p className="text-muted-foreground">
+                <p className="text-muted-foreground flex-grow">
                   <TranslatedText text="Brief description of the affiliate marketing project. Include strategies and results."/>
                 </p>
                 <div
@@ -344,16 +344,16 @@ export default function Home() {
             </Link>
 
             <Link href="/hobbies" passHref legacyBehavior>
-              <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
+              <a className="portfolio-item flex flex-col items-center text-center bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
                 <Image
                   src="https://drive.google.com/uc?export=view&id=1SEG-a3e_1xHx0-P7gD6MUysCSt6kg96U"
                   alt="Hobbies"
-                  width={600}
-                  height={400}
-                  className="rounded-md mb-2 w-full h-auto object-cover"
+                  width={150}
+                  height={150}
+                  className="rounded-full mb-4 w-36 h-36 border-4 border-primary shadow-lg object-cover"
                 />
                 <h3 className="text-xl font-semibold text-foreground mb-2"><TranslatedText text="Hobbies"/></h3>
-                <p className="text-muted-foreground"><TranslatedText text="Brief description of the music track or project."/></p>
+                <p className="text-muted-foreground flex-grow"><TranslatedText text="Brief description of the music track or project."/></p>
                 <div
                   className="inline-block mt-4 px-4 py-2 bg-accent text-primary-foreground rounded-md hover:bg-accent/90 transition-colors"
                 >

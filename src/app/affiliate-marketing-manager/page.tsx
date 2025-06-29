@@ -24,13 +24,15 @@ export default function AffiliateMarketingManagerPage() {
       </header>
       <main className="flex-grow">
         <section className="mb-8 p-6 bg-card/90 backdrop-blur-md rounded-xl shadow-xl">
-          <Image
-            src="https://drive.google.com/uc?export=view&id=1zXu6UN8XztuTdFNCRIPMi9Tn5gDzkBbZ"
-            alt="Affiliate Marketing Showcase"
-            width={800}
-            height={400}
-            className="rounded-lg mb-6 w-full object-cover shadow-md"
-          />
+          <div className="flex justify-center mb-6">
+            <Image
+              src="https://drive.google.com/uc?export=view&id=1zXu6UN8XztuTdFNCRIPMi9Tn5gDzkBbZ"
+              alt="Affiliate Marketing Showcase"
+              width={200}
+              height={200}
+              className="rounded-full shadow-lg border-4 border-primary object-cover"
+            />
+          </div>
           <h2 className="text-3xl font-semibold text-foreground mb-4">
             <TranslatedText text="Driving Growth Through Partnerships" />
           </h2>

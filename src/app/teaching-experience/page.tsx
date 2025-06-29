@@ -43,13 +43,15 @@ export default function WorkAndEducationPage() {
       </header>
       <main className="flex-grow">
         <section className="mb-8 p-6 bg-card/90 backdrop-blur-md rounded-xl shadow-xl">
-          <Image
-            src="https://drive.google.com/uc?export=view&id=1AocH_Dpl2QbXhusfosqZEr21AFDNmJPW"
-            alt="A professional setting representing work and education"
-            width={800}
-            height={400}
-            className="rounded-lg mb-6 w-full object-cover shadow-md"
-          />
+          <div className="flex justify-center mb-6">
+            <Image
+              src="https://drive.google.com/uc?export=view&id=1AocH_Dpl2QbXhusfosqZEr21AFDNmJPW"
+              alt="A professional setting representing work and education"
+              width={200}
+              height={200}
+              className="rounded-full shadow-lg border-4 border-primary object-cover"
+            />
+          </div>
           <p className="text-muted-foreground mb-10 text-lg">
             <TranslatedText text="An experienced English teacher with a background in IT (MSc Informatics). Teaches practical language skills and tutors Python/Unity programming. Former System Administrator and Affiliate Marketing Manager with interests in cybersecurity, finance, and AI. Currently enhancing skills in Django web development and AI agent tools (n8n, Dialogflow, Suvvy AI). Passionate about blending education and technology for impactful learning." />
           </p>

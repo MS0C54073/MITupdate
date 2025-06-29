@@ -51,7 +51,7 @@ export default function AffiliateMarketingManagerPage() {
                     <TranslatedText text="🔥 Club World Cup 25 Action!"/>
                 </h4>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-4 max-w-2xl mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-4 max-w-5xl mx-auto">
                      <Image
                         src="https://drive.google.com/uc?export=view&id=1CQ8-t2ejOZR450cZq0lwq394HgJ6zHaa"
                         alt="Betwinner Offer 1"
@@ -62,6 +62,13 @@ export default function AffiliateMarketingManagerPage() {
                       <Image
                         src="https://drive.google.com/uc?export=view&id=13IA5TdCwTAbiCqLK36slEyl7798aG0o0"
                         alt="Betwinner Offer 2"
+                        width={400}
+                        height={200}
+                        className="rounded-lg mx-auto shadow-md w-full object-cover"
+                      />
+                      <Image
+                        src="https://drive.google.com/uc?export=view&id=1AfHoEiCMTsO8akNZ0F34WAsKkD8iy4Y-"
+                        alt="Betwinner Offer 3"
                         width={400}
                         height={200}
                         className="rounded-lg mx-auto shadow-md w-full object-cover"

@@ -39,7 +39,7 @@ export default function AffiliateMarketingManagerPage() {
             <TranslatedText text="Expert Affiliate Marketing Management" />
           </h2>
           <p className="text-muted-foreground mb-4 text-lg">
-            <TranslatedText text="join Betwinner:" />
+            <TranslatedText text="🔥 Join Betwinner & claim your 200% welcome bonus up to $300! Register, deposit & use promocode BWZED to activate your bonus. Need help with Bonus activation? Click our social icons below and contact afmin to assist you! Enjoy best odds, fast payouts & 24/7 support. 🎉 Sign up now!" />
           </p>
 
           <div className="mt-8 pt-6 border-t border-border">

@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { Loader2, Check } from 'lucide-react';
+import { Loader2, Check, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -17,7 +17,7 @@ import { MuzoInTechLogo } from '@/components/icons';
 import { SocialIcons } from '@/components/social-icons';
 import './ai.css';
 import TranslatedText from '@/app/components/translated-text';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import AuthModal from '@/app/components/auth-modal';
 import { Input } from '@/components/ui/input';
@@ -52,6 +52,11 @@ export default function Home() {
   const [commentStatus, setCommentStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [orderStatus, setOrderStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
 
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+
   const { register: registerComment, handleSubmit: handleSubmitComment, reset: resetCommentForm, formState: { errors: commentErrors } } = useForm<CommentFormData>({
     resolver: zodResolver(commentSchema),
     defaultValues: { 
@@ -73,6 +78,46 @@ export default function Home() {
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  const checkArrows = useCallback(() => {
+    const container = scrollContainerRef.current;
+    if (container) {
+        const { scrollLeft, scrollWidth, clientWidth } = container;
+        setCanScrollLeft(scrollLeft > 0);
+        // Use a small tolerance for floating point inaccuracies
+        setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
+    }
+  }, []);
+
+  useEffect(() => {
+      const container = scrollContainerRef.current;
+      if (container) {
+          // Initial check
+          const timer = setTimeout(() => checkArrows(), 100); // Small delay to allow layout to settle
+          
+          container.addEventListener('scroll', checkArrows);
+          window.addEventListener('resize', checkArrows);
+
+          return () => {
+              clearTimeout(timer);
+              container.removeEventListener('scroll', checkArrows);
+              window.removeEventListener('resize', checkArrows);
+          };
+      }
+  }, [isClient, checkArrows]);
+
+  const handleScroll = (direction: 'left' | 'right') => {
+      if (scrollContainerRef.current) {
+          // scroll by 80% of the container width
+          const scrollAmount = scrollContainerRef.current.clientWidth * 0.8;
+          const newScrollLeft = scrollContainerRef.current.scrollLeft + (direction === 'left' ? -scrollAmount : scrollAmount);
+          scrollContainerRef.current.scrollTo({
+              left: newScrollLeft,
+              behavior: 'smooth',
+          });
+      }
+  };
+
 
   const handleAdminLoginSuccess = () => {
     setIsAuthModalOpen(false);
@@ -220,94 +265,118 @@ export default function Home() {
 
       <section  className="relative z-10">
         <h2 className="text-2xl font-semibold mb-6 text-primary text-center"><TranslatedText text="Portfolio Showcase"/></h2>
-        <div className="portfolio-rotation">
-          <Link href="/mit-services" passHref legacyBehavior>
-            <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
-              <Image
-                src="https://picsum.photos/seed/tech/600/400"
-                data-ai-hint="tech service"
-                alt="MIT Services"
-                width={600}
-                height={400}
-                className="rounded-md mb-2 w-full h-auto object-cover"
-              />
-              <h3 className="text-xl font-semibold text-foreground mb-2"><TranslatedText text="MIT Services"/></h3>
-              <p className="text-muted-foreground">
-                <TranslatedText text="Brief description of the tech project. Mention technologies used and outcomes."/>
-              </p>
-              <div
-                className="inline-block mt-4 px-4 py-2 bg-accent text-primary-foreground rounded-md hover:bg-accent/90 transition-colors"
-              >
-                <TranslatedText text="Learn More"/>
-              </div>
-            </a>
-          </Link>
+        <div className="relative group">
+           {canScrollLeft && (
+            <Button
+              variant="outline"
+              size="icon"
+              className="absolute left-0 md:-left-4 top-1/2 -translate-y-1/2 z-20 h-10 w-10 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
+              onClick={() => handleScroll('left')}
+              aria-label="Scroll left"
+            >
+              <ChevronLeft className="h-6 w-6" />
+            </Button>
+          )}
+          <div className="portfolio-rotation" ref={scrollContainerRef}>
+            <Link href="/mit-services" passHref legacyBehavior>
+              <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
+                <Image
+                  src="https://picsum.photos/seed/tech/600/400"
+                  data-ai-hint="tech service"
+                  alt="MIT Services"
+                  width={600}
+                  height={400}
+                  className="rounded-md mb-2 w-full h-auto object-cover"
+                />
+                <h3 className="text-xl font-semibold text-foreground mb-2"><TranslatedText text="MIT Services"/></h3>
+                <p className="text-muted-foreground">
+                  <TranslatedText text="Brief description of the tech project. Mention technologies used and outcomes."/>
+                </p>
+                <div
+                  className="inline-block mt-4 px-4 py-2 bg-accent text-primary-foreground rounded-md hover:bg-accent/90 transition-colors"
+                >
+                  <TranslatedText text="Learn More"/>
+                </div>
+              </a>
+            </Link>
 
-          <Link href="/teaching-experience" passHref legacyBehavior>
-            <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
-              <Image
-                src="https://picsum.photos/seed/education/600/400"
-                data-ai-hint="online learning"
-                alt="Work and Education"
-                width={600}
-                height={400}
-                className="rounded-md mb-2 w-full h-auto object-cover"
-              />
-              <h3 className="text-xl font-semibold text-foreground mb-2"><TranslatedText text="Work and Education"/></h3>
-              <p className="text-muted-foreground">
-                <TranslatedText text="A detailed look at professional experience, educational background, and certifications."/>
-              </p>
-              <div
-                className="inline-block mt-4 px-4 py-2 bg-accent text-primary-foreground rounded-md hover:bg-accent/90 transition-colors"
-              >
-                <TranslatedText text="Learn More"/>
-              </div>
-            </a>
-          </Link>
+            <Link href="/teaching-experience" passHref legacyBehavior>
+              <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
+                <Image
+                  src="https://picsum.photos/seed/education/600/400"
+                  data-ai-hint="online learning"
+                  alt="Work and Education"
+                  width={600}
+                  height={400}
+                  className="rounded-md mb-2 w-full h-auto object-cover"
+                />
+                <h3 className="text-xl font-semibold text-foreground mb-2"><TranslatedText text="Work and Education"/></h3>
+                <p className="text-muted-foreground">
+                  <TranslatedText text="A detailed look at professional experience, educational background, and certifications."/>
+                </p>
+                <div
+                  className="inline-block mt-4 px-4 py-2 bg-accent text-primary-foreground rounded-md hover:bg-accent/90 transition-colors"
+                >
+                  <TranslatedText text="Learn More"/>
+                </div>
+              </a>
+            </Link>
 
-          <Link href="/affiliate-marketing-manager" passHref legacyBehavior>
-            <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
-              <Image
-                src="https://picsum.photos/seed/marketing/600/400"
-                data-ai-hint="digital marketing"
-                alt="Affiliate Marketing Project"
-                width={600}
-                height={400}
-                className="rounded-md mb-2 w-full h-auto object-cover"
-              />
-              <h3 className="text-xl font-semibold text-foreground mb-2">
-                <TranslatedText text="Affiliate Marketing Manager"/>
-              </h3>
-              <p className="text-muted-foreground">
-                <TranslatedText text="Brief description of the affiliate marketing project. Include strategies and results."/>
-              </p>
-              <div
-                className="inline-block mt-4 px-4 py-2 bg-accent text-primary-foreground rounded-md hover:bg-accent/90 transition-colors"
-              >
-                <TranslatedText text="Learn More"/>
-              </div>
-            </a>
-          </Link>
+            <Link href="/affiliate-marketing-manager" passHref legacyBehavior>
+              <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
+                <Image
+                  src="https://picsum.photos/seed/marketing/600/400"
+                  data-ai-hint="digital marketing"
+                  alt="Affiliate Marketing Project"
+                  width={600}
+                  height={400}
+                  className="rounded-md mb-2 w-full h-auto object-cover"
+                />
+                <h3 className="text-xl font-semibold text-foreground mb-2">
+                  <TranslatedText text="Affiliate Marketing Manager"/>
+                </h3>
+                <p className="text-muted-foreground">
+                  <TranslatedText text="Brief description of the affiliate marketing project. Include strategies and results."/>
+                </p>
+                <div
+                  className="inline-block mt-4 px-4 py-2 bg-accent text-primary-foreground rounded-md hover:bg-accent/90 transition-colors"
+                >
+                  <TranslatedText text="Learn More"/>
+                </div>
+              </a>
+            </Link>
 
-          <Link href="/hobbies" passHref legacyBehavior>
-            <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
-              <Image
-                src="https://picsum.photos/seed/hobby/600/400"
-                data-ai-hint="creative hobby"
-                alt="Hobbies"
-                width={600}
-                height={400}
-                className="rounded-md mb-2 w-full h-auto object-cover"
-              />
-              <h3 className="text-xl font-semibold text-foreground mb-2"><TranslatedText text="Hobbies"/></h3>
-              <p className="text-muted-foreground"><TranslatedText text="Brief description of the music track or project."/></p>
-              <div
-                className="inline-block mt-4 px-4 py-2 bg-accent text-primary-foreground rounded-md hover:bg-accent/90 transition-colors"
-              >
-                <TranslatedText text="Explore More"/>
-              </div>
-            </a>
-          </Link>
+            <Link href="/hobbies" passHref legacyBehavior>
+              <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
+                <Image
+                  src="https://picsum.photos/seed/hobby/600/400"
+                  data-ai-hint="creative hobby"
+                  alt="Hobbies"
+                  width={600}
+                  height={400}
+                  className="rounded-md mb-2 w-full h-auto object-cover"
+                />
+                <h3 className="text-xl font-semibold text-foreground mb-2"><TranslatedText text="Hobbies"/></h3>
+                <p className="text-muted-foreground"><TranslatedText text="Brief description of the music track or project."/></p>
+                <div
+                  className="inline-block mt-4 px-4 py-2 bg-accent text-primary-foreground rounded-md hover:bg-accent/90 transition-colors"
+                >
+                  <TranslatedText text="Explore More"/>
+                </div>
+              </a>
+            </Link>
+          </div>
+          {canScrollRight && (
+            <Button
+              variant="outline"
+              size="icon"
+              className="absolute right-0 md:-right-4 top-1/2 -translate-y-1/2 z-20 h-10 w-10 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
+              onClick={() => handleScroll('right')}
+              aria-label="Scroll right"
+            >
+              <ChevronRight className="h-6 w-6" />
+            </Button>
+          )}
         </div>
       </section>
 

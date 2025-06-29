@@ -1,29 +1,25 @@
 .portfolio-rotation {
     display: flex;
-    overflow: hidden;
+    gap: 1.25rem; /* 20px */
+    overflow-x: auto;
     width: 100%;
-    padding: 20px 0;
+    padding: 1rem 0.5rem;
+    position: relative;
+    /* Hide scrollbar for clean look and enable smooth scrolling */
+    scroll-behavior: smooth;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+}
+
+.portfolio-rotation::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, and Opera */
 }
 
 .portfolio-item {
-    flex: 0 0 auto;
-    width: 100%; /* Adjust as needed */
-    margin-right: 20px; /* Space between items */
+    flex: 0 0 320px;
+    width: 320px;
     transition: transform 0.5s ease-in-out;
-}
-
-.portfolio-rotation {
-  display: flex;
-  overflow-x: auto; /* Enable horizontal scrolling if items overflow */
-  scroll-snap-type: x mandatory; /* Enable scroll snapping */
-  -webkit-overflow-scrolling: touch; /* For smooth scrolling on iOS */
-}
-
-.portfolio-item {
-  flex: 0 0 80%; /* Each item takes up 80% of the container width */
-  width: 80%;
-  scroll-snap-align: start; /* Snap items to the start of the container */
-  padding: 10px;
+    scroll-snap-align: start;
 }
 
 .ai-background {

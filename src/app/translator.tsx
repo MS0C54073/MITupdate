@@ -3,24 +3,6 @@
 
 import React, { useState, createContext, useContext, ReactNode, useEffect, useCallback } from 'react';
 import { translate as genkitTranslate, TranslateInput } from '@/ai/flows/translate-flow';
-import { db } from '@/lib/firebase'; // Import Firestore instance
-import { doc, getDoc, setDoc, serverTimestamp, Timestamp } from 'firebase/firestore';
-
-// Helper function to generate SHA-256 hash for document IDs
-async function sha256(message: string): Promise<string> {
-  try {
-    const msgBuffer = new TextEncoder().encode(message);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    return hashHex;
-  } catch (error) {
-    console.error('SHA-256 hashing failed, falling back to plain text (not recommended for all inputs):', error);
-    // Fallback for environments where crypto.subtle might not be available (e.g., non-secure contexts)
-    // Replace non-alphanumeric characters. This is a basic fallback.
-    return message.replace(/[^a-zA-Z0-9]/g, '_') + '_fallback_sha256_error';
-  }
-}
 
 type LanguageCode = 'en' | 'ru' | 'ar' | 'zh' | 'fr' | 'es';
 
@@ -46,11 +28,12 @@ interface TranslationProviderProps {
 
 export const TranslationProvider: React.FC<TranslationProviderProps> = ({ children }) => {
   const [language, setLanguage] = useState<LanguageCode>('en');
-  const [sessionTranslationsCache, setSessionTranslationsCache] = useState<{ [key: string]: string }>({});
+  // Using a Map for the cache is slightly more performant for frequent lookups/updates
+  const [sessionTranslationsCache, setSessionTranslationsCache] = useState<Map<string, string>>(new Map());
 
   useEffect(() => {
     // Clear session cache when language changes
-    setSessionTranslationsCache({});
+    setSessionTranslationsCache(new Map());
   }, [language]);
 
   const memoizedTranslate = useCallback(
@@ -59,37 +42,12 @@ export const TranslationProvider: React.FC<TranslationProviderProps> = ({ childr
         return englishText;
       }
 
-      const cacheKey = englishText; 
-      if (sessionTranslationsCache[cacheKey]) {
-        return sessionTranslationsCache[cacheKey];
+      const cacheKey = `${language}::${englishText}`;
+      if (sessionTranslationsCache.has(cacheKey)) {
+        return sessionTranslationsCache.get(cacheKey)!;
       }
 
-      let docId;
-      try {
-        docId = await sha256(`${language}_${englishText}`);
-      } catch (e) {
-        console.error(`Failed to generate docId for "${englishText}" (lang: ${language}).`, e);
-        return englishText; 
-      }
-      
-      const docRef = doc(db, "translations", docId);
-
-      // 1. Check Firestore cache first.
-      try {
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          if (data?.translatedText) {
-            const cachedTranslatedText = data.translatedText as string;
-            setSessionTranslationsCache(prev => ({ ...prev, [cacheKey]: cachedTranslatedText }));
-            return cachedTranslatedText;
-          }
-        }
-      } catch (error) {
-        console.error(`Firestore read error for docId ${docId}. Proceeding to API call.`, error);
-      }
-
-      // 2. If not in Firestore, call the translation API.
+      // If not in cache, call the translation API.
       try {
         const translateFlowInput: TranslateInput = {
           text: englishText,
@@ -99,33 +57,34 @@ export const TranslationProvider: React.FC<TranslationProviderProps> = ({ childr
         
         const translatedText = apiResult.translatedText;
 
-        if (typeof translatedText !== 'string') {
-          console.warn(`Translation for "${englishText}" returned invalid result.`, apiResult);
+        if (typeof translatedText !== 'string' || !translatedText.trim()) {
+          console.warn(`Translation for "${englishText}" to "${language}" returned invalid or empty result. Falling back to original text.`, {apiResult});
           return englishText; // Fallback, do not cache.
         }
 
-        // 3. Update caches with the new translation.
-        setSessionTranslationsCache(prev => ({ ...prev, [cacheKey]: translatedText }));
-        
-        // Asynchronously write to Firestore, don't block returning the translation.
-        setDoc(docRef, { 
-          originalText: englishText, 
-          targetLanguage: language,
-          translatedText: translatedText,
-          lastTranslated: serverTimestamp() 
-        }, { merge: true }).catch(firestoreError => {
-          console.error(`Non-blocking Firestore write error for docId ${docId}:`, firestoreError);
+        // Update session cache with the new translation.
+        setSessionTranslationsCache(prevCache => {
+            const newCache = new Map(prevCache);
+            newCache.set(cacheKey, translatedText);
+            return newCache;
         });
 
         return translatedText;
 
       } catch (error) {
-        console.error(`Translation API process failed for "${englishText}" to "${language}":`, error);
+        // This is a critical error path. Most likely, the GOOGLE_GENAI_API_KEY is not set correctly
+        // in the .env file, or the associated Google Cloud project does not have billing enabled.
+        console.error(
+            `TRANSLATION FAILED: Could not translate "${englishText}" to "${language}". ` +
+            `This is likely due to an API key or billing issue. ` +
+            `Please check your .env file and Google Cloud project configuration.`,
+            error
+        );
         // On API error, return original text and DO NOT cache the failure.
         return englishText;
       }
     },
-    [language, sessionTranslationsCache]
+    [language, sessionTranslationsCache] // Dependency on cache is correct here
   );
 
   const value = {
@@ -148,12 +107,10 @@ export const useTranslated = (englishText: string): string => {
     // when the language or source text changes. This provides instant UI feedback.
     setTranslatedText(englishText);
 
-    // If the target language is English, we don't need to call the API.
     if (currentLanguage === 'en') {
       return;
     }
 
-    // Define the async function to perform the translation.
     const doTranslate = async () => {
       if (!englishText.trim()) {
         if (isMounted) setTranslatedText('');
@@ -168,12 +125,10 @@ export const useTranslated = (englishText: string): string => {
     
     doTranslate();
     
-    // Cleanup function to prevent state updates on unmounted components.
     return () => {
       isMounted = false;
     };
   }, [englishText, currentLanguage, translate]);
 
-  // The hook returns the state variable, which is updated by the effect.
   return translatedText;
 };

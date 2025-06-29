@@ -40,7 +40,7 @@ const orderSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }).optional().or(z.literal('')),
   phone: z.string().optional(),
   details: z.string().optional(),
-  attachment: z.any().refine((files) => files?.length > 0, "Attachment is required."),
+  attachment: z.any().optional(),
 });
 type OrderFormData = z.infer<typeof orderSchema>;
 
@@ -153,26 +153,24 @@ export default function Home() {
     setOrderStatus('submitting');
     try {
       const file = data.attachment?.[0];
-      if (!file) {
-        throw new Error("Attachment is required.");
+      let attachmentName = null;
+      let attachmentUrl = null;
+
+      if (file) {
+        attachmentName = file.name;
+        const storageRef = ref(storage, `orders/${Date.now()}_${attachmentName}`);
+        const uploadTask = await uploadBytes(storageRef, file);
+        attachmentUrl = await getDownloadURL(uploadTask.ref);
       }
       
-      const attachmentName = file.name;
-      const storageRef = ref(storage, `orders/${Date.now()}_${attachmentName}`);
-      
-      // Upload file
-      const uploadTask = await uploadBytes(storageRef, file);
-      // Get download URL
-      const attachmentUrl = await getDownloadURL(uploadTask.ref);
-
       const orderPayload: Omit<Order, 'id'> = {
         name: data.name,
         email: data.email || '', 
         phone: data.phone || '', 
         details: data.details || '', 
         status: 'pending',
-        attachmentName,
-        attachmentUrl,
+        attachmentName: attachmentName,
+        attachmentUrl: attachmentUrl,
         timestamp: serverTimestamp(),
       };
 
@@ -427,7 +425,7 @@ export default function Home() {
                 <Input type="tel" id="order-phone" {...registerOrder("phone")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary"/>
               </div>
                <div className="mb-4">
-                <Label htmlFor="order-attachment" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Attach File:"/></Label>
+                <Label htmlFor="order-attachment" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Attach File (Optional):"/></Label>
                 <Input type="file" id="order-attachment" {...registerOrder("attachment")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90 focus:ring-2 focus:ring-primary"/>
                 {orderErrors.attachment && <p className="text-destructive text-xs italic mt-1"><TranslatedText text={orderErrors.attachment.message as string} /></p>}
               </div>

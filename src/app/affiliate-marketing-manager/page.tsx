@@ -7,6 +7,8 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
 import { SocialIcons } from '@/components/social-icons';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { ZambiaFlagIcon, RussiaFlagIcon } from '@/components/flag-icons';
 
 export default function AffiliateMarketingManagerPage() {
   return (
@@ -70,6 +72,53 @@ export default function AffiliateMarketingManagerPage() {
               </h3>
               <p className="text-sm text-foreground">
                 <TranslatedText text="Managed an affiliate program for a new line of tech gadgets. Successfully recruited over 50 active affiliates within the first 6 months, resulting in a 25% increase in online sales attributed to the affiliate channel. Implemented a tiered commission structure to incentivize top performers." />
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-8 pt-6 border-t border-border">
+            <h3 className="text-xl font-semibold text-accent mb-4 text-center">
+              <TranslatedText text="Special Promotion: BETWINNER" />
+            </h3>
+            <div className="text-center p-4 bg-background/50 rounded-lg border-2 border-dashed border-primary shadow-lg">
+              <p className="font-bold text-lg text-foreground">
+                <TranslatedText text="Join BETWINNER now and claim your BONUS! 💎💎" />
+              </p>
+              <p className="mt-2 text-muted-foreground">👇🏾👇🏾👇🏾</p>
+              <p className="my-3 text-2xl font-extrabold text-primary">
+                <TranslatedText text="Get a 200% BONUS on your first deposit! 🎉💰" />
+              </p>
+              <p className="text-lg text-foreground">
+                <TranslatedText text="Use Promo Code:" /> <span className="font-bold bg-accent text-accent-foreground px-2 py-1 rounded">BWZED</span> ✅
+              </p>
+
+              <TooltipProvider>
+                <div className="flex justify-center items-center gap-8 my-6">
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <a href="https://bw-prm.com/bw-zambia/?s1=BETODDS&id=1FbP" target="_blank" rel="noopener noreferrer" className="transition-transform hover:scale-110">
+                        <ZambiaFlagIcon className="h-12 w-18" />
+                      </a>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p><TranslatedText text="ZAMBIA" /></p>
+                    </TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <a href="https://h5lwvwj.top/2bi1" target="_blank" rel="noopener noreferrer" className="transition-transform hover:scale-110">
+                        <RussiaFlagIcon className="h-12 w-18" />
+                      </a>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p><TranslatedText text="RUSSIA" /></p>
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
+              </TooltipProvider>
+
+              <p className="font-semibold text-lg text-foreground">
+                <TranslatedText text="🎯 Bet now and win big! 🎯" />
               </p>
             </div>
           </div>

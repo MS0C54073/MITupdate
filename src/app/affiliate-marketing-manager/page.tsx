@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -36,45 +35,11 @@ export default function AffiliateMarketingManagerPage() {
             />
           </div>
           <h2 className="text-3xl font-semibold text-foreground mb-4">
-            <TranslatedText text="Driving Growth Through Partnerships" />
+            <TranslatedText text="Expert Affiliate Marketing Management" />
           </h2>
           <p className="text-muted-foreground mb-4 text-lg">
-            <TranslatedText text="As an Affiliate Marketing Manager, Musonda Salimu focuses on building and nurturing strategic partnerships to drive sales, increase brand visibility, and expand market reach. This involves a data-driven approach to optimizing campaigns and maximizing ROI." />
+            <TranslatedText text="Musonda Salimu excels in affiliate marketing by building strategic partnerships, managing data-driven campaigns, and leveraging industry tools to drive growth and maximize ROI." />
           </p>
-          <div className="space-y-6">
-            <div>
-              <h3 className="text-xl font-semibold text-accent mb-2">
-                <TranslatedText text="Strategy & Campaign Management" />
-              </h3>
-              <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
-                <li><TranslatedText text="Developing and executing comprehensive affiliate marketing strategies aligned with overall business objectives." /></li>
-                <li><TranslatedText text="Identifying and recruiting new affiliates and partners through various channels." /></li>
-                <li><TranslatedText text="Negotiating terms, commission structures, and contracts with affiliates." /></li>
-                <li><TranslatedText text="Managing day-to-day affiliate program operations, including onboarding, communication, and support." /></li>
-                <li><TranslatedText text="Monitoring campaign performance, analyzing key metrics (clicks, conversions, EPC, AOV), and providing regular reports." /></li>
-                <li><TranslatedText text="Optimizing campaigns for improved performance by A/B testing creatives, landing pages, and promotional offers." /></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-xl font-semibold text-accent mb-2">
-                <TranslatedText text="Relationship Building & Tools" />
-              </h3>
-               <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
-                <li><TranslatedText text="Building and maintaining strong relationships with key affiliates and affiliate networks." /></li>
-                <li><TranslatedText text="Providing affiliates with necessary marketing materials, tools, and training to promote products/services effectively." /></li>
-                <li><TranslatedText text="Staying updated with industry trends, competitor activities, and new affiliate marketing technologies." /></li>
-                <li><TranslatedText text="Experience with affiliate tracking platforms (e.g., Impact, ShareASale, CJ Affiliate) and analytics tools (e.g., Google Analytics)." /></li>
-              </ul>
-            </div>
-             <div>
-              <h3 className="text-xl font-semibold text-accent mb-2">
-                <TranslatedText text="Example Project: Tech Gadget Niche" />
-              </h3>
-              <p className="text-sm text-foreground">
-                <TranslatedText text="Managed an affiliate program for a new line of tech gadgets. Successfully recruited over 50 active affiliates within the first 6 months, resulting in a 25% increase in online sales attributed to the affiliate channel. Implemented a tiered commission structure to incentivize top performers." />
-              </p>
-            </div>
-          </div>
 
           <div className="mt-8 pt-6 border-t border-border">
             <h3 className="text-xl font-semibold text-accent mb-4 text-center">

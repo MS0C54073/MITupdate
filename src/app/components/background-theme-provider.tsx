@@ -20,7 +20,7 @@ export const useBackgroundTheme = () => {
 };
 
 export const BackgroundThemeProvider = ({ children }: { children: ReactNode }) => {
-  const [theme, setTheme] = useState<BackgroundTheme>('neural'); // Default to neural as per original
+  const [theme, setTheme] = useState<BackgroundTheme>('circuit');
 
   const value = useMemo(() => ({ theme, setTheme }), [theme]);
 

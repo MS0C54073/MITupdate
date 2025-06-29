@@ -35,7 +35,7 @@ export default function SoftwareEngineeringPage() {
             <TranslatedText text="Project Highlights" />
           </h2>
           <p className="text-muted-foreground mb-4 text-lg">
-            <TranslatedText text="Dive into the technical details of Musonda Salimu's software engineering endeavors. This section showcases a variety of projects, demonstrating proficiency in modern web technologies, problem-solving capabilities, and a commitment to building efficient and scalable solutions." />
+            <TranslatedText text="Dive into the technical details of MIT's software engineering endeavors. This section showcases a variety of projects, demonstrating proficiency in modern web technologies, problem-solving capabilities, and a commitment to building efficient and scalable solutions." />
           </p>
           <div className="grid md:grid-cols-2 gap-6 mb-6">
             <div className="p-4 bg-background/50 rounded-lg border">

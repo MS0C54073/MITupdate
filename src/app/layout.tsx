@@ -21,11 +21,10 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: "Muzo's Niche - Musonda Salimu's Portfolio",
+  title: "Muzo's Niche - Portfolio",
   description:
-    'Musonda Salimu (Muzo) - Tech Enthusiast, English Teacher, Affiliate Marketer, and Music Lover',
+    'Muzo - Tech Enthusiast, English Teacher, Affiliate Marketer, and Music Lover',
   keywords: [
-    'Musonda Salimu',
     'Muzo',
     'Tech Enthusiast',
     'English Teacher',
@@ -33,11 +32,11 @@ export const metadata: Metadata = {
     'Music',
     'Portfolio',
   ],
-  authors: [{name: 'Musonda Salimu'}],
+  authors: [{name: 'Muzo'}],
   openGraph: {
-    title: "Muzo's Niche - Musonda Salimu's Portfolio",
+    title: "Muzo's Niche - Portfolio",
     description:
-      'Musonda Salimu (Muzo) - Tech Enthusiast, English Teacher, Affiliate Marketer, and Music Lover',
+      'Muzo - Tech Enthusiast, English Teacher, Affiliate Marketer, and Music Lover',
     url: 'https://muzosniche.com',
     siteName: "Muzo's Niche",
     images: [
@@ -53,9 +52,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Muzo's Niche - Musonda Salimu's Portfolio",
+    title: "Muzo's Niche - Portfolio",
     description:
-      'Musonda Salimu (Muzo) - Tech Enthusiast, English Teacher, Affiliate Marketer, and Music Lover',
+      'Muzo - Tech Enthusiast, English Teacher, Affiliate Marketer, and Music Lover',
     images: ['https://drive.google.com/uc?export=view&id=1SEG-a3e_1xHx0-P7gD6MUysCSt6kg96U'],
     creator: '@MuzoSalimu',
   },

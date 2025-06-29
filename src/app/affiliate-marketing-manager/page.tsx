@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -27,7 +28,8 @@ export default function AffiliateMarketingManagerPage() {
         <section className="mb-8 p-6 bg-card/90 backdrop-blur-md rounded-xl shadow-xl">
           <div className="flex justify-center mb-6">
             <Image
-              src="https://drive.google.com/uc?export=view&id=1zXu6UN8XztuTdFNCRIPMi9Tn5gDzkBbZ"
+              src="https://placehold.co/250x250.png"
+              data-ai-hint="crypto money"
               alt="Affiliate Marketing Showcase"
               width={250}
               height={250}
@@ -38,7 +40,7 @@ export default function AffiliateMarketingManagerPage() {
             <TranslatedText text="Expert Affiliate Marketing Management" />
           </h2>
           <p className="text-muted-foreground mb-4 text-lg">
-            <TranslatedText text="Musonda Salimu excels in affiliate marketing by building strategic partnerships, managing data-driven campaigns, and leveraging industry tools to drive growth and maximize ROI." />
+            <TranslatedText text="Muzo excels in affiliate marketing by building strategic partnerships, managing data-driven campaigns, and leveraging industry tools to drive growth and maximize ROI." />
           </p>
 
           <div className="mt-8 pt-6 border-t border-border">

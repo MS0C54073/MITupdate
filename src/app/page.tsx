@@ -184,7 +184,7 @@ export default function Home() {
             <div className="flex items-center gap-4 justify-center md:justify-start mb-2">
               <MuzoInTechLogo className="h-16 w-16" />
               <div>
-                <h1 className="text-3xl font-bold text-primary"><TranslatedText text="Musonda Salimu (Muzo)"/></h1>
+                <h1 className="text-3xl font-bold text-primary"><TranslatedText text="Muzo"/></h1>
                 <p className="text-lg font-semibold text-accent"><TranslatedText text="MuzoInTech (MIT)"/></p>
               </div>
             </div>

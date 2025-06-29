@@ -281,7 +281,7 @@ export default function Home() {
             <Link href="/mit-services" passHref legacyBehavior>
               <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
                 <Image
-                  src="https://drive.google.com/uc?export=view&id=1SEG-a3e_1xHx0-P7gD6MUysCSt6kg96U"
+                  src="https://drive.google.com/uc?export=view&id=17Vtoqp0jhBSYHrrstnCDCMBUzcrhuGfG"
                   alt="MIT Services"
                   width={600}
                   height={400}
@@ -302,7 +302,7 @@ export default function Home() {
             <Link href="/teaching-experience" passHref legacyBehavior>
               <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
                 <Image
-                  src="https://drive.google.com/uc?export=view&id=1SEG-a3e_1xHx0-P7gD6MUysCSt6kg96U"
+                  src="https://drive.google.com/uc?export=view&id=1AocH_Dpl2QbXhusfosqZEr21AFDNmJPW"
                   alt="Work and Education"
                   width={600}
                   height={400}
@@ -323,7 +323,7 @@ export default function Home() {
             <Link href="/affiliate-marketing-manager" passHref legacyBehavior>
               <a className="portfolio-item block bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
                 <Image
-                  src="https://drive.google.com/uc?export=view&id=1SEG-a3e_1xHx0-P7gD6MUysCSt6kg96U"
+                  src="https://drive.google.com/uc?export=view&id=1zXu6UN8XztuTdFNCRIPMi9Tn5gDzkBbZ"
                   alt="Affiliate Marketing Project"
                   width={600}
                   height={400}

@@ -23,7 +23,6 @@ function renderContent(content: string) {
     return <>{paragraphs}</>;
 }
 
-
 export default function BlogPostPage() {
     const params = useParams();
     const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;

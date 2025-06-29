@@ -131,7 +131,7 @@ export default function MITServicesPage() {
             alt="MIT Services Showcase"
             width={800}
             height={400}
-            className="rounded-lg mb-6 w-full object-cover shadow-md"
+            className="rounded-lg mb-6 w-full max-w-3xl mx-auto h-auto max-h-96 object-cover shadow-md"
           />
           <h2 className="text-3xl font-semibold text-foreground mb-4">
             <TranslatedText text="Comprehensive Technology Solutions" />

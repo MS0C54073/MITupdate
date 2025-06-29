@@ -147,8 +147,7 @@ export default function WorkAndEducationPage() {
           <div className="mb-12">
             <h2 className="text-3xl font-semibold text-foreground mb-4 flex items-center"><GraduationCap className="mr-3 h-7 w-7 text-primary" /> <TranslatedText text="Education" /></h2>
             <ul className="space-y-3">
-              <li className="text-md text-muted-foreground"><span className="font-semibold text-foreground"><TranslatedText text="Master's, International Finance (2026):"/></span> <TranslatedText text="Financial University under the Government of the Russian Federation, Moscow"/></li>
-              <li className="text-md text-muted-foreground"><span className="font-semibold text-foreground"><TranslatedText text="Computer Science and Engineering (2024):"/></span> <TranslatedText text="Novosibirsk State Technical University, Novosibirsk"/></li>
+              <li className="text-md text-muted-foreground"><span className="font-semibold text-foreground"><TranslatedText text="Informatics and Computer Engineering (2024):"/></span> <TranslatedText text="Novosibirsk State Technical University, Novosibirsk"/></li>
               <li className="text-md text-muted-foreground"><span className="font-semibold text-foreground"><TranslatedText text="Technology Entrepreneurship and Innovation Management (2023):"/></span> <TranslatedText text="Novosibirsk State Technical University, Novosibirsk"/></li>
               <li className="text-md text-muted-foreground"><span className="font-semibold text-foreground"><TranslatedText text="Management in the Digital Economy (2023):"/></span> <TranslatedText text="Novosibirsk State Technical University, Novosibirsk"/></li>
               <li className="text-md text-muted-foreground"><span className="font-semibold text-foreground"><TranslatedText text="Management of High-Tech Programs and Projects (2023):"/></span> <TranslatedText text="Pskov State University"/></li>

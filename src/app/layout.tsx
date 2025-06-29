@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     siteName: "Muzo's Niche",
     images: [
       {
-        url: 'https://picsum.photos/1200/630',
+        url: 'https://drive.google.com/uc?export=view&id=1SEG-a3e_1xHx0-P7gD6MUysCSt6kg96U',
         width: 1200,
         height: 630,
         alt: "Muzo's Niche Portfolio",
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     title: "Muzo's Niche - Musonda Salimu's Portfolio",
     description:
       'Musonda Salimu (Muzo) - Tech Enthusiast, English Teacher, Affiliate Marketer, and Music Lover',
-    images: ['https://picsum.photos/1200/630'],
+    images: ['https://drive.google.com/uc?export=view&id=1SEG-a3e_1xHx0-P7gD6MUysCSt6kg96U'],
     creator: '@MuzoSalimu',
   },
   robots: {

@@ -153,8 +153,7 @@ export default function AdminOrdersPage() {
           {!loading && !error && orders.length === 0 && (
              <div className="text-center py-10">
               <Image
-                src="https://picsum.photos/400/300"
-                data-ai-hint="no orders"
+                src="https://drive.google.com/uc?export=view&id=1SEG-a3e_1xHx0-P7gD6MUysCSt6kg96U"
                 alt="No orders yet"
                 width={400}
                 height={300}

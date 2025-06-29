@@ -95,8 +95,7 @@ export default function BlogIndexPage() {
                                 <Card className="flex flex-col h-full overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 bg-card/90 backdrop-blur-md cursor-pointer">
                                     <CardHeader className="p-0">
                                         <Image
-                                            src={post.imageUrl}
-                                            data-ai-hint={post.imageHint}
+                                            src="https://drive.google.com/uc?export=view&id=1SEG-a3e_1xHx0-P7gD6MUysCSt6kg96U"
                                             alt={post.title}
                                             width={400}
                                             height={250}
@@ -131,8 +130,7 @@ export default function BlogIndexPage() {
                 {!loading && !error && posts.length === 0 && (
                     <div className="text-center py-20">
                         <Image
-                            src="https://picsum.photos/400/300"
-                            data-ai-hint="empty notebook"
+                            src="https://drive.google.com/uc?export=view&id=1SEG-a3e_1xHx0-P7gD6MUysCSt6kg96U"
                             alt="No posts yet"
                             width={400}
                             height={300}

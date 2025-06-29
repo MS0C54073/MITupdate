@@ -99,8 +99,7 @@ export default function BlogPostPage() {
             <main className="flex-grow">
                 <article className="max-w-4xl mx-auto bg-card/90 backdrop-blur-md rounded-xl shadow-xl overflow-hidden">
                     <Image
-                        src={post.imageUrl}
-                        data-ai-hint={post.imageHint}
+                        src="https://drive.google.com/uc?export=view&id=1SEG-a3e_1xHx0-P7gD6MUysCSt6kg96U"
                         alt={post.title}
                         width={800}
                         height={400}

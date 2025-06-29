@@ -144,8 +144,7 @@ export default function AdminCommentsPage() {
           {!loading && !error && comments.length === 0 && (
             <div className="text-center py-10">
               <Image
-                src="https://picsum.photos/400/300"
-                data-ai-hint="no messages"
+                src="https://drive.google.com/uc?export=view&id=1SEG-a3e_1xHx0-P7gD6MUysCSt6kg96U"
                 alt="No comments yet"
                 width={400}
                 height={300}

@@ -127,8 +127,7 @@ export default function MITServicesPage() {
       <main className="flex-grow">
         <section className="mb-8 p-6 bg-card/90 backdrop-blur-md rounded-xl shadow-xl">
           <Image
-            src="https://picsum.photos/seed/tech/800/400"
-            data-ai-hint="modern office technology"
+            src="https://drive.google.com/uc?export=view&id=1SEG-a3e_1xHx0-P7gD6MUysCSt6kg96U"
             alt="MIT Services Showcase"
             width={800}
             height={400}

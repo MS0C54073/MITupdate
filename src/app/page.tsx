@@ -190,7 +190,7 @@ export default function Home() {
             </div>
             
             <p className="text-muted-foreground mb-4">
-              <TranslatedText text="Tech Enthusiast, English Teacher, Affiliate Marketer, and Music Lover"/>
+              <TranslatedText text="Tech Enthusiast, Tutor, Affiliate Marketer, and Music Lover"/>
             </p>
             <p className="text-foreground">
               <TranslatedText text="Passionate about leveraging technology for education and creating engaging content."/>

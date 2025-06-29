@@ -23,11 +23,11 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Muzo's Niche - Portfolio",
   description:
-    'Muzo - Tech Enthusiast, English Teacher, Affiliate Marketer, and Music Lover',
+    'Muzo - Tech Enthusiast, Tutor, Affiliate Marketer, and Music Lover',
   keywords: [
     'Muzo',
     'Tech Enthusiast',
-    'English Teacher',
+    'Tutor',
     'Affiliate Marketing',
     'Music',
     'Portfolio',
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Muzo's Niche - Portfolio",
     description:
-      'Muzo - Tech Enthusiast, English Teacher, Affiliate Marketer, and Music Lover',
+      'Muzo - Tech Enthusiast, Tutor, Affiliate Marketer, and Music Lover',
     url: 'https://muzosniche.com',
     siteName: "Muzo's Niche",
     images: [
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: "Muzo's Niche - Portfolio",
     description:
-      'Muzo - Tech Enthusiast, English Teacher, Affiliate Marketer, and Music Lover',
+      'Muzo - Tech Enthusiast, Tutor, Affiliate Marketer, and Music Lover',
     images: ['https://drive.google.com/uc?export=view&id=1SEG-a3e_1xHx0-P7gD6MUysCSt6kg96U'],
     creator: '@MuzoSalimu',
   },

@@ -230,7 +230,7 @@ export default function Home() {
             alt="Muzo's Profile Picture"
             width={200}
             height={200}
-            className="rounded-full shadow-lg border-4 border-primary"
+            className="rounded-full shadow-lg border-4 border-primary object-cover"
           />
           <div className="text-center md:text-left flex-grow">
             <div className="flex items-center gap-4 justify-center md:justify-start mb-2">

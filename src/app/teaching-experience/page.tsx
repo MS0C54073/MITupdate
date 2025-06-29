@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -179,10 +180,10 @@ export default function WorkAndEducationPage() {
                 </ul>
                 <h4 className="font-semibold text-foreground"><TranslatedText text="Technical Skills"/></h4>
                 <ul className="list-disc list-inside text-muted-foreground space-y-1">
-                  <li><TranslatedText text="Python programming"/></li>
-                  <li><TranslatedText text="Mathematical Programming"/></li>
-                  <li><TranslatedText text="Information Technology"/></li>
-                  <li><TranslatedText text="Linux"/></li>
+                  <li><TranslatedText text="Programming (Python, C#, C++ e.t.c)"/></li>
+                  <li><TranslatedText text="Applied Mathematics"/></li>
+                  <li><TranslatedText text="Information Technology (network management, cybersecurity, data storage, cloud computing, software development, and help desk support)"/></li>
+                  <li><TranslatedText text="Linux (Kali, Ubuntu e.t.c)"/></li>
                 </ul>
             </div>
           </div>

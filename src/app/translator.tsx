@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, createContext, useContext, ReactNode, useEffect, useCallback } from 'react';
@@ -138,30 +139,41 @@ export const TranslationProvider: React.FC<TranslationProviderProps> = ({ childr
 
 export const useTranslated = (englishText: string): string => {
   const { translate, language: currentLanguage } = useTranslation();
-  const [translatedText, setTranslatedText] = useState(englishText); 
+  const [translatedText, setTranslatedText] = useState(englishText);
 
   useEffect(() => {
     let isMounted = true;
-    
-    async function updateTranslation() {
+
+    // Immediately reset to English text to avoid showing stale translations
+    // when the language or source text changes. This provides instant UI feedback.
+    setTranslatedText(englishText);
+
+    // If the target language is English, we don't need to call the API.
+    if (currentLanguage === 'en') {
+      return;
+    }
+
+    // Define the async function to perform the translation.
+    const doTranslate = async () => {
       if (!englishText.trim()) {
         if (isMounted) setTranslatedText('');
         return;
       }
       
-      // The translate function (memoizedTranslate) already handles the "if language is 'en'" case.
       const result = await translate(englishText);
       if (isMounted) {
         setTranslatedText(result);
       }
-    }
+    };
     
-    updateTranslation();
+    doTranslate();
     
+    // Cleanup function to prevent state updates on unmounted components.
     return () => {
       isMounted = false;
     };
-  }, [englishText, translate, currentLanguage]);
+  }, [englishText, currentLanguage, translate]);
 
+  // The hook returns the state variable, which is updated by the effect.
   return translatedText;
 };

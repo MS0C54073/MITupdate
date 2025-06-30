@@ -81,22 +81,23 @@ const translateFlow = ai.defineFlow(
     outputSchema: TranslateOutputSchema,
   },
   async (input): Promise<TranslateOutput> => {
-    // Let errors from the prompt execution propagate.
-    const response = await prompt(input);
-    const output = response.output;
+    try {
+      const response = await prompt(input);
+      const output = response.output;
 
-    // Validate the output.
-    if (output && typeof output.translatedText === 'string') {
-        // If the model returns an empty string, we'll treat it as a valid (but empty) translation.
-        // The calling logic can decide if it wants to fall back.
+      if (output && typeof output.translatedText === 'string') {
         return output;
+      }
+
+      console.warn('Translation prompt returned invalid structure, falling back to original text.', { input, response });
+      return { translatedText: input.text }; // Fallback for invalid structure
+    } catch (error) {
+      console.error(
+        `Translation flow failed for text "${input.text}" to "${input.targetLanguage}". This could be due to API rate limits. Falling back to original text.`,
+        error
+      );
+      // On any error (including rate limiting), gracefully fall back to the original text.
+      return { translatedText: input.text };
     }
-    
-    // If we get here, the model returned an invalid structure. This is an error condition.
-    console.error(
-        'Translation prompt did not return the expected output structure.',
-        { input, response }
-    );
-    throw new Error('Translation failed: Invalid output from model.');
   }
 );

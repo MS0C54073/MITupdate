@@ -15,6 +15,8 @@ import { BackgroundThemeToggle } from './components/background-theme-toggle';
 import { DynamicBackground } from './components/dynamic-background';
 import { AuthProvider } from './auth-context';
 import AuthNav from './components/auth-nav';
+import Link from 'next/link';
+import { MuzoInTechLogo } from '@/components/icons';
 
 
 const inter = Inter({
@@ -98,6 +100,9 @@ export default function RootLayout({
               <BackgroundThemeProvider>
                 <ViewModeProvider>
                   <DynamicBackground />
+                  <Link href="/" className="fixed top-4 left-4 z-50 h-12 w-12 transition-transform hover:scale-110" aria-label="Go to homepage">
+                    <MuzoInTechLogo />
+                  </Link>
                   <div className="fixed top-4 right-4 z-50 flex flex-col items-end space-y-2">
                     <div className="flex items-center gap-2">
                       <AuthNav />

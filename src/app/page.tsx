@@ -12,6 +12,7 @@ import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/app/auth-context';
 
 // Custom Icons
 import { MuzoInTechLogo } from '@/components/icons';
@@ -45,6 +46,7 @@ type OrderFormData = z.infer<typeof orderSchema>;
 
 export default function Home() {
   const { toast } = useToast();
+  const { user } = useAuth();
 
   const [commentStatus, setCommentStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [orderStatus, setOrderStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
@@ -114,6 +116,15 @@ export default function Home() {
   };
 
   const onCommentSubmit: SubmitHandler<CommentFormData> = async (data) => {
+    if (!user) {
+      toast({
+        variant: 'destructive',
+        title: 'Authentication Required',
+        description: 'You must be logged in to leave a comment.',
+      });
+      return;
+    }
+
     setCommentStatus('submitting');
     try {
       const commentPayload: Omit<Comment, 'id'> = {
@@ -121,6 +132,7 @@ export default function Home() {
         email: data.email || '', 
         comment: data.comment || '', 
         timestamp: serverTimestamp(),
+        userId: user.uid,
       };
       const docRef = await addDoc(collection(db, 'comments'), commentPayload);
       toast({ 
@@ -162,6 +174,7 @@ export default function Home() {
         attachmentName: attachmentName,
         attachmentUrl: attachmentUrl,
         timestamp: serverTimestamp(),
+        userId: user ? user.uid : undefined,
       };
 
       const docRef = await addDoc(collection(db, 'orders'), orderPayload);
@@ -335,65 +348,71 @@ export default function Home() {
 
        <section className="mt-12 py-8 border-t border-border relative z-10">
         <h2 className="text-2xl font-semibold mb-6 text-primary text-center"><TranslatedText text="Leave a comment"/></h2>
-       <Button variant="link" asChild>
-          <Link href="/admin/comments">
-            <TranslatedText text="View Comments" />
-          </Link>
-        </Button>
          <div className="max-w-xl mx-auto p-6 bg-card/80 backdrop-blur-sm rounded-xl shadow-xl">
-         <form onSubmit={handleSubmitComment(onCommentSubmit)}>
-            <div className="mb-4">
-              <Label htmlFor="comment-name" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Name:"/></Label>
-              <Input type="text" id="comment-name" {...registerComment("name")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary" />
-              {commentErrors.name && <p className="text-destructive text-xs italic mt-1"><TranslatedText text={commentErrors.name.message || ""} /></p>}
-            </div>
+         {user ? (
+            <form onSubmit={handleSubmitComment(onCommentSubmit)}>
               <div className="mb-4">
-                <Label htmlFor="comment-email" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Email (Optional):"/></Label>
-                <Input type="email" id="comment-email" {...registerComment("email")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary"/>
-                {commentErrors.email && <p className="text-destructive text-xs italic mt-1"><TranslatedText text={commentErrors.email.message || ""} /></p>}
+                <Label htmlFor="comment-name" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Name:"/></Label>
+                <Input type="text" id="comment-name" {...registerComment("name")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary" />
+                {commentErrors.name && <p className="text-destructive text-xs italic mt-1"><TranslatedText text={commentErrors.name.message || ""} /></p>}
               </div>
-                <div className="mb-6">
-                  <Label htmlFor="comment-text" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Comment (Optional):"/></Label>
-                  <Textarea id="comment-text" rows={4} {...registerComment("comment")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary"></Textarea>
+                <div className="mb-4">
+                  <Label htmlFor="comment-email" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Email (Optional):"/></Label>
+                  <Input type="email" id="comment-email" {...registerComment("email")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary"/>
+                  {commentErrors.email && <p className="text-destructive text-xs italic mt-1"><TranslatedText text={commentErrors.email.message || ""} /></p>}
                 </div>
-                <div className="flex items-center justify-end">
-                  <Button
-                    type="submit"
-                    disabled={commentStatus === 'submitting' || commentStatus === 'success'}
-                    className={cn(
-                      'font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors min-w-[160px] justify-center',
-                      commentStatus === 'submitting' && 'opacity-50 cursor-not-allowed',
-                      commentStatus === 'success'
-                        ? 'bg-button-success text-button-success-foreground hover:bg-button-success/90'
-                        : 'bg-accent hover:bg-accent/90 text-primary-foreground'
-                    )}
-                  >
-                    {commentStatus === 'submitting' ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        <TranslatedText text="Posting..." />
-                      </>
-                    ) : commentStatus === 'success' ? (
-                      <>
-                        <Check className="mr-2 h-4 w-4" />
-                        <TranslatedText text="Sent!" />
-                      </>
-                    ) : (
-                      <TranslatedText text="Post Comment" />
-                    )}
-                  </Button>
+                  <div className="mb-6">
+                    <Label htmlFor="comment-text" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Comment (Optional):"/></Label>
+                    <Textarea id="comment-text" rows={4} {...registerComment("comment")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary"></Textarea>
+                  </div>
+                  <div className="flex items-center justify-end">
+                    <Button
+                      type="submit"
+                      disabled={commentStatus === 'submitting' || commentStatus === 'success'}
+                      className={cn(
+                        'font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors min-w-[160px] justify-center',
+                        commentStatus === 'submitting' && 'opacity-50 cursor-not-allowed',
+                        commentStatus === 'success'
+                          ? 'bg-button-success text-button-success-foreground hover:bg-button-success/90'
+                          : 'bg-accent hover:bg-accent/90 text-primary-foreground'
+                      )}
+                    >
+                      {commentStatus === 'submitting' ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          <TranslatedText text="Posting..." />
+                        </>
+                      ) : commentStatus === 'success' ? (
+                        <>
+                          <Check className="mr-2 h-4 w-4" />
+                          <TranslatedText text="Sent!" />
+                        </>
+                      ) : (
+                        <TranslatedText text="Post Comment" />
+                      )}
+                    </Button>
+                  </div>
+                </form>
+              ) : (
+                <div className="text-center">
+                  <p className="text-muted-foreground mb-4">
+                    <TranslatedText text="You must be logged in to leave a comment." />
+                  </p>
+                  <div className="flex justify-center gap-4">
+                    <Button asChild>
+                      <Link href="/login"><TranslatedText text="Login" /></Link>
+                    </Button>
+                    <Button variant="secondary" asChild>
+                      <Link href="/signup"><TranslatedText text="Sign Up" /></Link>
+                    </Button>
+                  </div>
                 </div>
-              </form>
+              )}
           </div>
       </section>
 
        <section className="mt-12 py-8 border-t border-border relative z-10">
         <h2 className="text-2xl font-semibold mb-6 text-primary text-center"><TranslatedText text="Leave an order"/></h2>
-       <Button variant="link" asChild>
-          <Link href="/admin/orders">
-            <TranslatedText text="View Orders" />
-          </Link>
-        </Button>
          <div className="max-w-xl mx-auto p-6 bg-card/80 backdrop-blur-sm rounded-xl shadow-xl">
          <form onSubmit={handleSubmitOrder(onOrderSubmit)}>
             <div className="mb-4">

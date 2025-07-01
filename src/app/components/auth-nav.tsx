@@ -65,7 +65,7 @@ export default function AuthNav() {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-10 w-10 rounded-full">
           <Avatar className="h-10 w-10">
-            <AvatarImage src={`https://api.dicebear.com/8.x/initials/svg?seed=${userProfile?.name}`} alt={userProfile?.name} />
+            <AvatarImage src={`https://api.dicebear.com/8.x/initials/svg?seed=${userProfile?.name}`} alt={userProfile?.name || ''} />
             <AvatarFallback>{userProfile ? getInitials(userProfile.name) : 'U'}</AvatarFallback>
           </Avatar>
         </Button>
@@ -78,11 +78,18 @@ export default function AuthNav() {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        {userProfile?.role === 'admin' && (
+        {userProfile?.role === 'admin' ? (
           <DropdownMenuItem asChild>
             <Link href="/admin/dashboard">
               <User className="mr-2 h-4 w-4" />
               <span><TranslatedText text="Admin Dashboard" /></span>
+            </Link>
+          </DropdownMenuItem>
+        ) : (
+          <DropdownMenuItem asChild>
+            <Link href="/dashboard">
+              <User className="mr-2 h-4 w-4" />
+              <span><TranslatedText text="My Dashboard" /></span>
             </Link>
           </DropdownMenuItem>
         )}

@@ -3,12 +3,12 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { Loader2, Check, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Loader2, Check, ChevronLeft, ChevronRight, Star } from 'lucide-react';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { db, storage } from '@/lib/firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, query, orderBy, limit, getDocs, Timestamp } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -24,7 +24,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import type { Comment, Order } from '@/lib/types';
+import type { Comment, Order, Review, DisplayReview } from '@/lib/types';
 
 
 const commentSchema = z.object({
@@ -43,6 +43,13 @@ const orderSchema = z.object({
 });
 type OrderFormData = z.infer<typeof orderSchema>;
 
+const reviewSchema = z.object({
+  name: z.string().min(1, { message: 'Name is required' }),
+  review: z.string().optional(),
+  rating: z.number().min(1, { message: 'Please select a rating' }).max(5),
+});
+type ReviewFormData = z.infer<typeof reviewSchema>;
+
 
 export default function Home() {
   const { toast } = useToast();
@@ -50,6 +57,10 @@ export default function Home() {
 
   const [commentStatus, setCommentStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [orderStatus, setOrderStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const [reviewStatus, setReviewStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  
+  const [reviews, setReviews] = useState<DisplayReview[]>([]);
+  const [loadingReviews, setLoadingReviews] = useState(true);
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -58,30 +69,31 @@ export default function Home() {
 
   const { register: registerComment, handleSubmit: handleSubmitComment, reset: resetCommentForm, formState: { errors: commentErrors } } = useForm<CommentFormData>({
     resolver: zodResolver(commentSchema),
-    defaultValues: { 
-      name: '',
-      email: '',
-      comment: '',
-    }
+    defaultValues: { name: '', email: '', comment: '' }
   });
 
   const { register: registerOrder, handleSubmit: handleSubmitOrder, reset: resetOrderForm, formState: { errors: orderErrors } } = useForm<OrderFormData>({
     resolver: zodResolver(orderSchema),
-    defaultValues: { 
-      name: '',
-      email: '',
-      phone: '',
-      details: '',
-      attachment: null
-    }
+    defaultValues: { name: '', email: '', phone: '', details: '', attachment: null }
   });
+
+  const { register: registerReview, handleSubmit: handleSubmitReview, setValue: setReviewValue, reset: resetReviewForm, watch: watchReview, formState: { errors: reviewErrors } } = useForm<ReviewFormData>({
+    resolver: zodResolver(reviewSchema),
+    defaultValues: { name: '', review: '', rating: 0 }
+  });
+
+  const [hoverRating, setHoverRating] = useState(0);
+  const currentRating = watchReview('rating');
+  
+  useEffect(() => {
+    registerReview('rating');
+  }, [registerReview]);
 
   const checkArrows = useCallback(() => {
     const container = scrollContainerRef.current;
     if (container) {
         const { scrollLeft, scrollWidth, clientWidth } = container;
         setCanScrollLeft(scrollLeft > 0);
-        // Use a small tolerance for floating point inaccuracies
         setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
     }
   }, []);
@@ -89,12 +101,9 @@ export default function Home() {
   useEffect(() => {
       const container = scrollContainerRef.current;
       if (container) {
-          // Initial check
-          const timer = setTimeout(() => checkArrows(), 100); // Small delay to allow layout to settle
-          
+          const timer = setTimeout(() => checkArrows(), 100);
           container.addEventListener('scroll', checkArrows);
           window.addEventListener('resize', checkArrows);
-
           return () => {
               clearTimeout(timer);
               container.removeEventListener('scroll', checkArrows);
@@ -102,10 +111,36 @@ export default function Home() {
           };
       }
   }, [checkArrows]);
+  
+  useEffect(() => {
+    const fetchReviews = async () => {
+        setLoadingReviews(true);
+        try {
+            const reviewsCollection = collection(db, 'reviews');
+            const q = query(reviewsCollection, orderBy('timestamp', 'desc'), limit(5));
+            const querySnapshot = await getDocs(q);
+            const fetchedReviews = querySnapshot.docs.map(doc => {
+                const data = doc.data();
+                return {
+                    id: doc.id,
+                    name: data.name || 'Anonymous',
+                    review: data.review || '',
+                    rating: data.rating || 0,
+                    timestamp: (data.timestamp as Timestamp)?.toDate().toLocaleDateString() ?? 'No date',
+                }
+            });
+            setReviews(fetchedReviews);
+        } catch (error) {
+            console.error("Error fetching reviews:", error);
+        } finally {
+            setLoadingReviews(false);
+        }
+    };
+    fetchReviews();
+  }, []);
 
   const handleScroll = (direction: 'left' | 'right') => {
       if (scrollContainerRef.current) {
-          // scroll by 80% of the container width
           const scrollAmount = scrollContainerRef.current.clientWidth * 0.8;
           const newScrollLeft = scrollContainerRef.current.scrollLeft + (direction === 'left' ? -scrollAmount : scrollAmount);
           scrollContainerRef.current.scrollTo({
@@ -134,12 +169,8 @@ export default function Home() {
         timestamp: serverTimestamp(),
         userId: user.uid,
       };
-      const docRef = await addDoc(collection(db, 'comments'), commentPayload);
-      toast({ 
-        variant: 'success', 
-        title: 'Success!', 
-        description: `Comment submitted! Your ID is: ${docRef.id}` 
-      });
+      await addDoc(collection(db, 'comments'), commentPayload);
+      toast({ variant: 'success', title: 'Success!', description: `Comment submitted successfully!` });
       setCommentStatus('success');
       resetCommentForm(); 
       setTimeout(() => setCommentStatus('idle'), 3000);
@@ -155,12 +186,10 @@ export default function Home() {
     setOrderStatus('submitting');
     try {
       const file = data.attachment?.[0];
-      let attachmentName = null;
       let attachmentUrl = null;
 
       if (file) {
-        attachmentName = file.name;
-        const storageRef = ref(storage, `orders/${Date.now()}_${attachmentName}`);
+        const storageRef = ref(storage, `orders/${Date.now()}_${file.name}`);
         const uploadTask = await uploadBytes(storageRef, file);
         attachmentUrl = await getDownloadURL(uploadTask.ref);
       }
@@ -171,18 +200,14 @@ export default function Home() {
         phone: data.phone || '', 
         details: data.details || '', 
         status: 'pending',
-        attachmentName: attachmentName,
+        attachmentName: file ? file.name : null,
         attachmentUrl: attachmentUrl,
         timestamp: serverTimestamp(),
         userId: user ? user.uid : undefined,
       };
 
-      const docRef = await addDoc(collection(db, 'orders'), orderPayload);
-      toast({ 
-        variant: 'success', 
-        title: 'Success!', 
-        description: `Order submitted! Your Order ID is: ${docRef.id}` 
-      });
+      await addDoc(collection(db, 'orders'), orderPayload);
+      toast({ variant: 'success', title: 'Success!', description: `Order submitted successfully!` });
       setOrderStatus('success');
       resetOrderForm(); 
       setTimeout(() => setOrderStatus('idle'), 3000);
@@ -191,6 +216,39 @@ export default function Home() {
       toast({ variant: 'destructive', title: 'Error', description: 'Failed to submit order. Please try again.'});
       setOrderStatus('error');
       setTimeout(() => setOrderStatus('idle'), 3000);
+    }
+  };
+
+  const onReviewSubmit: SubmitHandler<ReviewFormData> = async (data) => {
+    setReviewStatus('submitting');
+    try {
+      const reviewPayload: Omit<Review, 'id'> = {
+        name: data.name,
+        review: data.review || '',
+        rating: data.rating,
+        timestamp: serverTimestamp(),
+      };
+      const docRef = await addDoc(collection(db, 'reviews'), reviewPayload);
+      
+      // Add new review to the top of the list locally
+      const newReview: DisplayReview = {
+        id: docRef.id,
+        name: data.name,
+        review: data.review || '',
+        rating: data.rating,
+        timestamp: new Date().toLocaleDateString(),
+      }
+      setReviews(prevReviews => [newReview, ...prevReviews].slice(0, 5));
+
+      toast({ variant: 'success', title: 'Thank You!', description: 'Your review has been submitted.' });
+      setReviewStatus('success');
+      resetReviewForm();
+      setTimeout(() => setReviewStatus('idle'), 3000);
+    } catch (error) {
+      console.error("Error submitting review: ", error);
+      toast({ variant: 'destructive', title: 'Error', description: 'Failed to submit review. Please try again.' });
+      setReviewStatus('error');
+      setTimeout(() => setReviewStatus('idle'), 3000);
     }
   };
 
@@ -346,7 +404,92 @@ export default function Home() {
         </div>
       </section>
 
-       <section className="mt-12 py-8 border-t border-border relative z-10">
+      <section className="mt-12 py-8 border-t border-border relative z-10">
+        <h2 className="text-2xl font-semibold mb-6 text-primary text-center"><TranslatedText text="Leave a Review"/></h2>
+        <div className="max-w-xl mx-auto">
+            {/* Review Form */}
+            <div className="p-6 bg-card/80 backdrop-blur-sm rounded-xl shadow-xl mb-8">
+                <form onSubmit={handleSubmitReview(onReviewSubmit)}>
+                    <div className="mb-4">
+                        <Label htmlFor="review-name" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Name:"/></Label>
+                        <Input type="text" id="review-name" {...registerReview("name")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary" />
+                        {reviewErrors.name && <p className="text-destructive text-xs italic mt-1"><TranslatedText text={reviewErrors.name.message || ""} /></p>}
+                    </div>
+                    <div className="mb-4">
+                        <Label className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Rating:"/></Label>
+                        <div className="flex items-center space-x-1">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                                <Star
+                                    key={star}
+                                    className={cn(
+                                        'h-8 w-8 cursor-pointer transition-colors',
+                                        (hoverRating >= star || currentRating >= star) 
+                                            ? 'text-yellow-400 fill-yellow-400' 
+                                            : 'text-muted-foreground/50'
+                                    )}
+                                    onMouseEnter={() => setHoverRating(star)}
+                                    onMouseLeave={() => setHoverRating(0)}
+                                    onClick={() => setReviewValue('rating', star, { shouldValidate: true })}
+                                />
+                            ))}
+                        </div>
+                        {reviewErrors.rating && <p className="text-destructive text-xs italic mt-1"><TranslatedText text={reviewErrors.rating.message || ""} /></p>}
+                    </div>
+                    <div className="mb-6">
+                        <Label htmlFor="review-text" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Review (Optional):"/></Label>
+                        <Textarea id="review-text" rows={4} {...registerReview("review")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary"></Textarea>
+                    </div>
+                    <div className="flex items-center justify-end">
+                        <Button
+                            type="submit"
+                            disabled={reviewStatus === 'submitting' || reviewStatus === 'success'}
+                            className={cn(
+                                'font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors min-w-[160px] justify-center',
+                                reviewStatus === 'submitting' && 'opacity-50 cursor-not-allowed',
+                                reviewStatus === 'success'
+                                    ? 'bg-button-success text-button-success-foreground hover:bg-button-success/90'
+                                    : 'bg-accent hover:bg-accent/90 text-primary-foreground'
+                            )}
+                        >
+                            {reviewStatus === 'submitting' ? (
+                                <><Loader2 className="mr-2 h-4 w-4 animate-spin" /><TranslatedText text="Submitting..." /></>
+                            ) : reviewStatus === 'success' ? (
+                                <><Check className="mr-2 h-4 w-4" /><TranslatedText text="Sent!" /></>
+                            ) : (
+                                <TranslatedText text="Submit Review" />
+                            )}
+                        </Button>
+                    </div>
+                </form>
+            </div>
+
+            {/* Display Reviews */}
+            <h3 className="text-xl font-semibold mb-4 text-primary text-center"><TranslatedText text="Recent Reviews"/></h3>
+            {loadingReviews ? (
+                <div className="flex justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>
+            ) : reviews.length > 0 ? (
+                <div className="space-y-4">
+                    {reviews.map(review => (
+                        <div key={review.id} className="p-4 bg-card/80 backdrop-blur-sm rounded-lg border shadow-md">
+                            <div className="flex justify-between items-start">
+                                <h4 className="font-bold text-foreground">{review.name}</h4>
+                                <span className="text-xs text-muted-foreground">{review.timestamp}</span>
+                            </div>
+                            <div className="flex items-center my-1">
+                                {[...Array(review.rating)].map((_, i) => <Star key={`filled-${i}`} className="h-4 w-4 text-yellow-400 fill-yellow-400"/>)}
+                                {[...Array(5 - review.rating)].map((_, i) => <Star key={`empty-${i}`} className="h-4 w-4 text-muted-foreground/50"/>)}
+                            </div>
+                            <p className="text-sm text-muted-foreground italic">"<TranslatedText text={review.review} />"</p>
+                        </div>
+                    ))}
+                </div>
+            ) : (
+                <p className="text-center text-muted-foreground"><TranslatedText text="No reviews yet. Be the first!"/></p>
+            )}
+        </div>
+    </section>
+
+    <section className="mt-12 py-8 border-t border-border relative z-10">
         <h2 className="text-2xl font-semibold mb-6 text-primary text-center"><TranslatedText text="Leave a comment"/></h2>
          <div className="max-w-xl mx-auto p-6 bg-card/80 backdrop-blur-sm rounded-xl shadow-xl">
          {user ? (

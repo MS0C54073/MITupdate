@@ -1,3 +1,4 @@
+
 import type { Timestamp } from 'firebase/firestore';
 
 export interface UserProfile {
@@ -27,6 +28,14 @@ export interface Order {
   attachmentUrl?: string | null;
   timestamp: Timestamp | ReturnType<typeof import('firebase/firestore').serverTimestamp>; // Firestore Timestamp or ServerTimestamp sentinel
   userId?: string;
+}
+
+export interface Review {
+  id?: string;
+  name: string;
+  review?: string;
+  rating: number; // 1 to 5
+  timestamp: Timestamp | ReturnType<typeof import('firebase/firestore').serverTimestamp>;
 }
 
 // Data from Firestore for blog posts
@@ -60,6 +69,14 @@ export interface DisplayOrder {
   attachmentName: string | null;
   attachmentUrl: string | null;
   timestamp: string; // Formatted timestamp string
+}
+
+export interface DisplayReview {
+  id: string;
+  name: string;
+  review: string;
+  rating: number;
+  timestamp: string;
 }
 
 // For the blog index page

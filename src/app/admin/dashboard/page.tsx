@@ -5,12 +5,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowLeft, Bell, MessageSquare, ShoppingCart, Loader2 } from 'lucide-react';
+import { ArrowLeft, Bell, MessageSquare, ShoppingCart, Star, Loader2 } from 'lucide-react';
 import TranslatedText from '@/app/components/translated-text';
 import { useEffect, useState } from 'react';
 import { db } from '@/lib/firebase';
 import { collection, onSnapshot, query, orderBy, limit, getCountFromServer } from 'firebase/firestore';
-import type { DisplayComment, DisplayOrder } from '@/lib/types';
+import type { DisplayComment, DisplayOrder, DisplayReview } from '@/lib/types';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,11 +28,13 @@ export default function AdminDashboardPage() {
 
   const [newCommentsCount, setNewCommentsCount] = useState(0);
   const [newOrdersCount, setNewOrdersCount] = useState(0);
+  const [newReviewsCount, setNewReviewsCount] = useState(0);
   const [latestComments, setLatestComments] = useState<DisplayComment[]>([]);
   const [latestOrders, setLatestOrders] = useState<DisplayOrder[]>([]);
+  const [latestReviews, setLatestReviews] = useState<DisplayReview[]>([]);
   const [loading, setLoading] = useState(true);
   
-  const totalNotifications = newCommentsCount + newOrdersCount;
+  const totalNotifications = newCommentsCount + newOrdersCount + newReviewsCount;
 
   useEffect(() => {
     if (!authLoading && (!user || userProfile?.role !== 'admin')) {
@@ -48,12 +50,17 @@ export default function AdminDashboardPage() {
       try {
         const commentsCollection = collection(db, "comments");
         const ordersCollection = collection(db, "orders");
-        const [commentsSnapshot, ordersSnapshot] = await Promise.all([
+        const reviewsCollection = collection(db, "reviews");
+
+        const [commentsSnapshot, ordersSnapshot, reviewsSnapshot] = await Promise.all([
           getCountFromServer(commentsCollection),
-          getCountFromServer(ordersCollection)
+          getCountFromServer(ordersCollection),
+          getCountFromServer(reviewsCollection)
         ]);
         setNewCommentsCount(commentsSnapshot.data().count);
         setNewOrdersCount(ordersSnapshot.data().count);
+        setNewReviewsCount(reviewsSnapshot.data().count);
+
       } catch (error) {
         console.error("Error fetching counts:", error);
       }
@@ -61,7 +68,7 @@ export default function AdminDashboardPage() {
 
     fetchData();
 
-    const latestCommentsQuery = query(collection(db, "comments"), orderBy("timestamp", "desc"), limit(5));
+    const latestCommentsQuery = query(collection(db, "comments"), orderBy("timestamp", "desc"), limit(3));
     const latestCommentsUnsubscribe = onSnapshot(latestCommentsQuery, (snapshot) => {
         setLatestComments(snapshot.docs.map(doc => ({
             id: doc.id,
@@ -76,7 +83,7 @@ export default function AdminDashboardPage() {
       setLoading(false);
     });
 
-    const latestOrdersQuery = query(collection(db, "orders"), orderBy("timestamp", "desc"), limit(5));
+    const latestOrdersQuery = query(collection(db, "orders"), orderBy("timestamp", "desc"), limit(3));
     const latestOrdersUnsubscribe = onSnapshot(latestOrdersQuery, (snapshot) => {
         setLatestOrders(snapshot.docs.map(doc => ({
             id: doc.id,
@@ -87,10 +94,24 @@ export default function AdminDashboardPage() {
     }, (error) => {
         console.error("Error fetching latest orders:", error);
     });
+    
+    const latestReviewsQuery = query(collection(db, "reviews"), orderBy("timestamp", "desc"), limit(3));
+    const latestReviewsUnsubscribe = onSnapshot(latestReviewsQuery, (snapshot) => {
+        setLatestReviews(snapshot.docs.map(doc => ({
+            id: doc.id,
+            name: doc.data().name || 'Anonymous',
+            review: doc.data().review || 'No review text.',
+            rating: doc.data().rating || 0,
+            timestamp: ''
+        } as DisplayReview)));
+    }, (error) => {
+      console.error("Error fetching latest reviews:", error);
+    });
 
     return () => {
       latestCommentsUnsubscribe();
       latestOrdersUnsubscribe();
+      latestReviewsUnsubscribe();
     }
   }, [userProfile]);
 
@@ -147,6 +168,30 @@ export default function AdminDashboardPage() {
                 </p>
               ) : (
                 <>
+                  {latestReviews.length > 0 && (
+                    <>
+                      <DropdownMenuLabel className="text-xs text-muted-foreground px-2 py-1.5"><TranslatedText text="Recent Reviews" /></DropdownMenuLabel>
+                      {latestReviews.map((review) => (
+                        <DropdownMenuItem key={review.id} asChild>
+                          <Link href={`/admin/reviews#${review.id}`} className="cursor-pointer">
+                            <div className="flex flex-col w-full">
+                               <div className="flex justify-between items-center">
+                                <span className="font-semibold text-sm">{review.name}</span>
+                                <div className="flex items-center">
+                                    {[...Array(review.rating)].map((_, i) => <Star key={i} className="h-3 w-3 text-yellow-400 fill-yellow-400"/>)}
+                                    {[...Array(5 - review.rating)].map((_, i) => <Star key={i} className="h-3 w-3 text-muted-foreground"/>)}
+                                </div>
+                               </div>
+                              <span className="text-xs text-muted-foreground truncate">
+                                <TranslatedText text={review.review} />
+                              </span>
+                            </div>
+                          </Link>
+                        </DropdownMenuItem>
+                      ))}
+                    </>
+                  )}
+                  {(latestReviews.length > 0 && latestComments.length > 0) && <DropdownMenuSeparator />}
                   {latestComments.length > 0 && (
                     <>
                       <DropdownMenuLabel className="text-xs text-muted-foreground px-2 py-1.5"><TranslatedText text="Recent Comments" /></DropdownMenuLabel>
@@ -192,7 +237,33 @@ export default function AdminDashboardPage() {
         </h1>
       </header>
 
-      <main className="flex-grow grid md:grid-cols-2 gap-6">
+      <main className="flex-grow grid md:grid-cols-3 gap-6">
+        <Card className="shadow-xl bg-card/90 backdrop-blur-md">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-2xl font-semibold text-foreground">
+              <TranslatedText text="Reviews" />
+            </CardTitle>
+            <Star className="h-6 w-6 text-accent" />
+          </CardHeader>
+          <CardContent>
+            {loading ? (
+              <Loader2 className="h-8 w-8 animate-spin text-primary my-1" />
+            ) : (
+              <div className="text-3xl font-bold text-primary" data-ai-hint="dynamic review count">
+                {newReviewsCount}
+              </div>
+            )}
+            <p className="text-xs text-muted-foreground mb-4">
+              <TranslatedText text="Total user reviews" />
+            </p>
+            <Button asChild>
+              <Link href="/admin/reviews">
+                <TranslatedText text="View Reviews" />
+              </Link>
+            </Button>
+          </CardContent>
+        </Card>
+        
         <Card className="shadow-xl bg-card/90 backdrop-blur-md">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-2xl font-semibold text-foreground">

@@ -147,7 +147,7 @@ export default function MITServicesPage() {
         <section className="mb-8 p-6 bg-card/90 backdrop-blur-md rounded-xl shadow-xl">
           <div className="flex justify-center mb-6">
             <Image
-              src="https://placehold.co/250x250.png"
+              src="https://drive.google.com/uc?id=17Vtoqp0jhBSYHrrstnCDCMBUzcrhuGfG"
               alt="MIT Services Showcase"
               data-ai-hint="tech services"
               width={250}

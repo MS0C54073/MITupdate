@@ -200,7 +200,7 @@ export default function Home() {
       <section className="mb-12 relative z-10 pt-16">
         <div className="flex flex-col items-center text-center md:flex-row md:text-left gap-8 p-6 bg-card/80 backdrop-blur-sm rounded-xl shadow-xl">
           <Image
-            src="https://placehold.co/200x200.png"
+            src="https://drive.google.com/uc?id=17Vtoqp0jhBSYHrrstnCDCMBUzcrhuGfG"
             alt="Muzo's Profile Picture"
             width={200}
             height={200}

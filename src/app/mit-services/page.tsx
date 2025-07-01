@@ -10,7 +10,7 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { db, storage } from '@/lib/firebase';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -20,6 +20,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import type { Order } from '@/lib/types';
 import { SocialIcons } from '@/components/social-icons';
+import { useAuth } from '@/app/auth-context';
 
 
 const orderSchema = z.object({
@@ -73,6 +74,7 @@ const services = [
 
 export default function MITServicesPage() {
   const { toast } = useToast();
+  const { user } = useAuth();
   const [orderStatus, setOrderStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
 
   const { register: registerOrder, handleSubmit: handleSubmitOrder, reset: resetOrderForm, formState: { errors: orderErrors } } = useForm<OrderFormData>({
@@ -109,6 +111,7 @@ export default function MITServicesPage() {
         attachmentName: attachmentName,
         attachmentUrl: attachmentUrl,
         timestamp: serverTimestamp(),
+        userId: user ? user.uid : undefined,
       };
       const docRef = await addDoc(collection(db, 'orders'), orderPayload);
       toast({ 

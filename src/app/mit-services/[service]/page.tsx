@@ -11,7 +11,7 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { db, storage } from '@/lib/firebase';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -21,6 +21,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import type { Order } from '@/lib/types';
 import { SocialIcons } from '@/components/social-icons';
+import { useAuth } from '@/app/auth-context';
 
 
 const orderSchema = z.object({
@@ -123,6 +124,7 @@ const serviceData: { [key: string]: {
 
 export default function ServiceDetailPage() {
   const { toast } = useToast();
+  const { user } = useAuth();
   const [orderStatus, setOrderStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const params = useParams();
   const serviceSlug = Array.isArray(params.service) ? params.service[0] : params.service;
@@ -163,6 +165,7 @@ export default function ServiceDetailPage() {
         attachmentName: attachmentName,
         attachmentUrl: attachmentUrl,
         timestamp: serverTimestamp(),
+        userId: user ? user.uid : undefined,
       };
       const docRef = await addDoc(collection(db, 'orders'), orderPayload);
       toast({ 
@@ -207,7 +210,7 @@ export default function ServiceDetailPage() {
       <main className="flex-grow">
         <section className="mb-8 p-6 bg-card/90 backdrop-blur-md rounded-xl shadow-xl">
           <Image
-            src="https://placehold.co/800x400.png"
+            src={`https://placehold.co/800x400.png?text=${service.title}`}
             alt={`${service.title} Showcase`}
             width={800}
             height={400}

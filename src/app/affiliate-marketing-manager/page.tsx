@@ -28,8 +28,9 @@ export default function AffiliateMarketingManagerPage() {
         <section className="mb-8 p-6 bg-card/90 backdrop-blur-md rounded-xl shadow-xl">
           <div className="flex justify-center mb-6">
             <Image
-              src="https://drive.google.com/uc?export=view&id=1zXu6UN8XztuTdFNCRIPMi9Tn5gDzkBbZ"
+              src="https://placehold.co/250x250.png"
               alt="Club World Cup Promotion"
+              data-ai-hint="promotional offer"
               width={250}
               height={250}
               className="rounded-full shadow-lg border-4 border-primary object-cover"
@@ -53,22 +54,25 @@ export default function AffiliateMarketingManagerPage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-4 max-w-5xl mx-auto">
                      <Image
-                        src="https://drive.google.com/uc?export=view&id=1CQ8-t2ejOZR450cZq0lwq394HgJ6zHaa"
+                        src="https://placehold.co/400x200.png"
                         alt="Betwinner Offer 1"
+                        data-ai-hint="sports betting"
                         width={400}
                         height={200}
                         className="rounded-lg mx-auto shadow-md w-full object-cover"
                       />
                       <Image
-                        src="https://drive.google.com/uc?export=view&id=13IA5TdCwTAbiCqLK36slEyl7798aG0o0"
+                        src="https://placehold.co/400x200.png"
                         alt="Betwinner Offer 2"
+                        data-ai-hint="soccer match"
                         width={400}
                         height={200}
                         className="rounded-lg mx-auto shadow-md w-full object-cover"
                       />
                       <Image
-                        src="https://drive.google.com/uc?export=view&id=1AfHoEiCMTsO8akNZ0F34WAsKkD8iy4Y-"
+                        src="https://placehold.co/400x200.png"
                         alt="Betwinner Offer 3"
+                        data-ai-hint="stadium lights"
                         width={400}
                         height={200}
                         className="rounded-lg mx-auto shadow-md w-full object-cover"

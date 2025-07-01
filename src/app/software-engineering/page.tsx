@@ -25,10 +25,11 @@ export default function SoftwareEngineeringPage() {
       <main className="flex-grow">
         <section className="mb-8 p-6 bg-card/90 backdrop-blur-md rounded-xl shadow-xl">
           <Image
-            src="https://drive.google.com/uc?export=view&id=1SEG-a3e_1xHx0-P7gD6MUysCSt6kg96U"
+            src="https://placehold.co/800x400.png"
             alt="Software Engineering Project Showcase"
             width={800}
             height={400}
+            data-ai-hint="software code"
             className="rounded-lg mb-6 w-full object-cover shadow-md"
           />
           <h2 className="text-3xl font-semibold text-foreground mb-4">

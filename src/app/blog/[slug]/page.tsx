@@ -56,7 +56,7 @@ export default function BlogPostPage() {
                         content: data.content || 'No content available.',
                         author: data.author || 'Anonymous',
                         publishedDate: date ? date.toLocaleDateString() : 'No date',
-                        imageUrl: data.imageUrl || `https://picsum.photos/seed/${doc.id}/800/400`,
+                        imageUrl: data.imageUrl || `https://placehold.co/800x400.png`,
                         imageHint: data.imageHint || 'blog post topic'
                     });
                 }
@@ -98,10 +98,11 @@ export default function BlogPostPage() {
             <main className="flex-grow">
                 <article className="max-w-4xl mx-auto bg-card/90 backdrop-blur-md rounded-xl shadow-xl overflow-hidden">
                     <Image
-                        src="https://drive.google.com/uc?export=view&id=1SEG-a3e_1xHx0-P7gD6MUysCSt6kg96U"
+                        src={post.imageUrl}
                         alt={post.title}
                         width={800}
                         height={400}
+                        data-ai-hint={post.imageHint}
                         className="w-full h-auto object-cover"
                         priority // Prioritize loading the main blog image
                     />

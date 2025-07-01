@@ -42,7 +42,7 @@ export default function BlogIndexPage() {
                         slug: data.slug || doc.id,
                         author: data.author || 'Anonymous',
                         publishedDate: date ? date.toLocaleDateString() : 'No date',
-                        imageUrl: data.imageUrl || `https://picsum.photos/seed/${doc.id}/400/250`,
+                        imageUrl: data.imageUrl || `https://placehold.co/400x250.png`,
                         imageHint: data.imageHint || 'blog post',
                         excerpt: createExcerpt(data.content || ''),
                     };
@@ -95,10 +95,11 @@ export default function BlogIndexPage() {
                                 <Card className="flex flex-col h-full overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 bg-card/90 backdrop-blur-md cursor-pointer">
                                     <CardHeader className="p-0">
                                         <Image
-                                            src="https://drive.google.com/uc?export=view&id=1SEG-a3e_1xHx0-P7gD6MUysCSt6kg96U"
+                                            src={post.imageUrl}
                                             alt={post.title}
                                             width={400}
                                             height={250}
+                                            data-ai-hint={post.imageHint}
                                             className="w-full h-48 object-cover"
                                         />
                                     </CardHeader>
@@ -130,10 +131,11 @@ export default function BlogIndexPage() {
                 {!loading && !error && posts.length === 0 && (
                     <div className="text-center py-20">
                         <Image
-                            src="https://drive.google.com/uc?export=view&id=1SEG-a3e_1xHx0-P7gD6MUysCSt6kg96U"
+                            src="https://placehold.co/400x300.png"
                             alt="No posts yet"
                             width={400}
                             height={300}
+                            data-ai-hint="empty state"
                             className="mx-auto rounded-lg mb-4 opacity-70"
                         />
                         <h2 className="text-2xl font-semibold text-foreground mb-2">

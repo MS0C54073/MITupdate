@@ -26,8 +26,9 @@ export default function HobbiesPage() {
         <section className="mb-8 p-6 bg-card/90 backdrop-blur-md rounded-xl shadow-xl">
           <div className="flex justify-center mb-6">
             <Image
-              src="https://drive.google.com/uc?export=view&id=1k6DbCourwAGd8mH4TcFG0w2DatVJ0PyN"
+              src="https://placehold.co/250x250.png"
               alt="Hobbies Showcase"
+              data-ai-hint="hobby collection"
               width={250}
               height={250}
               className="rounded-full shadow-lg border-4 border-primary object-cover"

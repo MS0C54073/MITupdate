@@ -247,7 +247,7 @@ export default function Home() {
             <Link href="/mit-services" passHref legacyBehavior>
               <a className="portfolio-item flex flex-col items-center text-center bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
                 <Image
-                  src="https://placehold.co/150x150.png"
+                  src="https://drive.google.com/uc?id=17Vtoqp0jhBSYHrrstnCDCMBUzcrhuGfG"
                   alt="MIT Services"
                   width={150}
                   height={150}
@@ -269,7 +269,7 @@ export default function Home() {
             <Link href="/teaching-experience" passHref legacyBehavior>
               <a className="portfolio-item flex flex-col items-center text-center bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
                 <Image
-                  src="https://placehold.co/150x150.png"
+                  src="https://drive.google.com/uc?id=1AocH_Dpl2QbXhusfosqZEr21AFDNmJPW"
                   alt="Work and Education"
                   width={150}
                   height={150}
@@ -291,7 +291,7 @@ export default function Home() {
             <Link href="/affiliate-marketing-manager" passHref legacyBehavior>
               <a className="portfolio-item flex flex-col items-center text-center bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
                 <Image
-                  src="https://placehold.co/150x150.png"
+                  src="https://drive.google.com/uc?id=1zXu6UN8XztuTdFNCRIPMi9Tn5gDzkBbZ"
                   alt="Affiliate Marketing Project"
                   width={150}
                   height={150}
@@ -315,7 +315,7 @@ export default function Home() {
             <Link href="/hobbies" passHref legacyBehavior>
               <a className="portfolio-item flex flex-col items-center text-center bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
                 <Image
-                  src="https://placehold.co/150x150.png"
+                  src="https://drive.google.com/uc?id=1k6DbCourwAGd8mH4TcFG0w2DatVJ0PyN"
                   alt="Hobbies"
                   width={150}
                   height={150}

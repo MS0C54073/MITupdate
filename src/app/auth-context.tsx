@@ -46,14 +46,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const value = { user, userProfile, loading };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-          <Loader2 className="h-16 w-16 animate-spin text-primary" />
-      </div>
-    );
-  }
-
+  // The global loader was removed from here.
+  // Public pages will now render immediately for guests.
+  // Pages that require auth state will use the `loading` value from the context
+  // to show their own specific loaders, keeping them secure.
   return (
     <AuthContext.Provider value={value}>
       {children}

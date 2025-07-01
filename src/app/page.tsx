@@ -4,13 +4,12 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Loader2, Check, ChevronLeft, ChevronRight } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { db, storage } from '@/lib/firebase';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 
@@ -21,7 +20,6 @@ import './ai.css';
 import TranslatedText from '@/app/components/translated-text';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
-import AuthModal from '@/app/components/auth-modal';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
@@ -46,8 +44,6 @@ type OrderFormData = z.infer<typeof orderSchema>;
 
 
 export default function Home() {
-  const router = useRouter();
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const { toast } = useToast();
 
   const [commentStatus, setCommentStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
@@ -115,12 +111,6 @@ export default function Home() {
               behavior: 'smooth',
           });
       }
-  };
-
-
-  const handleAdminLoginSuccess = () => {
-    setIsAuthModalOpen(false);
-    router.push('/admin/dashboard');
   };
 
   const onCommentSubmit: SubmitHandler<CommentFormData> = async (data) => {
@@ -194,13 +184,14 @@ export default function Home() {
 
   return (
     <div className="container mx-auto py-12 px-4 md:px-6 lg:px-8">
-      <section className="mb-12 relative z-10">
+      <section className="mb-12 relative z-10 pt-16">
         <div className="flex flex-col items-center text-center md:flex-row md:text-left gap-8 p-6 bg-card/80 backdrop-blur-sm rounded-xl shadow-xl">
           <Image
-            src="https://drive.google.com/uc?export=view&id=17Vtoqp0jhBSYHrrstnCDCMBUzcrhuGfG"
+            src="https://placehold.co/200x200.png"
             alt="Muzo's Profile Picture"
             width={200}
             height={200}
+            data-ai-hint="profile picture"
             className="rounded-full shadow-lg border-4 border-primary object-cover"
           />
           <div className="text-center md:text-left flex-grow">
@@ -222,17 +213,8 @@ export default function Home() {
             </p>
             <SocialIcons className="mt-4 flex space-x-4 justify-center md:justify-start" />
           </div>
-          <Button variant="outline" onClick={() => setIsAuthModalOpen(true)} className="self-start md:self-center mt-4 md:mt-0">
-            <TranslatedText text="Admin" />
-          </Button>
         </div>
       </section>
-
-      <AuthModal
-        isOpen={isAuthModalOpen}
-        onClose={() => setIsAuthModalOpen(false)}
-        onLoginSuccess={handleAdminLoginSuccess}
-      />
 
       <section  className="relative z-10">
         <h2 className="text-2xl font-semibold mb-6 text-primary text-center"><TranslatedText text="Portfolio Showcase"/></h2>
@@ -252,10 +234,11 @@ export default function Home() {
             <Link href="/mit-services" passHref legacyBehavior>
               <a className="portfolio-item flex flex-col items-center text-center bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
                 <Image
-                  src="https://drive.google.com/uc?export=view&id=17Vtoqp0jhBSYHrrstnCDCMBUzcrhuGfG"
+                  src="https://placehold.co/150x150.png"
                   alt="MIT Services"
                   width={150}
                   height={150}
+                  data-ai-hint="tech services"
                   className="rounded-full mb-4 w-36 h-36 border-4 border-primary shadow-lg object-cover"
                 />
                 <h3 className="text-xl font-semibold text-foreground mb-2"><TranslatedText text="MIT Services"/></h3>
@@ -273,10 +256,11 @@ export default function Home() {
             <Link href="/teaching-experience" passHref legacyBehavior>
               <a className="portfolio-item flex flex-col items-center text-center bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
                 <Image
-                  src="https://drive.google.com/uc?export=view&id=1AocH_Dpl2QbXhusfosqZEr21AFDNmJPW"
+                  src="https://placehold.co/150x150.png"
                   alt="Work and Education"
                   width={150}
                   height={150}
+                  data-ai-hint="education books"
                   className="rounded-full mb-4 w-36 h-36 border-4 border-primary shadow-lg object-cover"
                 />
                 <h3 className="text-xl font-semibold text-foreground mb-2"><TranslatedText text="Work and Education"/></h3>
@@ -294,10 +278,11 @@ export default function Home() {
             <Link href="/affiliate-marketing-manager" passHref legacyBehavior>
               <a className="portfolio-item flex flex-col items-center text-center bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
                 <Image
-                  src="https://drive.google.com/uc?export=view&id=1zXu6UN8XztuTdFNCRIPMi9Tn5gDzkBbZ"
+                  src="https://placehold.co/150x150.png"
                   alt="Affiliate Marketing Project"
                   width={150}
                   height={150}
+                  data-ai-hint="marketing chart"
                   className="rounded-full mb-4 w-36 h-36 border-4 border-primary shadow-lg object-cover"
                 />
                 <h3 className="text-xl font-semibold text-foreground mb-2">
@@ -317,10 +302,11 @@ export default function Home() {
             <Link href="/hobbies" passHref legacyBehavior>
               <a className="portfolio-item flex flex-col items-center text-center bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
                 <Image
-                  src="https://drive.google.com/uc?export=view&id=1k6DbCourwAGd8mH4TcFG0w2DatVJ0PyN"
+                  src="https://placehold.co/150x150.png"
                   alt="Hobbies"
                   width={150}
                   height={150}
+                  data-ai-hint="hobby collection"
                   className="rounded-full mb-4 w-36 h-36 border-4 border-primary shadow-lg object-cover"
                 />
                 <h3 className="text-xl font-semibold text-foreground mb-2"><TranslatedText text="Hobbies"/></h3>

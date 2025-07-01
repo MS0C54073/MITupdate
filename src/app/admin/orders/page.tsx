@@ -2,6 +2,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import TranslatedText from '@/app/components/translated-text';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -12,8 +13,12 @@ import { db } from '@/lib/firebase';
 import { collection, getDocs, orderBy, query, Timestamp, limit, startAfter, type QueryDocumentSnapshot, type DocumentData } from 'firebase/firestore';
 import type { DisplayOrder } from '@/lib/types'; 
 import { SocialIcons } from '@/components/social-icons';
+import { useAuth } from '@/app/auth-context';
 
 export default function AdminOrdersPage() {
+  const { user, userProfile, loading: authLoading } = useAuth();
+  const router = useRouter();
+
   const [orders, setOrders] = useState<DisplayOrder[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -22,6 +27,18 @@ export default function AdminOrdersPage() {
   const [error, setError] = useState<string | null>(null);
 
   const ordersPerPage = 15;
+
+  useEffect(() => {
+    if (!authLoading && (!user || userProfile?.role !== 'admin')) {
+      router.push('/login');
+    }
+  }, [user, userProfile, authLoading, router]);
+
+  useEffect(() => {
+    if (userProfile?.role === 'admin') {
+      fetchOrders(true);
+    }
+  }, [userProfile]);
 
   const mapDocToOrder = (doc: QueryDocumentSnapshot<DocumentData>): DisplayOrder => {
     const data = doc.data();
@@ -66,7 +83,6 @@ export default function AdminOrdersPage() {
       }
       
       const documentSnapshots = await getDocs(q);
-      
       const fetchedOrders = documentSnapshots.docs.map(mapDocToOrder);
 
       if (isInitial) {
@@ -90,9 +106,17 @@ export default function AdminOrdersPage() {
     }
   };
 
-  useEffect(() => {
-    fetchOrders(true);
-  }, []);
+  if (authLoading || loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+          <Loader2 className="h-16 w-16 animate-spin text-primary" />
+      </div>
+    );
+  }
+  
+  if (!user || userProfile?.role !== 'admin') {
+      return null;
+  }
 
   return (
     <div className="container mx-auto py-12 px-4 md:px-6 lg:px-8 min-h-screen flex flex-col">
@@ -173,10 +197,11 @@ export default function AdminOrdersPage() {
           {!loading && !error && orders.length === 0 && (
              <div className="text-center py-10">
               <Image
-                src="https://drive.google.com/uc?export=view&id=1SEG-a3e_1xHx0-P7gD6MUysCSt6kg96U"
+                src="https://placehold.co/400x300.png"
                 alt="No orders yet"
                 width={400}
                 height={300}
+                data-ai-hint="empty state"
                 className="mx-auto rounded-lg mb-4 opacity-70"
               />
               <p className="text-muted-foreground text-lg">

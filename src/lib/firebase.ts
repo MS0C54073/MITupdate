@@ -1,21 +1,14 @@
 
 // src/lib/firebase.ts
-import { initializeApp, getApps, FirebaseApp } from 'firebase/app';
-import { getFirestore, Firestore } from 'firebase/firestore';
-import { getStorage, FirebaseStorage } from 'firebase/storage';
+import { initializeApp, getApps, type FirebaseApp } from 'firebase/app';
+import { getFirestore, type Firestore } from 'firebase/firestore';
+import { getStorage, type FirebaseStorage } from 'firebase/storage';
+import { getAuth, type Auth } from 'firebase/auth';
 
 // Your web app's Firebase configuration
 // It's recommended to store these in environment variables
 // IMPORTANT: Ensure these environment variables are set in your .env.local file
 // and prefixed with NEXT_PUBLIC_ to be accessible on the client-side.
-// For example:
-// NEXT_PUBLIC_FIREBASE_API_KEY="your_api_key"
-// NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN="your_auth_domain"
-// NEXT_PUBLIC_FIREBASE_PROJECT_ID="your_project_id"
-// NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET="your_storage_bucket"
-// NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID="your_messaging_sender_id"
-// NEXT_PUBLIC_FIREBASE_APP_ID="your_app_id"
-
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -28,6 +21,7 @@ const firebaseConfig = {
 let app: FirebaseApp;
 let db: Firestore;
 let storage: FirebaseStorage;
+let auth: Auth;
 
 if (getApps().length === 0) {
   app = initializeApp(firebaseConfig);
@@ -37,5 +31,6 @@ if (getApps().length === 0) {
 
 db = getFirestore(app);
 storage = getStorage(app);
+auth = getAuth(app);
 
-export { app, db, storage };
+export { app, db, storage, auth };

@@ -13,6 +13,8 @@ import { ViewModeWrapper } from '@/app/components/view-mode-wrapper';
 import { BackgroundThemeProvider } from './components/background-theme-provider';
 import { BackgroundThemeToggle } from './components/background-theme-toggle';
 import { DynamicBackground } from './components/dynamic-background';
+import { AuthProvider } from './auth-context';
+import AuthNav from './components/auth-nav';
 
 
 const inter = Inter({
@@ -41,7 +43,7 @@ export const metadata: Metadata = {
     siteName: "Muzo's Niche",
     images: [
       {
-        url: 'https://drive.google.com/uc?export=view&id=1SEG-a3e_1xHx0-P7gD6MUysCSt6kg96U',
+        url: 'https://placehold.co/1200x630.png',
         width: 1200,
         height: 630,
         alt: "Muzo's Niche Portfolio",
@@ -55,7 +57,7 @@ export const metadata: Metadata = {
     title: "Muzo's Niche - Portfolio",
     description:
       'Muzo - Tech Enthusiast, Tutor, Affiliate Marketer, and Music Lover',
-    images: ['https://drive.google.com/uc?export=view&id=1SEG-a3e_1xHx0-P7gD6MUysCSt6kg96U'],
+    images: ['https://placehold.co/1200x630.png'],
     creator: '@MuzoSalimu',
   },
   robots: {
@@ -92,21 +94,26 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <TranslationProvider>
-            <BackgroundThemeProvider>
-              <ViewModeProvider>
-                <DynamicBackground />
-                <div className="fixed top-4 right-4 z-50 flex flex-col items-end space-y-2">
-                  <ModeToggle />
-                  <LanguageSelector />
-                  <ViewModeToggle />
-                  <BackgroundThemeToggle />
-                </div>
-                <ViewModeWrapper>
-                  {children}
-                </ViewModeWrapper>
-                <Toaster />
-              </ViewModeProvider>
-            </BackgroundThemeProvider>
+            <AuthProvider>
+              <BackgroundThemeProvider>
+                <ViewModeProvider>
+                  <DynamicBackground />
+                  <div className="fixed top-4 right-4 z-50 flex flex-col items-end space-y-2">
+                    <div className="flex items-center gap-2">
+                      <AuthNav />
+                      <ModeToggle />
+                    </div>
+                    <LanguageSelector />
+                    <ViewModeToggle />
+                    <BackgroundThemeToggle />
+                  </div>
+                  <ViewModeWrapper>
+                    {children}
+                  </ViewModeWrapper>
+                  <Toaster />
+                </ViewModeProvider>
+              </BackgroundThemeProvider>
+            </AuthProvider>
           </TranslationProvider>
         </ThemeProvider>
       </body>

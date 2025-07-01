@@ -1,6 +1,13 @@
 
 import type { Timestamp } from 'firebase/firestore';
 
+export interface UserProfile {
+  uid: string;
+  email: string;
+  name: string;
+  role: 'admin' | 'user';
+}
+
 export interface Comment {
   id?: string; // Firestore document ID
   name: string;

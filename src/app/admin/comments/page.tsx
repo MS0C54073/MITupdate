@@ -2,6 +2,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import TranslatedText from '@/app/components/translated-text';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, MessageSquare, Loader2 } from 'lucide-react';
@@ -11,8 +12,12 @@ import { db } from '@/lib/firebase';
 import { collection, getDocs, orderBy, query, Timestamp, limit, startAfter, type QueryDocumentSnapshot, type DocumentData } from 'firebase/firestore';
 import type { DisplayComment } from '@/lib/types'; 
 import { SocialIcons } from '@/components/social-icons';
+import { useAuth } from '@/app/auth-context';
 
 export default function AdminCommentsPage() {
+  const { user, userProfile, loading: authLoading } = useAuth();
+  const router = useRouter();
+
   const [comments, setComments] = useState<DisplayComment[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -21,6 +26,18 @@ export default function AdminCommentsPage() {
   const [error, setError] = useState<string | null>(null);
 
   const commentsPerPage = 15;
+
+  useEffect(() => {
+    if (!authLoading && (!user || userProfile?.role !== 'admin')) {
+      router.push('/login');
+    }
+  }, [user, userProfile, authLoading, router]);
+
+  useEffect(() => {
+    if (userProfile?.role === 'admin') {
+      fetchComments(true);
+    }
+  }, [userProfile]);
 
   const mapDocToComment = (doc: QueryDocumentSnapshot<DocumentData>): DisplayComment => {
     const data = doc.data();
@@ -56,13 +73,11 @@ export default function AdminCommentsPage() {
       } else if (lastVisible) {
         q = query(commentsCollection, orderBy('timestamp', 'desc'), startAfter(lastVisible), limit(commentsPerPage));
       } else {
-        // Should not happen if hasMore is true
         if(isInitial) setLoading(false); else setLoadingMore(false);
         return;
       }
       
       const documentSnapshots = await getDocs(q);
-      
       const fetchedComments = documentSnapshots.docs.map(mapDocToComment);
 
       if (isInitial) {
@@ -86,9 +101,17 @@ export default function AdminCommentsPage() {
     }
   };
 
-  useEffect(() => {
-    fetchComments(true);
-  }, []);
+  if (authLoading || loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+          <Loader2 className="h-16 w-16 animate-spin text-primary" />
+      </div>
+    );
+  }
+  
+  if (!user || userProfile?.role !== 'admin') {
+      return null;
+  }
 
   return (
     <div className="container mx-auto py-12 px-4 md:px-6 lg:px-8 min-h-screen flex flex-col">
@@ -145,10 +168,11 @@ export default function AdminCommentsPage() {
           {!loading && !error && comments.length === 0 && (
             <div className="text-center py-10">
               <Image
-                src="https://drive.google.com/uc?export=view&id=1SEG-a3e_1xHx0-P7gD6MUysCSt6kg96U"
+                src="https://placehold.co/400x300.png"
                 alt="No comments yet"
                 width={400}
                 height={300}
+                data-ai-hint="empty state"
                 className="mx-auto rounded-lg mb-4 opacity-70"
               />
               <p className="text-muted-foreground text-lg">

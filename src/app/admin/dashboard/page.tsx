@@ -2,6 +2,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft, Bell, MessageSquare, ShoppingCart, Loader2 } from 'lucide-react';
@@ -19,8 +20,12 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { SocialIcons } from '@/components/social-icons';
+import { useAuth } from '@/app/auth-context';
 
 export default function AdminDashboardPage() {
+  const { user, userProfile, loading: authLoading } = useAuth();
+  const router = useRouter();
+
   const [newCommentsCount, setNewCommentsCount] = useState(0);
   const [newOrdersCount, setNewOrdersCount] = useState(0);
   const [latestComments, setLatestComments] = useState<DisplayComment[]>([]);
@@ -30,6 +35,14 @@ export default function AdminDashboardPage() {
   const totalNotifications = newCommentsCount + newOrdersCount;
 
   useEffect(() => {
+    if (!authLoading && (!user || userProfile?.role !== 'admin')) {
+      router.push('/login');
+    }
+  }, [user, userProfile, authLoading, router]);
+
+  useEffect(() => {
+    if (userProfile?.role !== 'admin') return;
+
     const fetchData = async () => {
       setLoading(true);
       try {
@@ -43,13 +56,11 @@ export default function AdminDashboardPage() {
         setNewOrdersCount(ordersSnapshot.data().count);
       } catch (error) {
         console.error("Error fetching counts:", error);
-        // counts will be 0, but we shouldn't hang
       }
     };
 
     fetchData();
 
-    // Listen for latest comments and orders in real-time for notifications
     const latestCommentsQuery = query(collection(db, "comments"), orderBy("timestamp", "desc"), limit(5));
     const latestCommentsUnsubscribe = onSnapshot(latestCommentsQuery, (snapshot) => {
         setLatestComments(snapshot.docs.map(doc => ({
@@ -59,7 +70,7 @@ export default function AdminDashboardPage() {
             email: '',
             timestamp: ''
         } as DisplayComment)));
-        setLoading(false); // Set loading false after we get the first batch of latest comments
+        setLoading(false); 
     }, (error) => {
       console.error("Error fetching latest comments:", error);
       setLoading(false);
@@ -81,8 +92,19 @@ export default function AdminDashboardPage() {
       latestCommentsUnsubscribe();
       latestOrdersUnsubscribe();
     }
-  }, []);
+  }, [userProfile]);
 
+  if (authLoading || loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+          <Loader2 className="h-16 w-16 animate-spin text-primary" />
+      </div>
+    );
+  }
+  
+  if (!user || userProfile?.role !== 'admin') {
+      return null;
+  }
 
   return (
     <div className="container mx-auto py-12 px-4 md:px-6 lg:px-8 min-h-screen flex flex-col">

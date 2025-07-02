@@ -116,13 +116,13 @@ export default function RootLayout({
                     <BackgroundThemeToggle />
                   </div>
                   <ViewModeWrapper>
-                    <Alert className="container mx-auto mt-20 mb-[-2.5rem]">
+                    <Alert variant="destructive" className="container mx-auto mt-20 mb-[-2.5rem]">
                         <Construction className="h-4 w-4" />
-                        <AlertTitle>
-                            <TranslatedText text="Under Maintenance" />
+                        <AlertTitle className="font-bold">
+                            <TranslatedText text="Under Maintenance!!!" />
                         </AlertTitle>
-                        <AlertDescription>
-                            <TranslatedText text="This site is currently undergoing updates. For assistance, please click a social media icon to contact us." />
+                        <AlertDescription className="font-bold">
+                            <TranslatedText text="This site is currently undergoing updates and many functions are not working. For assistance, please click a social media icon to contact us!!!" />
                         </AlertDescription>
                     </Alert>
                     {children}

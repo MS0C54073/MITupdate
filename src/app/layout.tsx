@@ -17,6 +17,9 @@ import { AuthProvider } from './auth-context';
 import AuthNav from './components/auth-nav';
 import Link from 'next/link';
 import { MuzoInTechLogo } from '@/components/icons';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Construction } from 'lucide-react';
+import TranslatedText from './components/translated-text';
 
 
 const inter = Inter({
@@ -113,6 +116,15 @@ export default function RootLayout({
                     <BackgroundThemeToggle />
                   </div>
                   <ViewModeWrapper>
+                    <Alert className="container mx-auto mt-20 mb-[-2.5rem]">
+                        <Construction className="h-4 w-4" />
+                        <AlertTitle>
+                            <TranslatedText text="Under Maintenance" />
+                        </AlertTitle>
+                        <AlertDescription>
+                            <TranslatedText text="This site is currently undergoing updates. For assistance, please click a social media icon to contact us." />
+                        </AlertDescription>
+                    </Alert>
                     {children}
                   </ViewModeWrapper>
                   <Toaster />

@@ -116,7 +116,7 @@ export default function RootLayout({
                     <BackgroundThemeToggle />
                   </div>
                   <ViewModeWrapper>
-                    <Alert variant="destructive" className="container mx-auto mt-20 mb-[-2.5rem]">
+                    <Alert variant="accent" className="container mx-auto mt-20 mb-[-2.5rem]">
                         <Construction className="h-4 w-4" />
                         <AlertTitle className="font-bold">
                             <TranslatedText text="Under Maintenance!!!" />

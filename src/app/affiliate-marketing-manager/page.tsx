@@ -2,13 +2,15 @@
 'use client';
 
 import Link from 'next/link';
-import TranslatedText from '@/app/components/translated-text'; // Updated import
+import TranslatedText from '@/app/components/translated-text';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Gift, Trophy } from 'lucide-react';
+import { ArrowLeft, Gift, Trophy, ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import { SocialIcons } from '@/components/social-icons';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { ZambiaFlagIcon, RussiaFlagIcon } from '@/components/flag-icons';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import '@/app/ai.css';
 
 export default function AffiliateMarketingManagerPage() {
     const images = [
@@ -22,6 +24,44 @@ export default function AffiliateMarketingManagerPage() {
     { src: "https://drive.google.com/uc?id=1-h46xg2ZrgOlmcMdZKK-Q3uMCSfOx3sV", alt: "Affiliate Marketing Image 8", hint: "soccer ball" },
     { src: "https://drive.google.com/uc?id=1R__srceNSMgx5ncLeQSWesA5V5FwkU4b", alt: "Affiliate Marketing Image 9", hint: "winning bet" },
   ];
+
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const checkArrows = useCallback(() => {
+      const container = scrollContainerRef.current;
+      if (container) {
+          const { scrollLeft, scrollWidth, clientWidth } = container;
+          setCanScrollLeft(scrollLeft > 0);
+          setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
+      }
+  }, []);
+
+  useEffect(() => {
+      const container = scrollContainerRef.current;
+      if (container) {
+          const timer = setTimeout(() => checkArrows(), 100);
+          container.addEventListener('scroll', checkArrows);
+          window.addEventListener('resize', checkArrows);
+          return () => {
+              clearTimeout(timer);
+              container.removeEventListener('scroll', checkArrows);
+              window.removeEventListener('resize', checkArrows);
+          };
+      }
+  }, [checkArrows]);
+
+  const handleScroll = (direction: 'left' | 'right') => {
+      if (scrollContainerRef.current) {
+          const scrollAmount = scrollContainerRef.current.clientWidth * 0.8;
+          const newScrollLeft = scrollContainerRef.current.scrollLeft + (direction === 'left' ? -scrollAmount : scrollAmount);
+          scrollContainerRef.current.scrollTo({
+              left: newScrollLeft,
+              behavior: 'smooth',
+          });
+      }
+  };
   
   return (
     <div className="container mx-auto py-12 px-4 md:px-6 lg:px-8 min-h-screen flex flex-col">
@@ -38,18 +78,43 @@ export default function AffiliateMarketingManagerPage() {
       </header>
       <main className="flex-grow">
         <section className="mb-8 p-6 bg-card/90 backdrop-blur-md rounded-xl shadow-xl">
-          <div className="relative max-h-[70vh] overflow-y-auto flex flex-col items-center gap-4 mb-6 p-4 rounded-lg border bg-muted/20">
-            {images.map((image, index) => (
-               <Image
-                key={index}
-                src={image.src}
-                alt={image.alt}
-                data-ai-hint={image.hint}
-                width={500}
-                height={400}
-                className="rounded-lg shadow-lg w-full max-w-lg h-auto object-contain"
-              />
-            ))}
+          <div className="relative group mb-6">
+            {canScrollLeft && (
+                <Button
+                variant="outline"
+                size="icon"
+                className="absolute left-0 md:-left-4 top-1/2 -translate-y-1/2 z-20 h-10 w-10 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
+                onClick={() => handleScroll('left')}
+                aria-label="Scroll left"
+                >
+                <ChevronLeft className="h-6 w-6" />
+                </Button>
+            )}
+            <div className="portfolio-rotation" ref={scrollContainerRef}>
+                {images.map((image, index) => (
+                    <div key={index} className="portfolio-item">
+                        <Image
+                            src={image.src}
+                            alt={image.alt}
+                            data-ai-hint={image.hint}
+                            width={320}
+                            height={240}
+                            className="w-full h-auto rounded-lg shadow-lg object-cover"
+                        />
+                    </div>
+                ))}
+            </div>
+            {canScrollRight && (
+                <Button
+                variant="outline"
+                size="icon"
+                className="absolute right-0 md:-right-4 top-1/2 -translate-y-1/2 z-20 h-10 w-10 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
+                onClick={() => handleScroll('right')}
+                aria-label="Scroll right"
+                >
+                <ChevronRight className="h-6 w-6" />
+                </Button>
+            )}
           </div>
           <h2 className="text-3xl font-semibold text-foreground mb-4">
             <TranslatedText text="Expert Affiliate Marketing Management" />
@@ -209,3 +274,5 @@ export default function AffiliateMarketingManagerPage() {
     </div>
   );
 }
+
+    

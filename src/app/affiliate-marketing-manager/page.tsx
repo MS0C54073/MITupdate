@@ -13,15 +13,18 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import '@/app/ai.css';
 
 export default function AffiliateMarketingManagerPage() {
+    const russiaLink = "https://tinyurl.com/2j9e6ndd";
+    const zambiaLink = "https://tinyurl.com/5xd8rb5e";
+    
     const images = [
-    { src: "https://drive.google.com/uc?id=1qKILVi6oOCuQBHevbYkvr1NS3s7sPDja", alt: "Affiliate Marketing Image 1", hint: "sports betting" },
-    { src: "https://drive.google.com/uc?id=1AjQ6wGLABvwQKUMVz-e0nVU5yO5YgWUJ", alt: "Affiliate Marketing Image 2", hint: "soccer players" },
-    { src: "https://drive.google.com/uc?id=1NLnTM6Xc8MZqnS_XSPKOpqxmBz6CkPNJ", alt: "Affiliate Marketing Image 4", hint: "casino chips" },
-    { src: "https://drive.google.com/uc?id=1HFP3VmUoINFAZTyA-zbIi6-Hom7yYMms", alt: "Affiliate Marketing Image 5", hint: "online game" },
-    { src: "https://drive.google.com/uc?id=1exU5AKqGy7F3VIp92yRpVckMCuWOb8CT", alt: "Affiliate Marketing Image 6", hint: "sports odds" },
-    { src: "https://drive.google.com/uc?id=1p4Es14i71zDIWsmav4Tw75p46a9undzc", alt: "Affiliate Marketing Image 7", hint: "betting app" },
-    { src: "https://drive.google.com/uc?id=1-h46xg2ZrgOlmcMdZKK-Q3uMCSfOx3sV", alt: "Affiliate Marketing Image 8", hint: "soccer ball" },
-    { src: "https://drive.google.com/uc?id=1R__srceNSMgx5ncLeQSWesA5V5FwkU4b", alt: "Affiliate Marketing Image 9", hint: "winning bet" },
+    { src: "https://drive.google.com/uc?id=1qKILVi6oOCuQBHevbYkvr1NS3s7sPDja", alt: "Affiliate Marketing Image 1", hint: "sports betting", link: zambiaLink },
+    { src: "https://drive.google.com/uc?id=1AjQ6wGLABvwQKUMVz-e0nVU5yO5YgWUJ", alt: "Affiliate Marketing Image 2", hint: "soccer players", link: russiaLink },
+    { src: "https://drive.google.com/uc?id=1NLnTM6Xc8MZqnS_XSPKOpqxmBz6CkPNJ", alt: "Affiliate Marketing Image 4", hint: "casino chips", link: russiaLink },
+    { src: "https://drive.google.com/uc?id=1HFP3VmUoINFAZTyA-zbIi6-Hom7yYMms", alt: "Affiliate Marketing Image 5", hint: "online game", link: russiaLink },
+    { src: "https://drive.google.com/uc?id=1exU5AKqGy7F3VIp92yRpVckMCuWOb8CT", alt: "Affiliate Marketing Image 6", hint: "sports odds", link: zambiaLink },
+    { src: "https://drive.google.com/uc?id=1p4Es14i71zDIWsmav4Tw75p46a9undzc", alt: "Affiliate Marketing Image 7", hint: "betting app", link: russiaLink },
+    { src: "https://drive.google.com/uc?id=1-h46xg2ZrgOlmcMdZKK-Q3uMCSfOx3sV", alt: "Affiliate Marketing Image 8", hint: "soccer ball", link: russiaLink },
+    { src: "https://drive.google.com/uc?id=1R__srceNSMgx5ncLeQSWesA5V5FwkU4b", alt: "Affiliate Marketing Image 9", hint: "winning bet", link: russiaLink },
   ];
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -91,16 +94,22 @@ export default function AffiliateMarketingManagerPage() {
             )}
             <div className="portfolio-rotation" ref={scrollContainerRef}>
                 {images.map((image, index) => (
-                    <div key={index} className="portfolio-item">
+                    <a
+                      key={index}
+                      href={image.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="portfolio-item block cursor-pointer group/item"
+                    >
                         <Image
                             src={image.src}
                             alt={image.alt}
                             data-ai-hint={image.hint}
                             width={320}
                             height={240}
-                            className="w-full h-60 rounded-lg shadow-lg object-cover"
+                            className="w-full h-60 rounded-lg shadow-lg object-cover transition-transform duration-300 group-hover/item:scale-105"
                         />
-                    </div>
+                    </a>
                 ))}
             </div>
             {canScrollRight && (
@@ -190,19 +199,19 @@ export default function AffiliateMarketingManagerPage() {
                     </p>
                     <div className="text-lg text-foreground flex items-center justify-center gap-2">
                         <Trophy className="h-5 w-5 text-primary" />
-                        <TranslatedText text="Use PROMOCODE BWZED for:"/>
+                        <TranslatedText text="Use PROMOCODE:"/>
                     </div>
                      <div className="flex flex-col sm:flex-row justify-center items-center gap-2 pt-2">
                         <Button asChild size="sm" className="font-bold bg-accent text-accent-foreground hover:bg-accent/90">
                            <a href="https://tinyurl.com/5xd8rb5e" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
                              <ZambiaFlagIcon className="h-4 w-6" />
-                             <span>Zambia</span>
+                             <span>BWZED (Zambia)</span>
                            </a>
                          </Button>
                          <Button asChild size="sm" className="font-bold">
                            <a href="https://tinyurl.com/2j9e6ndd" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
                              <RussiaFlagIcon className="h-4 w-6" />
-                             <span>Russia</span>
+                             <span>BWZED (Russia)</span>
                            </a>
                          </Button>
                     </div>

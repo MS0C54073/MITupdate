@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -37,16 +38,16 @@ export default function AffiliateMarketingManagerPage() {
       </header>
       <main className="flex-grow">
         <section className="mb-8 p-6 bg-card/90 backdrop-blur-md rounded-xl shadow-xl">
-          <div className="grid grid-cols-3 gap-2 md:gap-4 mb-6">
+          <div className="relative max-h-[70vh] overflow-y-auto flex flex-col items-center gap-4 mb-6 p-4 rounded-lg border bg-muted/20">
             {images.map((image, index) => (
                <Image
                 key={index}
                 src={image.src}
                 alt={image.alt}
                 data-ai-hint={image.hint}
-                width={300}
-                height={300}
-                className="rounded-lg shadow-lg w-full h-auto object-cover aspect-square"
+                width={500}
+                height={400}
+                className="rounded-lg shadow-lg w-full max-w-lg h-auto object-contain"
               />
             ))}
           </div>

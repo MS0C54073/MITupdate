@@ -177,7 +177,7 @@ export default function AffiliateMarketingManagerPage() {
                 </div>
 
                 <div className="text-left mx-auto max-w-lg space-y-4 text-foreground">
-                  <p className="text-center font-bold text-lg"><TranslatedText text="⚽ BW | ELSE | 201 ⚽" /></p>
+                  <p className="text-center font-bold text-lg"><TranslatedText text="ATTENTION!!!" /></p>
                   <h5 className="font-bold text-xl text-center text-accent"><TranslatedText text="🎯 BET OF THE DAY 🎯" /></h5>
                   <p className="text-center font-semibold text-lg"><TranslatedText text="🌍 Palmeiras vs. Chelsea | Club World Cup (QF) 🌍" /></p>
                   <p className="text-center font-bold text-lg text-primary"><TranslatedText text="🔮 Prediction: Total Goals Under 2.5 @ 1.7 🔮" /></p>

@@ -29,8 +29,8 @@ export default function AffiliateMarketingManagerPage() {
           <div className="flex justify-center mb-6">
             <Image
               src="https://drive.google.com/uc?id=1zXu6UN8XztuTdFNCRIPMi9Tn5gDzkBbZ"
-              alt="Club World Cup Promotion"
-              data-ai-hint="promotional offer"
+              alt="Affiliate Marketing Manager"
+              data-ai-hint="profile"
               width={250}
               height={250}
               className="rounded-full shadow-lg border-4 border-primary object-cover"

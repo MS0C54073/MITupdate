@@ -187,15 +187,24 @@ export default function AffiliateMarketingManagerPage() {
                         <Gift className="h-5 w-5 text-primary" />
                         <TranslatedText text="200% BONUS up to $300 on 1st deposit!"/>
                     </p>
-                    <p className="text-lg text-foreground flex items-center justify-center gap-2">
+                    <div className="text-lg text-foreground flex items-center justify-center gap-2">
                         <Trophy className="h-5 w-5 text-primary" />
-                        <TranslatedText text="Use PROMOCODE:"/>{' '}
-                        <span
-                            className="font-bold bg-accent text-accent-foreground px-2 py-1 rounded"
-                        >
-                            BWZED
-                        </span>
-                    </p>
+                        <TranslatedText text="Use PROMOCODE BWZED for:"/>
+                    </div>
+                     <div className="flex flex-col sm:flex-row justify-center items-center gap-2 pt-2">
+                        <Button asChild size="sm" className="font-bold bg-accent text-accent-foreground hover:bg-accent/90">
+                           <a href="https://tinyurl.com/5xd8rb5e" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                             <ZambiaFlagIcon className="h-4 w-6" />
+                             <span>Zambia</span>
+                           </a>
+                         </Button>
+                         <Button asChild size="sm" className="font-bold">
+                           <a href="https://tinyurl.com/2j9e6ndd" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                             <RussiaFlagIcon className="h-4 w-6" />
+                             <span>Russia</span>
+                           </a>
+                         </Button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -249,5 +258,7 @@ export default function AffiliateMarketingManagerPage() {
     </div>
   );
 }
+
+    
 
     

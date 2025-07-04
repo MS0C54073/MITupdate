@@ -215,7 +215,7 @@ export default function AffiliateMarketingManagerPage() {
               </p>
              
               <div className="flex flex-col sm:flex-row justify-center items-center gap-4 my-6">
-                <Button asChild size="lg" className="w-full sm:w-auto font-bold">
+                <Button asChild size="lg" className="w-full sm:w-auto font-bold bg-accent text-accent-foreground hover:bg-accent/90">
                   <a href="https://tinyurl.com/5xd8rb5e" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
                     <ZambiaFlagIcon className="h-6 w-9" />
                     <span>BWZED (Zambia)</span>

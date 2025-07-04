@@ -127,12 +127,9 @@ export default function AffiliateMarketingManagerPage() {
                 <TranslatedText text="Today's Big Game Info" />
             </h3>
             <div 
-              className="relative p-6 rounded-lg border-2 border-dashed border-primary shadow-lg space-y-4 text-center overflow-hidden"
-              style={{ backgroundImage: 'url(https://drive.google.com/uc?id=1MB8-p6xPYA7fTzC4gpdBdudNiF5MbtLY)', backgroundSize: 'cover', backgroundPosition: 'center' }}
+              className="p-6 rounded-lg border-2 border-dashed border-primary shadow-lg space-y-4 text-center"
             >
-              <div className="absolute inset-0 bg-black/60 -z-10"></div>
-
-                <h4 className="font-bold text-2xl text-primary-foreground">
+                <h4 className="font-bold text-2xl text-foreground">
                     <TranslatedText text="🔥 Club World Cup 25 Action!"/>
                 </h4>
 
@@ -163,21 +160,21 @@ export default function AffiliateMarketingManagerPage() {
                       />
                 </div>
 
-                <div className="text-left mx-auto max-w-lg space-y-4 text-primary-foreground">
+                <div className="text-left mx-auto max-w-lg space-y-4 text-foreground">
                   <p className="text-center font-bold text-lg"><TranslatedText text="⚽ BW | ELSE | 201 ⚽" /></p>
                   <h5 className="font-bold text-xl text-center text-accent"><TranslatedText text="🎯 BET OF THE DAY 🎯" /></h5>
                   <p className="text-center font-semibold text-lg"><TranslatedText text="🌍 Palmeiras vs. Chelsea | Club World Cup (QF) 🌍" /></p>
                   <p className="text-center font-bold text-lg text-primary"><TranslatedText text="🔮 Prediction: Total Goals Under 2.5 @ 1.7 🔮" /></p>
 
-                  <div className="space-y-2 text-sm text-primary-foreground/90">
-                      <h6 className="font-semibold text-md text-primary-foreground"><TranslatedText text="📊 ANALYSIS:" /></h6>
+                  <div className="space-y-2 text-sm text-muted-foreground">
+                      <h6 className="font-semibold text-md text-foreground"><TranslatedText text="📊 ANALYSIS:" /></h6>
                       <p><TranslatedText text="🛡️ Defensive Strength: Both teams boast rock-solid defenses—Chelsea’s structured backline + Palmeiras’ disciplined low block." /></p>
                       <p><TranslatedText text="📉 Recent Trends: Chelsea’s last 3 matches saw Under 2.5 goals, while Palmeiras kept 4 clean sheets in their past 5 games." /></p>
                       <p><TranslatedText text="⚡ Stakes: High-pressure knockout = fewer risks, more caution." /></p>
                   </div>
 
-                  <div className="space-y-2 text-sm text-primary-foreground/90">
-                      <h6 className="font-semibold text-md text-primary-foreground"><TranslatedText text="🔑 KEY FACTORS:" /></h6>
+                  <div className="space-y-2 text-sm text-muted-foreground">
+                      <h6 className="font-semibold text-md text-foreground"><TranslatedText text="🔑 KEY FACTORS:" /></h6>
                       <p><TranslatedText text="✅ Chelsea’s midfield control (Enzo Fernández, Caicedo) stifles opponent attacks." /></p>
                       <p><TranslatedText text="✅ Palmeiras relies on counters—lack a clinical finisher." /></p>
                       <p><TranslatedText text="✅ Slow tempo expected with tactical fouls + set-piece battles." /></p>
@@ -186,12 +183,12 @@ export default function AffiliateMarketingManagerPage() {
                   <p className="font-bold text-md text-center bg-highlight p-2 rounded-md text-foreground"><TranslatedText text="📢 Verdict: UNDER 2.5 GOALS (1.7) is the smart, data-backed pick! 🔥" /></p>
                 </div>
 
-                <div className="p-4 bg-background/20 backdrop-blur-sm rounded-lg text-center mt-4 space-y-2">
-                    <p className="text-lg text-primary-foreground font-semibold flex items-center justify-center gap-2">
+                <div className="p-4 rounded-lg text-center mt-4 space-y-2">
+                    <p className="text-lg text-foreground font-semibold flex items-center justify-center gap-2">
                         <Gift className="h-5 w-5 text-primary" />
                         <TranslatedText text="200% BONUS up to $300 on 1st deposit!"/>
                     </p>
-                    <div className="text-lg text-primary-foreground flex items-center justify-center gap-2">
+                    <div className="text-lg text-foreground flex items-center justify-center gap-2">
                         <Trophy className="h-5 w-5 text-primary" />
                         <TranslatedText text="Use PROMOCODE BWZED for:"/>
                     </div>
@@ -262,7 +259,3 @@ export default function AffiliateMarketingManagerPage() {
     </div>
   );
 }
-
-    
-
-    

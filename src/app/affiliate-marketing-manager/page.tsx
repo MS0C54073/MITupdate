@@ -16,7 +16,6 @@ export default function AffiliateMarketingManagerPage() {
     const images = [
     { src: "https://drive.google.com/uc?id=1qKILVi6oOCuQBHevbYkvr1NS3s7sPDja", alt: "Affiliate Marketing Image 1", hint: "sports betting" },
     { src: "https://drive.google.com/uc?id=1AjQ6wGLABvwQKUMVz-e0nVU5yO5YgWUJ", alt: "Affiliate Marketing Image 2", hint: "soccer players" },
-    { src: "https://drive.google.com/uc?id=1MB8-p6xPYA7fTzC4gpdBdudNiF5MbtLY", alt: "Affiliate Marketing Image 3", hint: "stadium" },
     { src: "https://drive.google.com/uc?id=1NLnTM6Xc8MZqnS_XSPKOpqxmBz6CkPNJ", alt: "Affiliate Marketing Image 4", hint: "casino chips" },
     { src: "https://drive.google.com/uc?id=1HFP3VmUoINFAZTyA-zbIi6-Hom7yYMms", alt: "Affiliate Marketing Image 5", hint: "online game" },
     { src: "https://drive.google.com/uc?id=1exU5AKqGy7F3VIp92yRpVckMCuWOb8CT", alt: "Affiliate Marketing Image 6", hint: "sports odds" },
@@ -127,8 +126,13 @@ export default function AffiliateMarketingManagerPage() {
             <h3 className="text-xl font-semibold text-accent mb-4 text-center">
                 <TranslatedText text="Today's Big Game Info" />
             </h3>
-            <div className="p-6 bg-background/50 rounded-lg border-2 border-dashed border-primary shadow-lg space-y-4 text-center">
-                <h4 className="font-bold text-2xl text-foreground">
+            <div 
+              className="relative p-6 rounded-lg border-2 border-dashed border-primary shadow-lg space-y-4 text-center overflow-hidden"
+              style={{ backgroundImage: 'url(https://drive.google.com/uc?id=1MB8-p6xPYA7fTzC4gpdBdudNiF5MbtLY)', backgroundSize: 'cover', backgroundPosition: 'center' }}
+            >
+              <div className="absolute inset-0 bg-black/60 -z-10"></div>
+
+                <h4 className="font-bold text-2xl text-primary-foreground">
                     <TranslatedText text="🔥 Club World Cup 25 Action!"/>
                 </h4>
 
@@ -159,35 +163,35 @@ export default function AffiliateMarketingManagerPage() {
                       />
                 </div>
 
-                <div className="text-left mx-auto max-w-lg space-y-4 text-foreground">
+                <div className="text-left mx-auto max-w-lg space-y-4 text-primary-foreground">
                   <p className="text-center font-bold text-lg"><TranslatedText text="⚽ BW | ELSE | 201 ⚽" /></p>
                   <h5 className="font-bold text-xl text-center text-accent"><TranslatedText text="🎯 BET OF THE DAY 🎯" /></h5>
                   <p className="text-center font-semibold text-lg"><TranslatedText text="🌍 Palmeiras vs. Chelsea | Club World Cup (QF) 🌍" /></p>
                   <p className="text-center font-bold text-lg text-primary"><TranslatedText text="🔮 Prediction: Total Goals Under 2.5 @ 1.7 🔮" /></p>
 
-                  <div className="space-y-2 text-sm">
-                      <h6 className="font-semibold text-md"><TranslatedText text="📊 ANALYSIS:" /></h6>
+                  <div className="space-y-2 text-sm text-primary-foreground/90">
+                      <h6 className="font-semibold text-md text-primary-foreground"><TranslatedText text="📊 ANALYSIS:" /></h6>
                       <p><TranslatedText text="🛡️ Defensive Strength: Both teams boast rock-solid defenses—Chelsea’s structured backline + Palmeiras’ disciplined low block." /></p>
                       <p><TranslatedText text="📉 Recent Trends: Chelsea’s last 3 matches saw Under 2.5 goals, while Palmeiras kept 4 clean sheets in their past 5 games." /></p>
                       <p><TranslatedText text="⚡ Stakes: High-pressure knockout = fewer risks, more caution." /></p>
                   </div>
 
-                  <div className="space-y-2 text-sm">
-                      <h6 className="font-semibold text-md"><TranslatedText text="🔑 KEY FACTORS:" /></h6>
+                  <div className="space-y-2 text-sm text-primary-foreground/90">
+                      <h6 className="font-semibold text-md text-primary-foreground"><TranslatedText text="🔑 KEY FACTORS:" /></h6>
                       <p><TranslatedText text="✅ Chelsea’s midfield control (Enzo Fernández, Caicedo) stifles opponent attacks." /></p>
                       <p><TranslatedText text="✅ Palmeiras relies on counters—lack a clinical finisher." /></p>
                       <p><TranslatedText text="✅ Slow tempo expected with tactical fouls + set-piece battles." /></p>
                   </div>
                   
-                  <p className="font-bold text-md text-center bg-highlight p-2 rounded-md"><TranslatedText text="📢 Verdict: UNDER 2.5 GOALS (1.7) is the smart, data-backed pick! 🔥" /></p>
+                  <p className="font-bold text-md text-center bg-highlight p-2 rounded-md text-foreground"><TranslatedText text="📢 Verdict: UNDER 2.5 GOALS (1.7) is the smart, data-backed pick! 🔥" /></p>
                 </div>
 
-                <div className="p-4 bg-accent/10 rounded-lg text-center mt-4 space-y-2">
-                    <p className="text-lg text-foreground font-semibold flex items-center justify-center gap-2">
+                <div className="p-4 bg-background/20 backdrop-blur-sm rounded-lg text-center mt-4 space-y-2">
+                    <p className="text-lg text-primary-foreground font-semibold flex items-center justify-center gap-2">
                         <Gift className="h-5 w-5 text-primary" />
                         <TranslatedText text="200% BONUS up to $300 on 1st deposit!"/>
                     </p>
-                    <div className="text-lg text-foreground flex items-center justify-center gap-2">
+                    <div className="text-lg text-primary-foreground flex items-center justify-center gap-2">
                         <Trophy className="h-5 w-5 text-primary" />
                         <TranslatedText text="Use PROMOCODE BWZED for:"/>
                     </div>

@@ -54,6 +54,15 @@ export function SocialIcons({ className }: { className?: string }) {
         <TelegramIcon className={`${iconClasses} text-white`} />
       </a>
       <a
+        href="https://tinyurl.com/a7pw8s3a"
+        target="_blank"
+        rel="noopener noreferrer"
+        className={`${iconWrapperClasses} bg-[#2AABEE] hover:bg-[#1A87B8]`}
+        aria-label="Telegram Channel"
+      >
+        <TelegramIcon className={`${iconClasses} text-white`} />
+      </a>
+      <a
         href="https://www.coursera.org/user/d5bf15915278f56a6f96c3b5195c6d11"
         target="_blank"
         rel="noopener noreferrer"

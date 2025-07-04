@@ -54,7 +54,7 @@ export default function AffiliateMarketingManagerPage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-4 max-w-5xl mx-auto">
                      <Image
-                        src="https://placehold.co/400x200.png"
+                        src="https://drive.google.com/uc?id=1b4zUNiRzCQizrBGJUSg62duUbFMyw3Fa"
                         alt="Betwinner Offer 1"
                         data-ai-hint="sports betting"
                         width={400}
@@ -62,7 +62,7 @@ export default function AffiliateMarketingManagerPage() {
                         className="rounded-lg mx-auto shadow-md w-full object-cover"
                       />
                       <Image
-                        src="https://placehold.co/400x200.png"
+                        src="https://drive.google.com/uc?id=1b4zUNiRzCQizrBGJUSg62duUbFMyw3Fa"
                         alt="Betwinner Offer 2"
                         data-ai-hint="soccer match"
                         width={400}
@@ -70,7 +70,7 @@ export default function AffiliateMarketingManagerPage() {
                         className="rounded-lg mx-auto shadow-md w-full object-cover"
                       />
                       <Image
-                        src="https://placehold.co/400x200.png"
+                        src="https://drive.google.com/uc?id=1b4zUNiRzCQizrBGJUSg62duUbFMyw3Fa"
                         alt="Betwinner Offer 3"
                         data-ai-hint="stadium lights"
                         width={400}

@@ -190,14 +190,11 @@ export default function AffiliateMarketingManagerPage() {
                     <p className="text-lg text-foreground flex items-center justify-center gap-2">
                         <Trophy className="h-5 w-5 text-primary" />
                         <TranslatedText text="Use PROMOCODE:"/>{' '}
-                        <a
-                            href="https://h5lwvwj.top/2bi1"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="font-bold bg-accent text-accent-foreground px-2 py-1 rounded hover:bg-accent/90 transition-colors"
+                        <span
+                            className="font-bold bg-accent text-accent-foreground px-2 py-1 rounded"
                         >
                             BWZED
-                        </a>
+                        </span>
                     </p>
                 </div>
             </div>
@@ -216,44 +213,22 @@ export default function AffiliateMarketingManagerPage() {
               <p className="my-3 text-2xl font-extrabold text-primary">
                 <TranslatedText text="Get a 200% BONUS on your first deposit! 🎉💰" />
               </p>
-              <p className="text-lg text-foreground">
-                <TranslatedText text="Use Promo Code:" />{' '}
-                <a
-                  href="https://h5lwvwj.top/2bi1"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-bold bg-accent text-accent-foreground px-2 py-1 rounded hover:bg-accent/90 transition-colors"
-                >
-                  BWZED
-                </a>{' '}
-                ✅
-              </p>
-
-              <TooltipProvider>
-                <div className="flex justify-center items-center gap-8 my-6">
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <a href="https://bw-prm.com/bw-zambia/?s1=BETODDS&id=1FbP" target="_blank" rel="noopener noreferrer" className="transition-transform hover:scale-110">
-                        <ZambiaFlagIcon className="h-12 w-18" />
-                      </a>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p><TranslatedText text="ZAMBIA" /></p>
-                    </TooltipContent>
-                  </Tooltip>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <a href="https://h5lwvwj.top/2bi1" target="_blank" rel="noopener noreferrer" className="transition-transform hover:scale-110">
-                        <RussiaFlagIcon className="h-12 w-18" />
-                      </a>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p><TranslatedText text="RUSSIA" /></p>
-                    </TooltipContent>
-                  </Tooltip>
-                </div>
-              </TooltipProvider>
-
+             
+              <div className="flex flex-col sm:flex-row justify-center items-center gap-4 my-6">
+                <Button asChild size="lg" className="w-full sm:w-auto font-bold">
+                  <a href="https://tinyurl.com/5xd8rb5e" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                    <ZambiaFlagIcon className="h-6 w-9" />
+                    <span>BWZED (Zambia)</span>
+                  </a>
+                </Button>
+                <Button asChild size="lg" className="w-full sm:w-auto font-bold">
+                  <a href="https://tinyurl.com/2j9e6ndd" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                    <RussiaFlagIcon className="h-6 w-9" />
+                    <span>BWZED (Russia)</span>
+                  </a>
+                </Button>
+              </div>
+              
               <p className="font-semibold text-lg text-foreground">
                 <TranslatedText text="🎯 Bet now and win big! 🎯" />
               </p>
@@ -274,7 +249,3 @@ export default function AffiliateMarketingManagerPage() {
     </div>
   );
 }
-
-    
-
-    

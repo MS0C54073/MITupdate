@@ -9,6 +9,7 @@ import Image from 'next/image';
 import { SocialIcons } from '@/components/social-icons';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { ZambiaFlagIcon, RussiaFlagIcon } from '@/components/flag-icons';
+import { TelegramIcon } from '@/components/icons';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import '@/app/ai.css';
 
@@ -207,7 +208,7 @@ export default function AffiliateMarketingManagerPage() {
                         <Trophy className="h-5 w-5 text-primary" />
                         <TranslatedText text="Use PROMOCODE:"/>
                     </div>
-                     <div className="flex flex-col sm:flex-row justify-center items-center gap-2 pt-2">
+                     <div className="flex flex-col sm:flex-row justify-center items-center gap-2 pt-2 flex-wrap">
                         <Button asChild size="sm" className="font-bold bg-accent text-accent-foreground hover:bg-accent/90">
                            <a href="https://tinyurl.com/5xd8rb5e" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
                              <ZambiaFlagIcon className="h-4 w-6" />
@@ -218,6 +219,12 @@ export default function AffiliateMarketingManagerPage() {
                            <a href="https://tinyurl.com/2j9e6ndd" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
                              <RussiaFlagIcon className="h-4 w-6" />
                              <span>BWZED (Russia)</span>
+                           </a>
+                         </Button>
+                         <Button asChild size="sm" className="font-bold bg-[#2AABEE] text-white hover:bg-[#229ED9]">
+                           <a href="https://tinyurl.com/a7pw8s3a" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                             <TelegramIcon className="h-4 w-4" />
+                             <span><TranslatedText text="Join Channel"/></span>
                            </a>
                          </Button>
                     </div>
@@ -239,7 +246,7 @@ export default function AffiliateMarketingManagerPage() {
                 <TranslatedText text="Get a 200% BONUS on your first deposit! 🎉💰" />
               </p>
              
-              <div className="flex flex-col sm:flex-row justify-center items-center gap-4 my-6">
+              <div className="flex flex-col sm:flex-row justify-center items-center gap-4 my-6 flex-wrap">
                 <Button asChild size="lg" className="w-full sm:w-auto font-bold bg-accent text-accent-foreground hover:bg-accent/90">
                   <a href="https://tinyurl.com/5xd8rb5e" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
                     <ZambiaFlagIcon className="h-6 w-9" />
@@ -250,6 +257,12 @@ export default function AffiliateMarketingManagerPage() {
                   <a href="https://tinyurl.com/2j9e6ndd" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
                     <RussiaFlagIcon className="h-6 w-9" />
                     <span>BWZED (Russia)</span>
+                  </a>
+                </Button>
+                <Button asChild size="lg" className="w-full sm:w-auto font-bold bg-[#2AABEE] text-white hover:bg-[#229ED9]">
+                  <a href="https://tinyurl.com/a7pw8s3a" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                    <TelegramIcon className="h-6 w-6" />
+                    <span><TranslatedText text="Join Telegram"/></span>
                   </a>
                 </Button>
               </div>

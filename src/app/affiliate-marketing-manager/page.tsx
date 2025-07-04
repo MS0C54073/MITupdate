@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -11,6 +10,18 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { ZambiaFlagIcon, RussiaFlagIcon } from '@/components/flag-icons';
 
 export default function AffiliateMarketingManagerPage() {
+    const images = [
+    { src: "https://drive.google.com/uc?id=1qKILVi6oOCuQBHevbYkvr1NS3s7sPDja", alt: "Affiliate Marketing Image 1", hint: "sports betting" },
+    { src: "https://drive.google.com/uc?id=1AjQ6wGLABvwQKUMVz-e0nVU5yO5YgWUJ", alt: "Affiliate Marketing Image 2", hint: "soccer players" },
+    { src: "https://drive.google.com/uc?id=1MB8-p6xPYA7fTzC4gpdBdudNiF5MbtLY", alt: "Affiliate Marketing Image 3", hint: "stadium" },
+    { src: "https://drive.google.com/uc?id=1NLnTM6Xc8MZqnS_XSPKOpqxmBz6CkPNJ", alt: "Affiliate Marketing Image 4", hint: "casino chips" },
+    { src: "https://drive.google.com/uc?id=1HFP3VmUoINFAZTyA-zbIi6-Hom7yYMms", alt: "Affiliate Marketing Image 5", hint: "online game" },
+    { src: "https://drive.google.com/uc?id=1exU5AKqGy7F3VIp92yRpVckMCuWOb8CT", alt: "Affiliate Marketing Image 6", hint: "sports odds" },
+    { src: "https://drive.google.com/uc?id=1p4Es14i71zDIWsmav4Tw75p46a9undzc", alt: "Affiliate Marketing Image 7", hint: "betting app" },
+    { src: "https://drive.google.com/uc?id=1-h46xg2ZrgOlmcMdZKK-Q3uMCSfOx3sV", alt: "Affiliate Marketing Image 8", hint: "soccer ball" },
+    { src: "https://drive.google.com/uc?id=1R__srceNSMgx5ncLeQSWesA5V5FwkU4b", alt: "Affiliate Marketing Image 9", hint: "winning bet" },
+  ];
+  
   return (
     <div className="container mx-auto py-12 px-4 md:px-6 lg:px-8 min-h-screen flex flex-col">
       <header className="mb-8">
@@ -26,15 +37,18 @@ export default function AffiliateMarketingManagerPage() {
       </header>
       <main className="flex-grow">
         <section className="mb-8 p-6 bg-card/90 backdrop-blur-md rounded-xl shadow-xl">
-          <div className="flex justify-center mb-6">
-            <Image
-              src="https://drive.google.com/uc?id=1zXu6UN8XztuTdFNCRIPMi9Tn5gDzkBbZ"
-              alt="Affiliate Marketing Manager"
-              data-ai-hint="profile"
-              width={250}
-              height={250}
-              className="rounded-full shadow-lg border-4 border-primary object-cover"
-            />
+          <div className="grid grid-cols-3 gap-2 md:gap-4 mb-6">
+            {images.map((image, index) => (
+               <Image
+                key={index}
+                src={image.src}
+                alt={image.alt}
+                data-ai-hint={image.hint}
+                width={300}
+                height={300}
+                className="rounded-lg shadow-lg w-full h-auto object-cover aspect-square"
+              />
+            ))}
           </div>
           <h2 className="text-3xl font-semibold text-foreground mb-4">
             <TranslatedText text="Expert Affiliate Marketing Management" />

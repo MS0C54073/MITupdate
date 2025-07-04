@@ -99,7 +99,7 @@ export default function AffiliateMarketingManagerPage() {
                             data-ai-hint={image.hint}
                             width={320}
                             height={240}
-                            className="w-full h-auto rounded-lg shadow-lg object-cover"
+                            className="w-full h-60 rounded-lg shadow-lg object-cover"
                         />
                     </div>
                 ))}
@@ -274,5 +274,7 @@ export default function AffiliateMarketingManagerPage() {
     </div>
   );
 }
+
+    
 
     

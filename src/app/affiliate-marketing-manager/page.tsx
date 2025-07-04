@@ -163,23 +163,23 @@ export default function AffiliateMarketingManagerPage() {
                   <p className="text-center font-bold text-lg"><TranslatedText text="⚽ BW | ELSE | 201 ⚽" /></p>
                   <h5 className="font-bold text-xl text-center text-accent"><TranslatedText text="🎯 BET OF THE DAY 🎯" /></h5>
                   <p className="text-center font-semibold text-lg"><TranslatedText text="🌍 Palmeiras vs. Chelsea | Club World Cup (QF) 🌍" /></p>
-                  <p className="text-center font-bold text-lg text-primary"><TranslatedText text="🔮 Prediction: Total Goals Over 2.5 @ 2.1 🔮" /></p>
+                  <p className="text-center font-bold text-lg text-primary"><TranslatedText text="🔮 Prediction: Total Goals Under 2.5 @ 1.7 🔮" /></p>
 
                   <div className="space-y-2 text-sm">
                       <h6 className="font-semibold text-md"><TranslatedText text="📊 ANALYSIS:" /></h6>
-                      <p><TranslatedText text="⚔️ Attacking Firepower: Chelsea’s revamped attack (Nkunku, Palmer) clashes with Palmeiras’ high-scoring home form (3+ goals in 4 of last 5)." /></p>
-                      <p><TranslatedText text="📈 Recent Trends: 5 of Chelsea’s last 7 matches hit Over 2.5, while Palmeiras conceded in 3 straight UCL knockouts." /></p>
-                      <p><TranslatedText text="⚡ Stakes: Both teams must win—expect end-to-end action in this derby!" /></p>
+                      <p><TranslatedText text="🛡️ Defensive Strength: Both teams boast rock-solid defenses—Chelsea’s structured backline + Palmeiras’ disciplined low block." /></p>
+                      <p><TranslatedText text="📉 Recent Trends: Chelsea’s last 3 matches saw Under 2.5 goals, while Palmeiras kept 4 clean sheets in their past 5 games." /></p>
+                      <p><TranslatedText text="⚡ Stakes: High-pressure knockout = fewer risks, more caution." /></p>
                   </div>
 
                   <div className="space-y-2 text-sm">
                       <h6 className="font-semibold text-md"><TranslatedText text="🔑 KEY FACTORS:" /></h6>
-                      <p><TranslatedText text="✅ Chelsea’s offensive depth thrives against compact defenses." /></p>
-                      <p><TranslatedText text="✅ Palmeiras’ home aggression—they’ve scored 2+ in 80% of Copa Libertadores games." /></p>
-                      <p><TranslatedText text="✅ Set-piece chaos: Both teams rank top-10 in headed goals this season." /></p>
+                      <p><TranslatedText text="✅ Chelsea’s midfield control (Enzo Fernández, Caicedo) stifles opponent attacks." /></p>
+                      <p><TranslatedText text="✅ Palmeiras relies on counters—lack a clinical finisher." /></p>
+                      <p><TranslatedText text="✅ Slow tempo expected with tactical fouls + set-piece battles." /></p>
                   </div>
                   
-                  <p className="font-bold text-md text-center bg-highlight p-2 rounded-md"><TranslatedText text="📢 Verdict: OVER 2.5 GOALS (2.1) is a HIGH-VALUE PLAY! 💥" /></p>
+                  <p className="font-bold text-md text-center bg-highlight p-2 rounded-md"><TranslatedText text="📢 Verdict: UNDER 2.5 GOALS (1.7) is the smart, data-backed pick! 🔥" /></p>
                 </div>
 
                 <div className="p-4 bg-accent/10 rounded-lg text-center mt-4 space-y-2">
@@ -249,3 +249,5 @@ export default function AffiliateMarketingManagerPage() {
     </div>
   );
 }
+
+    

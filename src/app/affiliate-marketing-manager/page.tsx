@@ -4,7 +4,7 @@
 import Link from 'next/link';
 import TranslatedText from '@/app/components/translated-text'; // Updated import
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Calendar, Gift, Swords, Trophy } from 'lucide-react';
+import { ArrowLeft, Gift, Trophy } from 'lucide-react';
 import Image from 'next/image';
 import { SocialIcons } from '@/components/social-icons';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
@@ -79,10 +79,27 @@ export default function AffiliateMarketingManagerPage() {
                       />
                 </div>
 
-                <div className="text-left mx-auto max-w-xs space-y-2 text-foreground">
-                     <p className="flex items-center gap-2"><Calendar className="h-4 w-4 text-accent shrink-0"/> <span><TranslatedText text="29.06 – PSG"/> <Swords className="inline h-4 w-4" /> <TranslatedText text="Inter Miami | 18:00"/></span></p>
-                     <p className="flex items-center gap-2"><Calendar className="h-4 w-4 text-accent shrink-0"/> <span><TranslatedText text="30.06 – Inter"/> <Swords className="inline h-4 w-4" /> <TranslatedText text="Fluminense | 21:00"/></span></p>
-                     <p className="flex items-center gap-2"><Calendar className="h-4 w-4 text-accent shrink-0"/> <span><TranslatedText text="01.07 – Real Madrid"/> <Swords className="inline h-4 w-4" /> <TranslatedText text="Juventus | 21:00"/></span></p>
+                <div className="text-left mx-auto max-w-lg space-y-4 text-foreground">
+                  <p className="text-center font-bold text-lg"><TranslatedText text="⚽ BW | ELSE | 201 ⚽" /></p>
+                  <h5 className="font-bold text-xl text-center text-accent"><TranslatedText text="🎯 BET OF THE DAY 🎯" /></h5>
+                  <p className="text-center font-semibold text-lg"><TranslatedText text="🌍 Palmeiras vs. Chelsea | Club World Cup (QF) 🌍" /></p>
+                  <p className="text-center font-bold text-lg text-primary"><TranslatedText text="🔮 Prediction: Total Goals Under 2.5 @ 1.7 🔮" /></p>
+
+                  <div className="space-y-2 text-sm">
+                      <h6 className="font-semibold text-md"><TranslatedText text="📊 ANALYSIS:" /></h6>
+                      <p><TranslatedText text="🛡️ Defensive Strength: Both teams boast rock-solid defenses—Chelsea’s structured backline + Palmeiras’ disciplined low block." /></p>
+                      <p><TranslatedText text="📉 Recent Trends: Chelsea’s last 3 matches saw Under 2.5 goals, while Palmeiras kept 4 clean sheets in their past 5 games." /></p>
+                      <p><TranslatedText text="⚡ Stakes: High-pressure knockout = fewer risks, more caution." /></p>
+                  </div>
+
+                  <div className="space-y-2 text-sm">
+                      <h6 className="font-semibold text-md"><TranslatedText text="🔑 KEY FACTORS:" /></h6>
+                      <p><TranslatedText text="✅ Chelsea’s midfield control (Enzo Fernández, Caicedo) stifles opponent attacks." /></p>
+                      <p><TranslatedText text="✅ Palmeiras relies on counters—lack a clinical finisher." /></p>
+                      <p><TranslatedText text="✅ Slow tempo expected with tactical fouls + set-piece battles." /></p>
+                  </div>
+                  
+                  <p className="font-bold text-md text-center bg-highlight p-2 rounded-md"><TranslatedText text="📢 Verdict: UNDER 2.5 GOALS (1.7) is the smart, data-backed pick! 🔥" /></p>
                 </div>
 
                 <div className="p-4 bg-accent/10 rounded-lg text-center mt-4 space-y-2">

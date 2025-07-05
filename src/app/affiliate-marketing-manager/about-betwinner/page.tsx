@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -59,7 +58,7 @@ export default function AboutBetwinnerPage() {
             <li><TranslatedText text="useful – coupon check, mobile version, payment methods." /></li>
           </ul>
           <p>
-            <TranslatedText text='Then we recommend paying attention to the "Settings" menu. In it, you can both activate and deactivate certain functions. Based on personal preferences, the player will customize the interface and start a comfortable game.' />
+            <TranslatedText text={`Then we recommend paying attention to the "Settings" menu. In it, you can both activate and deactivate certain functions. Based on personal preferences, the player will customize the interface and start a comfortable game.`} />
           </p>
           <p>
             <TranslatedText text="In terms of gambling entertainment, the Betwinner bookmaker is ready to offer:" />
@@ -122,7 +121,7 @@ export default function AboutBetwinnerPage() {
             <li><TranslatedText text="identity verification." /></li>
           </ul>
           <p>
-            <TranslatedText text='You can request mirror addresses from the bookmaker\'s support service, or on the Internet using search queries: "mirror, betwinner, bookmaker, office, download". It is important not to get to fake mirrors, where they may not give you your winnings or even transfer all the funds from your deposit.' />
+            <TranslatedText text={`You can request mirror addresses from the bookmaker's support service, or on the Internet using search queries: "mirror, betwinner, bookmaker, office, download". It is important not to get to fake mirrors, where they may not give you your winnings or even transfer all the funds from your deposit.`} />
           </p>
 
           <h3 className="text-2xl font-semibold text-accent mt-8 mb-4">
@@ -156,7 +155,7 @@ export default function AboutBetwinnerPage() {
             <TranslatedText text="Betwinner promo code for today upon registration" />
           </h3>
           <p>
-            <TranslatedText text="For active and goal-oriented players, a huge number of bonus programs are prepared. One of them is 'Sport' for the 1st deposit up to 100 euros." />
+            <TranslatedText text={`For active and goal-oriented players, a huge number of bonus programs are prepared. One of them is "Sport" for the 1st deposit up to 100 euros.`} />
           </p>
           <p><TranslatedText text="To get it, you need to:" /></p>
           <ul className="list-disc list-inside space-y-1">
@@ -203,7 +202,7 @@ export default function AboutBetwinnerPage() {
             <TranslatedText text="Download Betwinner on iPhone" />
           </h3>
           <p>
-            <TranslatedText text="In the upper left corner of the site there is a quick access button 'Application on smartphone'. In this menu the player selects 'IOS devices download application'. After that the window 'Scan the QR code from your iPhone to install the application' will appear on the smartphone screen." />
+            <TranslatedText text={`In the upper left corner of the site there is a quick access button "Application on smartphone". In this menu the player selects "IOS devices download application". After that the window "Scan the QR code from your iPhone to install the application" will appear on the smartphone screen.`} />
           </p>
           
           <Image
@@ -251,7 +250,7 @@ export default function AboutBetwinnerPage() {
             <TranslatedText text="Amatic, Blieprint, Ruby Play, Game Art, Betsoft, Wazdan, Swint, IsoftBet, ELK, Red Rake, Habanero, Spinomenal, Microgaming, NetEnt, Red Tiger" />
           </p>
           <p>
-            <TranslatedText text='Betwinner users can add their favorite slots to the "Favorites" category. This will save time on searching and loading the gaming machine of interest. The following are among the popular Betwinner machines:' />
+            <TranslatedText text={`Betwinner users can add their favorite slots to the "Favorites" category. This will save time on searching and loading the gaming machine of interest. The following are among the popular Betwinner machines:`} />
           </p>
           <p>
             <TranslatedText text="Bubbles Bonanza, Book of Secret 6, Fruit on Ice, 15 Dragon Pearls, Arabian Spins, Book of Anunnaki, Wild Vick, Green Fog, Aztec StarGems." />
@@ -261,7 +260,7 @@ export default function AboutBetwinnerPage() {
             <TranslatedText text="How to withdraw money from Betwinner" />
           </h3>
           <p>
-            <TranslatedText text="The footer of the official Betwinner website has a menu called 'Useful', which includes a tab called 'Payment Methods'. All possible methods for withdrawing money are presented here:" />
+            <TranslatedText text={`The footer of the official Betwinner website has a menu called “Useful”, which includes a tab called “Payment Methods”. All possible methods for withdrawing money are presented here:`} />
           </p>
           <ul className="list-disc list-inside space-y-1">
             <li><TranslatedText text="electronic wallets – Skrill, Jeton, Sticpay, Piastrix;" /></li>

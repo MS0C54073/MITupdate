@@ -28,6 +28,7 @@ export default function AffiliateMarketingManagerPage() {
     { src: "https://drive.google.com/uc?id=1R__srceNSMgx5ncLeQSWesA5V5FwkU4b", alt: "Affiliate Marketing Image 9", hint: "winning bet", link: russiaLink },
   ];
 
+  const shapeClasses = ["fancy-shape-1", "fancy-shape-2", "fancy-shape-3"];
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -108,7 +109,7 @@ export default function AffiliateMarketingManagerPage() {
                             data-ai-hint={image.hint}
                             width={320}
                             height={240}
-                            className="w-full h-60 rounded-lg shadow-lg object-cover transition-transform duration-300 group-hover/item:scale-105"
+                            className={`w-full h-60 shadow-lg object-cover fancy-shape ${shapeClasses[index % shapeClasses.length]} group-hover/item:scale-105 group-hover/item:[clip-path:inset(0)]`}
                         />
                     </a>
                 ))}

@@ -4,7 +4,7 @@
 import Link from 'next/link';
 import TranslatedText from '@/app/components/translated-text';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Gift, Trophy, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowLeft, Gift, Trophy, ChevronLeft, ChevronRight, Info } from 'lucide-react';
 import Image from 'next/image';
 import { SocialIcons } from '@/components/social-icons';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
@@ -284,8 +284,15 @@ export default function AffiliateMarketingManagerPage() {
                   </a>
                 </Button>
               </div>
+
+              <Button asChild size="lg" variant="secondary" className="mt-4">
+                <Link href="/affiliate-marketing-manager/about-betwinner">
+                  <Info className="mr-2 h-5 w-5" />
+                  <TranslatedText text="Learn More About Betwinner" />
+                </Link>
+              </Button>
               
-              <p className="font-semibold text-lg text-foreground">
+              <p className="font-semibold text-lg text-foreground mt-6">
                 <TranslatedText text="🎯 Bet now and win big! 🎯" />
               </p>
             </div>

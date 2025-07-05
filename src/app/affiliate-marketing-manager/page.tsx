@@ -175,19 +175,45 @@ export default function AffiliateMarketingManagerPage() {
                         />
                       </a>
                 </div>
-
-                <div className="text-left mx-auto max-w-lg space-y-4 text-foreground">
-                  <h5 className="font-bold text-xl text-center text-accent"><TranslatedText text="🏆 Matches Today" /></h5>
+                
+                <div className="text-left mx-auto max-w-2xl space-y-4 text-foreground">
+                  <h5 className="font-bold text-2xl text-center text-accent">
+                    <TranslatedText text="🔥 TONIGHT’S FOOTBALL MADNESS – BET & WIN BIG! 🔥" />
+                  </h5>
                   
                   <div className="text-center space-y-1 bg-background/50 p-3 rounded-lg border">
-                      <p className="font-semibold text-lg"><TranslatedText text="⚽ PSG vs. Bayern" /></p>
-                      <p className="text-muted-foreground"><TranslatedText text="🕒 Time: 19:00" /></p>
+                    <p className="font-semibold text-lg"><TranslatedText text="⚽ PSG vs. Bayern | 19:00" /></p>
+                    <p className="text-muted-foreground"><TranslatedText text="🌟 Mbappé vs. Kane | Attack at its finest!" /></p>
+                  </div>
+                  
+                  <div className="text-center space-y-1 bg-background/50 p-3 rounded-lg border">
+                    <p className="font-semibold text-lg"><TranslatedText text="⚽ Real Madrid vs. Dortmund | 23:00" /></p>
+                    <p className="text-muted-foreground"><TranslatedText text="⚡ Vinícius Jr. vs. Sancho | Who will rise?" /></p>
                   </div>
 
-                  <div className="text-center space-y-1 bg-background/50 p-3 rounded-lg border">
-                      <p className="font-semibold text-lg"><TranslatedText text="⚽ Real Madrid vs. Dortmund" /></p>
-                      <p className="text-muted-foreground"><TranslatedText text="🕒 Time: 23:00" /></p>
+                  <div className="bg-background/50 p-4 rounded-lg border">
+                    <h6 className="font-bold text-xl text-center text-accent mb-2">
+                      <TranslatedText text="🎉 Why Bet with Betwinner?" />
+                    </h6>
+                    <ul className="space-y-2 text-sm text-left list-none">
+                      <li><TranslatedText text="✅ 150+ Markets – From goals 🥅 to VAR decisions ⚖️!" /></li>
+                      <li><TranslatedText text="✅ Small Leagues Included – Corner kicks, fouls, offsides & more!" /></li>
+                      <li><TranslatedText text="✅ Live Cash Out – Secure wins or cut losses in real-time!" /></li>
+                      <li><TranslatedText text="✅ Best Odds – Maximize your profits instantly!" /></li>
+                    </ul>
                   </div>
+
+                  <p className="font-bold text-lg text-center pt-4 text-primary">
+                    <TranslatedText text="💥 Your Favorite Market Awaits – Turn Predictions into Cash! 💰" />
+                  </p>
+
+                  <p className="font-bold text-lg text-center text-destructive animate-pulse">
+                    <TranslatedText text="🔴 BET NOW & WIN BIG – DON’T JUST WATCH, DOMINATE!" />
+                  </p>
+                  
+                  <p className="text-center text-muted-foreground">
+                    <TranslatedText text="👇 Drop Your Bets Below & Let’s Celebrate Together! ⬇️" />
+                  </p>
                 </div>
 
                 <div className="p-4 rounded-lg text-center mt-4 space-y-2">

@@ -280,7 +280,7 @@ export default function AffiliateMarketingManagerPage() {
                 <Button asChild size="lg" className="w-full sm:w-auto font-bold bg-[#2AABEE] text-white hover:bg-[#229ED9]">
                   <a href="https://tinyurl.com/a7pw8s3a" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
                     <TelegramIcon className="h-6 w-6" />
-                    <span><TranslatedText text="Join Telegram"/></span>
+                    <span><TranslatedText text="Join Channel"/></span>
                   </a>
                 </Button>
               </div>

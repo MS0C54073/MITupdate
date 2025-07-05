@@ -144,15 +144,35 @@ export default function AffiliateMarketingManagerPage() {
                     <TranslatedText text="🔥 Club World Cup 25 Action!"/>
                 </h4>
 
-                <div className="grid grid-cols-1 gap-4 my-4 max-w-3xl mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-4 max-w-7xl mx-auto">
                       <a href={russiaLink} target="_blank" rel="noopener noreferrer" className="block cursor-pointer group/item">
                         <Image
                             src="https://drive.google.com/uc?id=1iioHhzsYi31cjYbPno6RryymacQYt6U5"
                             alt="Betwinner Club World Cup Offer"
                             data-ai-hint="soccer promotion"
-                            width={800}
+                            width={400}
                             height={400}
                             className="rounded-lg mx-auto shadow-md w-full object-cover transition-transform duration-300 group-hover/item:scale-105"
+                          />
+                      </a>
+                      <a href={zambiaLink} target="_blank" rel="noopener noreferrer" className="block cursor-pointer group/item">
+                          <Image
+                              src="https://drive.google.com/uc?id=1iioHhzsYi31cjYbPno6RryymacQYt6U5"
+                              alt="Betwinner Sports Action"
+                              data-ai-hint="sports action"
+                              width={400}
+                              height={400}
+                              className="rounded-lg mx-auto shadow-md w-full object-cover transition-transform duration-300 group-hover/item:scale-105"
+                          />
+                      </a>
+                      <a href={russiaLink} target="_blank" rel="noopener noreferrer" className="block cursor-pointer group/item">
+                           <Image
+                              src="https://drive.google.com/uc?id=1iioHhzsYi31cjYbPno6RryymacQYt6U5"
+                              alt="Betwinner Betting App"
+                              data-ai-hint="betting app"
+                              width={400}
+                              height={400}
+                              className="rounded-lg mx-auto shadow-md w-full object-cover transition-transform duration-300 group-hover/item:scale-105"
                           />
                       </a>
                 </div>

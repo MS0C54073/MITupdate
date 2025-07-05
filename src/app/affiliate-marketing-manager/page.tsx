@@ -144,36 +144,16 @@ export default function AffiliateMarketingManagerPage() {
                     <TranslatedText text="🔥 Club World Cup 25 Action!"/>
                 </h4>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-4 max-w-5xl mx-auto">
+                <div className="grid grid-cols-1 gap-4 my-4 max-w-3xl mx-auto">
                       <a href={russiaLink} target="_blank" rel="noopener noreferrer" className="block cursor-pointer group/item">
                         <Image
-                            src="https://drive.google.com/uc?id=1b4zUNiRzCQizrBGJUSg62duUbFMyw3Fa"
-                            alt="Betwinner Offer 1"
-                            data-ai-hint="sports betting"
-                            width={400}
-                            height={200}
+                            src="https://drive.google.com/uc?id=1iioHhzsYi31cjYbPno6RryymacQYt6U5"
+                            alt="Betwinner Club World Cup Offer"
+                            data-ai-hint="soccer promotion"
+                            width={800}
+                            height={400}
                             className="rounded-lg mx-auto shadow-md w-full object-cover transition-transform duration-300 group-hover/item:scale-105"
                           />
-                      </a>
-                      <a href={russiaLink} target="_blank" rel="noopener noreferrer" className="block cursor-pointer group/item">
-                        <Image
-                          src="https://drive.google.com/uc?id=1b4zUNiRzCQizrBGJUSg62duUbFMyw3Fa"
-                          alt="Betwinner Offer 2"
-                          data-ai-hint="soccer match"
-                          width={400}
-                          height={200}
-                          className="rounded-lg mx-auto shadow-md w-full object-cover transition-transform duration-300 group-hover/item:scale-105"
-                        />
-                      </a>
-                      <a href={russiaLink} target="_blank" rel="noopener noreferrer" className="block cursor-pointer group/item">
-                        <Image
-                          src="https://drive.google.com/uc?id=1b4zUNiRzCQizrBGJUSg62duUbFMyw3Fa"
-                          alt="Betwinner Offer 3"
-                          data-ai-hint="stadium lights"
-                          width={400}
-                          height={200}
-                          className="rounded-lg mx-auto shadow-md w-full object-cover transition-transform duration-300 group-hover/item:scale-105"
-                        />
                       </a>
                 </div>
                 

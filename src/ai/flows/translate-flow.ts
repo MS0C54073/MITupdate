@@ -44,14 +44,14 @@ const prompt = ai.definePrompt({
   output: {
     schema: TranslateOutputSchema,
   },
-  prompt: `You are a professional translator. Translate the following text from English to {{targetLanguage}}.
-If the text is already in {{targetLanguage}}, return it as is.
-If the text cannot be translated or is nonsensical, return the original text.
+  prompt: `You are an expert translation engine. Your sole task is to translate the given text into {{targetLanguage}}.
+Provide only the translated text in the 'translatedText' field. Do not add any extra commentary or explanation.
+If the text is untranslatable or nonsensical, return the original text.
 
-Original text:
+Original Text:
+"""
 {{text}}
-
-Translated text to {{targetLanguage}}:`,
+"""`,
   config: {
     safetySettings: [
       {
@@ -93,7 +93,7 @@ const translateFlow = ai.defineFlow(
       return { translatedText: input.text }; // Fallback for invalid structure
     } catch (error) {
       console.error(
-        `Translation flow failed for text "${input.text}" to "${input.targetLanguage}". This could be due to API rate limits. Falling back to original text.`,
+        `Translation flow failed for text "${input.text}" to "${input.targetLanguage}". This could be due to API rate limits or service restrictions. Falling back to original text.`,
         error
       );
       // On any error (including rate limiting), gracefully fall back to the original text.

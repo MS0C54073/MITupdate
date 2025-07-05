@@ -101,7 +101,7 @@ export default function AffiliateMarketingManagerPage() {
                       href={image.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="portfolio-item block cursor-pointer group/item"
+                      className="portfolio-item block cursor-pointer group/item relative"
                     >
                         <Image
                             src={image.src}
@@ -109,7 +109,7 @@ export default function AffiliateMarketingManagerPage() {
                             data-ai-hint={image.hint}
                             width={320}
                             height={240}
-                            className={`w-full h-60 shadow-lg object-cover fancy-shape ${shapeClasses[index % shapeClasses.length]} group-hover/item:scale-105 group-hover/item:[clip-path:inset(0)]`}
+                            className={`w-full h-60 shadow-lg object-cover fancy-shape ${shapeClasses[index % shapeClasses.length]} group-hover/item:scale-110 group-hover/item:shadow-2xl group-hover/item:z-10 group-hover/item:[clip-path:inset(0)]`}
                         />
                     </a>
                 ))}

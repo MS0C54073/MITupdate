@@ -33,9 +33,9 @@
 }
 
 .fancy-shape-2 {
-    clip-path: polygon(0% 0%, 75% 0%, 100% 100%, 25% 100%);
+    clip-path: circle(50% at 50% 50%);
 }
 
 .fancy-shape-3 {
-    clip-path: polygon(0% 15%, 100% 0%, 100% 85%, 0% 100%);
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
 }

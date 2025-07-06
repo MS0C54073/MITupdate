@@ -1,4 +1,3 @@
-
 'use client';
 
 import React from 'react';
@@ -8,7 +7,7 @@ import { signOut } from 'firebase/auth';
 import { useAuth } from '@/app/auth-context';
 import { auth } from '@/lib/firebase';
 import { Button } from '@/components/ui/button';
-import { LogOut, User, Loader2, LogIn, UserPlus } from 'lucide-react';
+import { LogOut, User, Loader2, LogIn, UserPlus, Shield } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -43,14 +42,20 @@ export default function AuthNav() {
 
   if (!user) {
     return (
-      <div className="flex items-center gap-2">
-        <Button variant="outline" asChild>
-          <Link href="/login">
-            <LogIn className="mr-2 h-4 w-4" />
-            <TranslatedText text="Login" />
+      <div className="flex items-center">
+        <Button variant="outline" asChild className="rounded-r-none focus:z-10">
+          <Link href="/admin/dashboard">
+            <Shield className="mr-2 h-4 w-4" />
+            <TranslatedText text="Admins" />
           </Link>
         </Button>
-        <Button asChild>
+        <Button variant="outline" asChild className="-ml-px rounded-none focus:z-10">
+          <Link href="/login">
+            <LogIn className="mr-2 h-4 w-4" />
+            <TranslatedText text="Client" />
+          </Link>
+        </Button>
+        <Button asChild className="-ml-px rounded-l-none focus:z-10">
           <Link href="/signup">
             <UserPlus className="mr-2 h-4 w-4" />
             <TranslatedText text="Sign Up" />

@@ -50,6 +50,17 @@ export interface BlogPost {
   imageHint: string;
 }
 
+// Data from Firestore for site images
+export interface SiteImage {
+  id?: string;
+  section: string; // e.g., 'affiliate_gallery'
+  imageUrl: string;
+  alt: string;
+  storagePath?: string; // Path in Firebase Storage, if uploaded directly
+  timestamp: Timestamp | ReturnType<typeof import('firebase/firestore').serverTimestamp>;
+}
+
+
 // Types for displaying data in admin pages with processed/formatted fields
 export interface DisplayComment {
   id: string;
@@ -79,6 +90,17 @@ export interface DisplayReview {
   timestamp: string;
 }
 
+// For displaying site images in the admin panel
+export interface DisplaySiteImage {
+  id: string;
+  section: string;
+  imageUrl: string;
+  alt: string;
+  timestamp: string; // Formatted
+  storagePath?: string;
+}
+
+
 // For the blog index page
 export interface DisplayBlogPost {
     id: string;
@@ -102,3 +124,5 @@ export interface FullDisplayBlogPost {
     imageUrl: string;
     imageHint: string;
 }
+
+    

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowLeft, Bell, MessageSquare, ShoppingCart, Star, Loader2 } from 'lucide-react';
+import { ArrowLeft, Bell, MessageSquare, ShoppingCart, Star, Loader2, ImagePlus } from 'lucide-react';
 import TranslatedText from '@/app/components/translated-text';
 import { useEffect, useState } from 'react';
 import { db } from '@/lib/firebase';
@@ -237,7 +237,26 @@ export default function AdminDashboardPage() {
         </h1>
       </header>
 
-      <main className="flex-grow grid md:grid-cols-3 gap-6">
+      <main className="flex-grow grid md:grid-cols-2 gap-6">
+        <Card className="shadow-xl bg-card/90 backdrop-blur-md">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-2xl font-semibold text-foreground">
+              <TranslatedText text="Manage Site Images" />
+            </CardTitle>
+            <ImagePlus className="h-6 w-6 text-accent" />
+          </CardHeader>
+          <CardContent>
+            <p className="text-xs text-muted-foreground mb-4">
+              <TranslatedText text="Upload and manage images for different sections of the site." />
+            </p>
+            <Button asChild>
+              <Link href="/admin/manage-images">
+                <TranslatedText text="Manage Images" />
+              </Link>
+            </Button>
+          </CardContent>
+        </Card>
+        
         <Card className="shadow-xl bg-card/90 backdrop-blur-md">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-2xl font-semibold text-foreground">
@@ -328,3 +347,5 @@ export default function AdminDashboardPage() {
     </div>
   );
 }
+
+    

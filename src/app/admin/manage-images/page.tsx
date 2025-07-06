@@ -5,10 +5,9 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useForm, type SubmitHandler } from 'react-hook-form';
+import { useForm, type SubmitHandler, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { useAuth } from '@/app/auth-context';
 import { db, storage } from '@/lib/firebase';
 import { collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, serverTimestamp, type Timestamp } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
@@ -23,6 +22,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import TranslatedText from '@/app/components/translated-text';
 import { ArrowLeft, Loader2, Upload, Trash2 } from 'lucide-react';
+import AuthModal from '@/app/components/auth-modal';
 
 const imageSections = [
   { id: 'affiliate_gallery', name: 'Affiliate Page Gallery' },
@@ -51,7 +51,8 @@ const imageUploadSchema = z.object({
 type ImageUploadFormData = z.infer<typeof imageUploadSchema>;
 
 export default function ManageImagesPage() {
-  const { user, userProfile, loading: authLoading } = useAuth();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
 
@@ -65,12 +66,6 @@ export default function ManageImagesPage() {
   });
 
   const sourceType = watch('sourceType');
-
-  useEffect(() => {
-    if (!authLoading && (!user || userProfile?.role !== 'admin')) {
-      router.push('/login');
-    }
-  }, [user, userProfile, authLoading, router]);
 
   const fetchImages = async () => {
     setLoading(true);
@@ -95,10 +90,19 @@ export default function ManageImagesPage() {
   };
 
   useEffect(() => {
-    if (userProfile?.role === 'admin') {
+    const adminLoggedIn = sessionStorage.getItem('isAdminLoggedIn');
+    if (adminLoggedIn === 'true') {
+      setIsLoggedIn(true);
       fetchImages();
     }
-  }, [userProfile]);
+    setAuthChecked(true);
+  }, []);
+
+  const handleLoginSuccess = () => {
+    sessionStorage.setItem('isAdminLoggedIn', 'true');
+    setIsLoggedIn(true);
+    fetchImages();
+  };
 
   const onSubmit: SubmitHandler<ImageUploadFormData> = async (data) => {
     setSubmitting(true);
@@ -119,7 +123,7 @@ export default function ManageImagesPage() {
       }
 
       const docPayload: Omit<SiteImage, 'id'> = {
-        section: data.section,
+        section: data.section as SectionId,
         alt: data.alt,
         imageUrl: imageUrl,
         timestamp: serverTimestamp(),
@@ -159,13 +163,23 @@ export default function ManageImagesPage() {
   };
   
   const groupedImages = images.reduce((acc, image) => {
-    (acc[image.section] = acc[image.section] || []).push(image);
+    const section = image.section as SectionId;
+    (acc[section] = acc[section] || []).push(image);
     return acc;
-  }, {} as Record<string, DisplaySiteImage[]>);
+  }, {} as Record<SectionId, DisplaySiteImage[]>);
 
-
-  if (authLoading || !userProfile) {
+  if (!authChecked) {
     return <div className="flex h-screen items-center justify-center"><Loader2 className="h-16 w-16 animate-spin" /></div>;
+  }
+  
+  if (!isLoggedIn) {
+      return (
+        <AuthModal 
+          isOpen={true} 
+          onClose={() => router.push('/')} 
+          onLoginSuccess={handleLoginSuccess}
+        />
+      );
   }
 
   return (
@@ -300,5 +314,3 @@ export default function ManageImagesPage() {
     </div>
   );
 }
-
-    

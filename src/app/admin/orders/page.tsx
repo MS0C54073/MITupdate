@@ -13,10 +13,11 @@ import { db } from '@/lib/firebase';
 import { collection, getDocs, orderBy, query, Timestamp, limit, startAfter, type QueryDocumentSnapshot, type DocumentData } from 'firebase/firestore';
 import type { DisplayOrder } from '@/lib/types'; 
 import { SocialIcons } from '@/components/social-icons';
-import { useAuth } from '@/app/auth-context';
+import AuthModal from '@/app/components/auth-modal';
 
 export default function AdminOrdersPage() {
-  const { user, userProfile, loading: authLoading } = useAuth();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
   const router = useRouter();
 
   const [orders, setOrders] = useState<DisplayOrder[]>([]);
@@ -29,17 +30,20 @@ export default function AdminOrdersPage() {
   const ordersPerPage = 15;
 
   useEffect(() => {
-    if (!authLoading && (!user || userProfile?.role !== 'admin')) {
-      router.push('/login');
-    }
-  }, [user, userProfile, authLoading, router]);
-
-  useEffect(() => {
-    if (userProfile?.role === 'admin') {
+    const adminLoggedIn = sessionStorage.getItem('isAdminLoggedIn');
+    if (adminLoggedIn === 'true') {
+      setIsLoggedIn(true);
       fetchOrders(true);
     }
-  }, [userProfile]);
+    setAuthChecked(true);
+  }, []);
 
+  const handleLoginSuccess = () => {
+    sessionStorage.setItem('isAdminLoggedIn', 'true');
+    setIsLoggedIn(true);
+    fetchOrders(true);
+  };
+  
   const mapDocToOrder = (doc: QueryDocumentSnapshot<DocumentData>): DisplayOrder => {
     const data = doc.data();
     let formattedTimestamp = 'Pending...';
@@ -106,7 +110,7 @@ export default function AdminOrdersPage() {
     }
   };
 
-  if (authLoading || loading) {
+  if (!authChecked || (isLoggedIn && loading)) {
     return (
       <div className="flex justify-center items-center min-h-screen">
           <Loader2 className="h-16 w-16 animate-spin text-primary" />
@@ -114,8 +118,14 @@ export default function AdminOrdersPage() {
     );
   }
   
-  if (!user || userProfile?.role !== 'admin') {
-      return null;
+  if (!isLoggedIn) {
+      return (
+        <AuthModal 
+          isOpen={true} 
+          onClose={() => router.push('/')} 
+          onLoginSuccess={handleLoginSuccess}
+        />
+      );
   }
 
   return (

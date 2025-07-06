@@ -12,10 +12,11 @@ import { db } from '@/lib/firebase';
 import { collection, getDocs, orderBy, query, Timestamp, limit, startAfter, type QueryDocumentSnapshot, type DocumentData } from 'firebase/firestore';
 import type { DisplayComment } from '@/lib/types'; 
 import { SocialIcons } from '@/components/social-icons';
-import { useAuth } from '@/app/auth-context';
+import AuthModal from '@/app/components/auth-modal';
 
 export default function AdminCommentsPage() {
-  const { user, userProfile, loading: authLoading } = useAuth();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
   const router = useRouter();
 
   const [comments, setComments] = useState<DisplayComment[]>([]);
@@ -28,17 +29,20 @@ export default function AdminCommentsPage() {
   const commentsPerPage = 15;
 
   useEffect(() => {
-    if (!authLoading && (!user || userProfile?.role !== 'admin')) {
-      router.push('/login');
-    }
-  }, [user, userProfile, authLoading, router]);
-
-  useEffect(() => {
-    if (userProfile?.role === 'admin') {
+    const adminLoggedIn = sessionStorage.getItem('isAdminLoggedIn');
+    if (adminLoggedIn === 'true') {
+      setIsLoggedIn(true);
       fetchComments(true);
     }
-  }, [userProfile]);
+    setAuthChecked(true);
+  }, []);
 
+  const handleLoginSuccess = () => {
+    sessionStorage.setItem('isAdminLoggedIn', 'true');
+    setIsLoggedIn(true);
+    fetchComments(true);
+  };
+  
   const mapDocToComment = (doc: QueryDocumentSnapshot<DocumentData>): DisplayComment => {
     const data = doc.data();
     let formattedTimestamp = 'Pending...';
@@ -101,7 +105,7 @@ export default function AdminCommentsPage() {
     }
   };
 
-  if (authLoading || loading) {
+  if (!authChecked) {
     return (
       <div className="flex justify-center items-center min-h-screen">
           <Loader2 className="h-16 w-16 animate-spin text-primary" />
@@ -109,8 +113,14 @@ export default function AdminCommentsPage() {
     );
   }
   
-  if (!user || userProfile?.role !== 'admin') {
-      return null;
+  if (!isLoggedIn) {
+      return (
+        <AuthModal 
+          isOpen={true} 
+          onClose={() => router.push('/')} 
+          onLoginSuccess={handleLoginSuccess}
+        />
+      );
   }
 
   return (

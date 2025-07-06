@@ -20,10 +20,11 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { SocialIcons } from '@/components/social-icons';
-import { useAuth } from '@/app/auth-context';
+import AuthModal from '@/app/components/auth-modal';
 
 export default function AdminDashboardPage() {
-  const { user, userProfile, loading: authLoading } = useAuth();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
   const router = useRouter();
 
   const [newCommentsCount, setNewCommentsCount] = useState(0);
@@ -36,38 +37,26 @@ export default function AdminDashboardPage() {
   
   const totalNotifications = newCommentsCount + newOrdersCount + newReviewsCount;
 
-  useEffect(() => {
-    if (!authLoading && (!user || userProfile?.role !== 'admin')) {
-      router.push('/login');
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const commentsCollection = collection(db, "comments");
+      const ordersCollection = collection(db, "orders");
+      const reviewsCollection = collection(db, "reviews");
+
+      const [commentsSnapshot, ordersSnapshot, reviewsSnapshot] = await Promise.all([
+        getCountFromServer(commentsCollection),
+        getCountFromServer(ordersCollection),
+        getCountFromServer(reviewsCollection)
+      ]);
+      setNewCommentsCount(commentsSnapshot.data().count);
+      setNewOrdersCount(ordersSnapshot.data().count);
+      setNewReviewsCount(reviewsSnapshot.data().count);
+
+    } catch (error) {
+      console.error("Error fetching counts:", error);
     }
-  }, [user, userProfile, authLoading, router]);
-
-  useEffect(() => {
-    if (userProfile?.role !== 'admin') return;
-
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const commentsCollection = collection(db, "comments");
-        const ordersCollection = collection(db, "orders");
-        const reviewsCollection = collection(db, "reviews");
-
-        const [commentsSnapshot, ordersSnapshot, reviewsSnapshot] = await Promise.all([
-          getCountFromServer(commentsCollection),
-          getCountFromServer(ordersCollection),
-          getCountFromServer(reviewsCollection)
-        ]);
-        setNewCommentsCount(commentsSnapshot.data().count);
-        setNewOrdersCount(ordersSnapshot.data().count);
-        setNewReviewsCount(reviewsSnapshot.data().count);
-
-      } catch (error) {
-        console.error("Error fetching counts:", error);
-      }
-    };
-
-    fetchData();
-
+    
     const latestCommentsQuery = query(collection(db, "comments"), orderBy("timestamp", "desc"), limit(3));
     const latestCommentsUnsubscribe = onSnapshot(latestCommentsQuery, (snapshot) => {
         setLatestComments(snapshot.docs.map(doc => ({
@@ -77,11 +66,7 @@ export default function AdminDashboardPage() {
             email: '',
             timestamp: ''
         } as DisplayComment)));
-        setLoading(false); 
-    }, (error) => {
-      console.error("Error fetching latest comments:", error);
-      setLoading(false);
-    });
+    }, (error) => console.error("Error fetching latest comments:", error));
 
     const latestOrdersQuery = query(collection(db, "orders"), orderBy("timestamp", "desc"), limit(3));
     const latestOrdersUnsubscribe = onSnapshot(latestOrdersQuery, (snapshot) => {
@@ -91,9 +76,7 @@ export default function AdminDashboardPage() {
             details: doc.data().details || 'No details provided.',
             email: '', phone: '', attachmentName: null, timestamp: ''
         } as DisplayOrder)));
-    }, (error) => {
-        console.error("Error fetching latest orders:", error);
-    });
+    }, (error) => console.error("Error fetching latest orders:", error));
     
     const latestReviewsQuery = query(collection(db, "reviews"), orderBy("timestamp", "desc"), limit(3));
     const latestReviewsUnsubscribe = onSnapshot(latestReviewsQuery, (snapshot) => {
@@ -104,8 +87,10 @@ export default function AdminDashboardPage() {
             rating: doc.data().rating || 0,
             timestamp: ''
         } as DisplayReview)));
+        setLoading(false);
     }, (error) => {
       console.error("Error fetching latest reviews:", error);
+      setLoading(false);
     });
 
     return () => {
@@ -113,9 +98,24 @@ export default function AdminDashboardPage() {
       latestOrdersUnsubscribe();
       latestReviewsUnsubscribe();
     }
-  }, [userProfile]);
+  };
 
-  if (authLoading || loading) {
+  useEffect(() => {
+    const adminLoggedIn = sessionStorage.getItem('isAdminLoggedIn');
+    if (adminLoggedIn === 'true') {
+      setIsLoggedIn(true);
+      fetchData();
+    }
+    setAuthChecked(true);
+  }, []);
+
+  const handleLoginSuccess = () => {
+    sessionStorage.setItem('isAdminLoggedIn', 'true');
+    setIsLoggedIn(true);
+    fetchData();
+  };
+
+  if (!authChecked || loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
           <Loader2 className="h-16 w-16 animate-spin text-primary" />
@@ -123,8 +123,14 @@ export default function AdminDashboardPage() {
     );
   }
   
-  if (!user || userProfile?.role !== 'admin') {
-      return null;
+  if (!isLoggedIn) {
+      return (
+        <AuthModal 
+          isOpen={true} 
+          onClose={() => router.push('/')} 
+          onLoginSuccess={handleLoginSuccess}
+        />
+      );
   }
 
   return (
@@ -265,13 +271,9 @@ export default function AdminDashboardPage() {
             <Star className="h-6 w-6 text-accent" />
           </CardHeader>
           <CardContent>
-            {loading ? (
-              <Loader2 className="h-8 w-8 animate-spin text-primary my-1" />
-            ) : (
-              <div className="text-3xl font-bold text-primary" data-ai-hint="dynamic review count">
-                {newReviewsCount}
-              </div>
-            )}
+            <div className="text-3xl font-bold text-primary" data-ai-hint="dynamic review count">
+              {newReviewsCount}
+            </div>
             <p className="text-xs text-muted-foreground mb-4">
               <TranslatedText text="Total user reviews" />
             </p>
@@ -291,13 +293,9 @@ export default function AdminDashboardPage() {
             <MessageSquare className="h-6 w-6 text-accent" />
           </CardHeader>
           <CardContent>
-            {loading ? (
-              <Loader2 className="h-8 w-8 animate-spin text-primary my-1" />
-            ) : (
-              <div className="text-3xl font-bold text-primary" data-ai-hint="dynamic comment count">
-                {newCommentsCount}
-              </div>
-            )}
+            <div className="text-3xl font-bold text-primary" data-ai-hint="dynamic comment count">
+              {newCommentsCount}
+            </div>
             <p className="text-xs text-muted-foreground mb-4">
               <TranslatedText text="Total feedback messages" />
             </p>
@@ -317,13 +315,9 @@ export default function AdminDashboardPage() {
             <ShoppingCart className="h-6 w-6 text-accent" />
           </CardHeader>
           <CardContent>
-             {loading ? (
-              <Loader2 className="h-8 w-8 animate-spin text-primary my-1" />
-            ) : (
-              <div className="text-3xl font-bold text-primary" data-ai-hint="dynamic order count">
-                {newOrdersCount}
-              </div>
-            )}
+             <div className="text-3xl font-bold text-primary" data-ai-hint="dynamic order count">
+              {newOrdersCount}
+            </div>
             <p className="text-xs text-muted-foreground mb-4">
               <TranslatedText text="Total client requests" />
             </p>
@@ -347,5 +341,3 @@ export default function AdminDashboardPage() {
     </div>
   );
 }
-
-    

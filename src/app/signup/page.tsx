@@ -5,7 +5,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, collection, getDocs } from 'firebase/firestore';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -37,6 +37,11 @@ export default function SignupPage() {
   const onSubmit: SubmitHandler<SignupFormData> = async (data) => {
     setLoading(true);
     try {
+      // Check if any users already exist to determine if this is the first user.
+      const usersCollection = collection(db, 'users');
+      const usersSnapshot = await getDocs(usersCollection);
+      const isFirstUser = usersSnapshot.empty;
+      
       const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
       const user = userCredential.user;
 
@@ -45,10 +50,10 @@ export default function SignupPage() {
         uid: user.uid,
         name: data.name,
         email: data.email,
-        role: 'user', // Default role
+        role: isFirstUser ? 'admin' : 'user', // Assign 'admin' role if it's the first user
       });
       
-      router.push('/admin/dashboard');
+      router.push('/dashboard');
 
     } catch (error: any) {
       console.error('Signup failed:', error);

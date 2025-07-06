@@ -36,7 +36,7 @@ export default function LoginPage() {
     setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, data.email, data.password);
-      router.push('/admin/dashboard');
+      router.push('/dashboard');
     } catch (error: any) {
       console.error('Login failed:', error);
       toast({

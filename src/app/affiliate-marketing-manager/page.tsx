@@ -18,14 +18,14 @@ export default function AffiliateMarketingManagerPage() {
     const zambiaLink = "https://tinyurl.com/5xd8rb5e";
     
     const images = [
-    { src: "https://drive.google.com/uc?id=1qKILVi6oOCuQBHevbYkvr1NS3s7sPDja", alt: "Affiliate Marketing Image 1", hint: "sports betting", link: zambiaLink },
-    { src: "https://drive.google.com/uc?id=1AjQ6wGLABvwQKUMVz-e0nVU5yO5YgWUJ", alt: "Affiliate Marketing Image 2", hint: "soccer players", link: russiaLink },
-    { src: "https://drive.google.com/uc?id=1NLnTM6Xc8MZqnS_XSPKOpqxmBz6CkPNJ", alt: "Affiliate Marketing Image 4", hint: "casino chips", link: russiaLink },
-    { src: "https://drive.google.com/uc?id=1HFP3VmUoINFAZTyA-zbIi6-Hom7yYMms", alt: "Affiliate Marketing Image 5", hint: "online game", link: russiaLink },
-    { src: "https://drive.google.com/uc?id=1exU5AKqGy7F3VIp92yRpVckMCuWOb8CT", alt: "Affiliate Marketing Image 6", hint: "sports odds", link: zambiaLink },
-    { src: "https://drive.google.com/uc?id=1p4Es14i71zDIWsmav4Tw75p46a9undzc", alt: "Affiliate Marketing Image 7", hint: "betting app", link: russiaLink },
-    { src: "https://drive.google.com/uc?id=1-h46xg2ZrgOlmcMdZKK-Q3uMCSfOx3sV", alt: "Affiliate Marketing Image 8", hint: "soccer ball", link: russiaLink },
-    { src: "https://drive.google.com/uc?id=1R__srceNSMgx5ncLeQSWesA5V5FwkU4b", alt: "Affiliate Marketing Image 9", hint: "winning bet", link: russiaLink },
+    { src: "https://placehold.co/320x240.png", alt: "Affiliate Marketing Image 1", hint: "sports betting", link: zambiaLink },
+    { src: "https://placehold.co/320x240.png", alt: "Affiliate Marketing Image 2", hint: "soccer players", link: russiaLink },
+    { src: "https://placehold.co/320x240.png", alt: "Affiliate Marketing Image 4", hint: "casino chips", link: russiaLink },
+    { src: "https://placehold.co/320x240.png", alt: "Affiliate Marketing Image 5", hint: "online game", link: russiaLink },
+    { src: "https://placehold.co/320x240.png", alt: "Affiliate Marketing Image 6", hint: "sports odds", link: zambiaLink },
+    { src: "https://placehold.co/320x240.png", alt: "Affiliate Marketing Image 7", hint: "betting app", link: russiaLink },
+    { src: "https://placehold.co/320x240.png", alt: "Affiliate Marketing Image 8", hint: "soccer ball", link: russiaLink },
+    { src: "https://placehold.co/320x240.png", alt: "Affiliate Marketing Image 9", hint: "winning bet", link: russiaLink },
   ];
 
   const shapeClasses = ["fancy-shape-1", "fancy-shape-2", "fancy-shape-3"];
@@ -147,7 +147,7 @@ export default function AffiliateMarketingManagerPage() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-4 max-w-7xl mx-auto">
                       <a href={russiaLink} target="_blank" rel="noopener noreferrer" className="block cursor-pointer group/item">
                         <Image
-                            src="https://drive.google.com/uc?id=1iioHhzsYi31cjYbPno6RryymacQYt6U5"
+                            src="https://placehold.co/400x400.png"
                             alt="Betwinner Club World Cup Offer"
                             data-ai-hint="soccer promotion"
                             width={400}
@@ -157,7 +157,7 @@ export default function AffiliateMarketingManagerPage() {
                       </a>
                       <a href={zambiaLink} target="_blank" rel="noopener noreferrer" className="block cursor-pointer group/item">
                           <Image
-                              src="https://drive.google.com/uc?id=1iioHhzsYi31cjYbPno6RryymacQYt6U5"
+                              src="https://placehold.co/400x400.png"
                               alt="Betwinner Sports Action"
                               data-ai-hint="sports action"
                               width={400}
@@ -167,7 +167,7 @@ export default function AffiliateMarketingManagerPage() {
                       </a>
                       <a href={russiaLink} target="_blank" rel="noopener noreferrer" className="block cursor-pointer group/item">
                            <Image
-                              src="https://drive.google.com/uc?id=1iioHhzsYi31cjYbPno6RryymacQYt6U5"
+                              src="https://placehold.co/400x400.png"
                               alt="Betwinner Betting App"
                               data-ai-hint="betting app"
                               width={400}

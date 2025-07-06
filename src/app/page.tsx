@@ -258,7 +258,7 @@ export default function Home() {
       <section className="mb-12 relative z-10 pt-16">
         <div className="flex flex-col items-center text-center md:flex-row md:text-left gap-8 p-6 bg-card/80 backdrop-blur-sm rounded-xl shadow-xl">
           <Image
-            src="https://drive.google.com/uc?id=17Vtoqp0jhBSYHrrstnCDCMBUzcrhuGfG"
+            src="https://placehold.co/200x200.png"
             alt="Muzo's Profile Picture"
             width={200}
             height={200}
@@ -305,7 +305,7 @@ export default function Home() {
             <Link href="/mit-services" passHref legacyBehavior>
               <a className="portfolio-item flex flex-col items-center text-center bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
                 <Image
-                  src="https://drive.google.com/uc?id=17Vtoqp0jhBSYHrrstnCDCMBUzcrhuGfG"
+                  src="https://placehold.co/150x150.png"
                   alt="MIT Services"
                   width={150}
                   height={150}
@@ -327,7 +327,7 @@ export default function Home() {
             <Link href="/teaching-experience" passHref legacyBehavior>
               <a className="portfolio-item flex flex-col items-center text-center bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
                 <Image
-                  src="https://drive.google.com/uc?id=1AocH_Dpl2QbXhusfosqZEr21AFDNmJPW"
+                  src="https://placehold.co/150x150.png"
                   alt="Work and Education"
                   width={150}
                   height={150}
@@ -349,7 +349,7 @@ export default function Home() {
             <Link href="/affiliate-marketing-manager" passHref legacyBehavior>
               <a className="portfolio-item flex flex-col items-center text-center bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
                 <Image
-                  src="https://drive.google.com/uc?id=1zXu6UN8XztuTdFNCRIPMi9Tn5gDzkBbZ"
+                  src="https://placehold.co/150x150.png"
                   alt="Affiliate Marketing Project"
                   width={150}
                   height={150}
@@ -373,7 +373,7 @@ export default function Home() {
             <Link href="/hobbies" passHref legacyBehavior>
               <a className="portfolio-item flex flex-col items-center text-center bg-card/80 backdrop-blur-sm rounded-lg border shadow-md p-4 hover:shadow-xl hover:animate-shake transition-all duration-300 cursor-pointer">
                 <Image
-                  src="https://drive.google.com/uc?id=1k6DbCourwAGd8mH4TcFG0w2DatVJ0PyN"
+                  src="https://placehold.co/150x150.png"
                   alt="Hobbies"
                   width={150}
                   height={150}

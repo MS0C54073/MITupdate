@@ -144,37 +144,6 @@ const education = [
     },
 ];
 
-const certifications = [
-  { title: "EF SET English Certificate (C1 Advanced)", issuer: "EF SET", date: "Sep 2024", id: null, skills: null },
-  { title: "Teacher Of English To Speakers Of Other Languages (TEFL)", issuer: "Teacher Record", date: "Sep 2023", id: "TR2672252278", skills: null },
-  { title: "Automate Cybersecurity Tasks with Python", issuer: "Google", date: "Aug 2023", id: "C7XRV7CQNCQM", skills: "PEP 8 style guide" },
-  { title: "Assets, Threats, and Vulnerabilities", issuer: "Google", date: "Aug 2023", id: "VX5TA2Q2S67K", skills: null },
-  { title: "Connect and Protect: Networks and Network Security", issuer: "Google", date: "Aug 2023", id: "QTMMW72GVFNR", skills: null },
-  { title: "Google Cybersecurity", issuer: "Google", date: "Aug 2023", id: "ZQRFL5JFN79Z", skills: "SQL, SIEM, IDS, Linux, Python" },
-  { title: "Introduction to Artificial Intelligence (AI)", issuer: "IBM", date: "Aug 2023", id: "ZQRFL5JFN79Z", skills: null },
-  { title: "Introduction to Cloud Computing", issuer: "IBM", date: "Aug 2023", id: "6V7R3J56LE33", skills: null },
-  { title: "Key Technologies for Business", issuer: "IBM", date: "Aug 2023", id: "ED6HPWDG6QVB", skills: null },
-  { title: "Play It Safe: Manage Security Risks", issuer: "Google", date: "Aug 2023", id: "SM23C5AREJRM", skills: null },
-  { title: "Put It to Work: Prepare for Cybersecurity Jobs", issuer: "Google", date: "Aug 2023", id: "LSZUYQUMHPP8", skills: null },
-  { title: "Sound the Alarm: Detection and Response", issuer: "Google", date: "Aug 2023", id: "DBENMJKEDA46", skills: null },
-  { title: "Tools of the Trade: Linux and SQL", issuer: "Google", date: "Aug 2023", id: "PMN4CB7GLMC7", skills: null },
-  { title: "Cybersecurity Compliance Framework & System Administration", issuer: "IBM", date: "Jun 2022", id: "SARK6MHGJE2W", skills: null },
-  { title: "Cybersecurity Roles, Processes & Operating System Security", issuer: "IBM", date: "Jun 2022", id: "9SSFKD6DLP7N", skills: null },
-  { title: "IT Fundamentals for Cybersecurity", issuer: "IBM", date: "Jun 2022", id: "BDSXYEGVZUWK", skills: "Networking, DB vulnerabilities, Cybersecurity, OS Security, Cyber Attacks" },
-  { title: "Introduction to Cybersecurity Tools & Cyber Attacks", issuer: "Coursera", date: "Jun 2022", id: null, skills: null },
-  { title: "Network Security & Database Vulnerabilities", issuer: "IBM", date: "Jun 2022", id: "NTDBPW657286", skills: null },
-  { title: "Foundations of Digital Marketing and E-commerce", issuer: "Google", date: "May 2022", id: "F7MG9YAXM94Y", skills: null },
-  { title: "Foundations of Project Management", issuer: "Google", date: "May 2022", id: "KBKA6QSQRLGV", skills: null },
-  { title: "Crash Course on Python", issuer: "Google", date: "Feb 2022", id: "739MZ344RHQ2", skills: null },
-  { title: "Exploratory Data Analysis for Machine Learning", issuer: "IBM", date: "Feb 2022", id: "65JUNKQNLLNE", skills: null },
-  { title: "Foundations of User Experience (UX) Design", issuer: "Google", date: "Feb 2022", id: "LQUUB69CBRJU", skills: null },
-  { title: "Foundations: Data, Data, Everywhere", issuer: "Google", date: "Feb 2022", id: "J5KRN8LFPNPK", skills: null },
-  { title: "Introduction to Cybersecurity Tools & Cyber Attacks", issuer: "IBM", date: "Feb 2022", id: "RJR6MQHGE65M", skills: null },
-  { title: "C++ (Basic) Certificate", issuer: "HackerRank", date: "Sep 2020", id: "DEA4F08FE541", skills: null },
-  { title: "Python (Basic) Certificate", issuer: "HackerRank", date: "Aug 2020", id: "6E56080D33F3", skills: null },
-];
-
-
 export default function Home() {
   return (
     <div className="container mx-auto py-12 px-4 md:px-6 lg:px-8">
@@ -320,21 +289,13 @@ export default function Home() {
       </section>
 
       {/* Certifications Section */}
-      <section id="certifications" className="py-20 border-t">
-        <h2 className="text-3xl font-bold text-center mb-12"><TranslatedText text="Licenses & Certifications" /></h2>
-        <div className="max-w-3xl mx-auto relative pl-8">
-          <div className="absolute left-0 top-0 h-full w-0.5 bg-border"></div>
-          {certifications.map((cert, index) => (
-            <div key={index} className="mb-12 relative">
-              <div className="absolute left-[-34px] top-1.5 w-4 h-4 bg-primary rounded-full border-4 border-background"></div>
-              <p className="text-sm text-muted-foreground">Issued {cert.date}</p>
-              <h3 className="text-xl font-bold text-accent"><TranslatedText text={cert.title}/></h3>
-              <p className="font-semibold text-foreground mb-2"><TranslatedText text={cert.issuer}/></p>
-              {cert.id && <p className="text-xs text-muted-foreground">Credential ID: {cert.id}</p>}
-              {cert.skills && <p className="text-sm text-muted-foreground mt-1"><b>Skills:</b> <TranslatedText text={cert.skills}/></p>}
-            </div>
-          ))}
-        </div>
+      <section id="certifications" className="py-20 border-t text-center">
+        <Button asChild size="lg" className="text-3xl font-bold h-auto py-3 px-6">
+            <Link href="https://www.coursera.org/user/d5bf15915278f56a6f96c3b5195c6d11" target="_blank">
+                <TranslatedText text="Licenses & Certifications" />
+                <ArrowRight className="ml-3 h-6 w-6" />
+            </Link>
+        </Button>
       </section>
 
       {/* Contact Section */}

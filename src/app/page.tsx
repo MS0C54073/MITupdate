@@ -11,15 +11,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
 const skills = [
-    { name: 'React', icon: <Globe className="h-6 w-6" /> },
+    { name: 'Python', icon: <Code className="h-6 w-6" /> },
+    { name: 'Django', icon: <Server className="h-6 w-6" /> },
+    { name: 'AI Development', icon: <BrainCircuit className="h-6 w-6" /> },
     { name: 'Next.js', icon: <Globe className="h-6 w-6" /> },
     { name: 'TypeScript', icon: <Code className="h-6 w-6" /> },
-    { name: 'Node.js', icon: <Server className="h-6 w-6" /> },
-    { name: 'Python', icon: <Code className="h-6 w-6" /> },
+    { name: 'React', icon: <Globe className="h-6 w-6" /> },
     { name: 'Firebase', icon: <Server className="h-6 w-6" /> },
-    { name: 'Genkit', icon: <BrainCircuit className="h-6 w-6" /> },
-    { name: 'Docker', icon: <Server className="h-6 w-6" /> },
     { name: 'Cybersecurity', icon: <Shield className="h-6 w-6" /> },
+    { name: 'System Admin', icon: <Server className="h-6 w-6" /> },
     { name: 'Networking', icon: <Network className="h-6 w-6" /> },
 ];
 
@@ -52,9 +52,19 @@ const projects = [
 
 const experiences = [
     {
+        title: "System Administrator (Temporal Contract)",
+        company: "Embassy of the Republic of Zambia in Moscow, Russia",
+        duration: "2025",
+        details: [
+            "Maintain embassy IT systems and integration of the SmartZambia portal.",
+            "Implement cybersecurity protocols and optimize system performance.",
+            "Provide technical support to ensure seamless digital operations."
+        ]
+    },
+    {
         title: "Software Engineer for AI Training Data",
-        company: "Outlier AI",
-        duration: "Aug 2024 – Jan 2025",
+        company: "Outlier",
+        duration: "2024 – Feb 2024",
         details: [
             "Evaluated AI-generated code quality and provided human-readable summaries.",
             "Solved coding problems with functional and efficient solutions.",
@@ -62,23 +72,33 @@ const experiences = [
         ]
     },
     {
-        title: "Affiliate Marketing Manager",
-        company: "Betwinner",
-        duration: "Aug 2021 – Aug 2024",
+        title: "AI Training Methods Researcher (Intern)",
+        company: "Novosibirsk State Technical University",
+        duration: "May 2022 – Oct 2022",
         details: [
-            "Identified new client opportunities and established strong client relationships.",
-            "Developed bespoke marketing materials and ensured affiliates had access to tools."
+            "Tested new training algorithms specifically for Spiking Neural Networks (SNNs).",
+            "Conducted experiments to evaluate the performance of various SNN training approaches.",
+            "Managed and preprocessed datasets for training and evaluating SNN models."
         ]
     },
     {
-        title: "System Administrator",
+        title: "System Administrator (Intern)",
         company: "Pensions and Insurance Authority, Zambia",
         duration: "May 2022 – Oct 2022",
         details: [
-            "Maintained and set up computer systems, network servers, and virtualization.",
-            "Provided technical documentation, performed data backups, and supported helpdesk services."
+            "Maintained and secured IT systems, optimized websites, and troubleshooted issues.",
+            "Provided ICT support and training to staff members."
         ]
-    }
+    },
+    {
+        title: "Software Engineer Intern",
+        company: "Kursk State University, Russia",
+        duration: "2019 – 2021",
+        details: [
+            "Built, tested, and optimized software in C++, Python, and C#.",
+            "Utilized automated debugging and performance enhancement techniques."
+        ]
+    },
 ];
 
 export default function Home() {
@@ -95,13 +115,13 @@ export default function Home() {
           className="rounded-full mx-auto mb-6 shadow-lg border-4 border-primary object-cover"
         />
         <h1 className="text-4xl md:text-5xl font-bold text-primary">
-          <TranslatedText text="Muzo Salimu" />
+          <TranslatedText text="Musonda Salimu" />
         </h1>
         <p className="text-xl md:text-2xl text-muted-foreground mt-2">
-          <TranslatedText text="Software Engineer | Tech Enthusiast | Educator" />
+          <TranslatedText text="IT Professional | Software Engineer | AI Enthusiast" />
         </p>
         <p className="max-w-2xl mx-auto mt-4 text-foreground">
-          <TranslatedText text="Passionate about leveraging technology to build innovative solutions, educate others, and create engaging digital experiences. Exploring the intersections of AI, web development, and marketing." />
+          <TranslatedText text="IT professional with an MSc in Informatics and System Administration experience. Skilled in Python, cybersecurity, and IT infrastructure management. Currently expanding expertise in Django and AI tools to build innovative solutions." />
         </p>
         <div className="mt-8 flex justify-center gap-4">
           <Button asChild size="lg">
@@ -126,9 +146,9 @@ export default function Home() {
                 className="rounded-lg shadow-xl object-cover"
               />
               <div className="text-lg text-muted-foreground space-y-4">
-                  <p><TranslatedText text="I am a versatile and experienced professional with a Master's degree in Informatics and a passion for technology. My journey has taken me through system administration, affiliate marketing, and into the world of software engineering, where I specialize in AI and web development."/></p>
-                  <p><TranslatedText text="As a natural educator, I enjoy breaking down complex topics, whether it's tutoring Python programming or teaching specialized English. I am driven by curiosity and a desire to build things that are both useful and well-crafted."/></p>
-                  <p><TranslatedText text="Currently, I am focused on enhancing my skills in full-stack development and exploring the potential of AI agents to create smarter, more efficient applications."/></p>
+                  <p><TranslatedText text="I am a versatile and experienced professional with a Master's degree in Informatics and a passion for technology. My journey has taken me through system administration, software engineering, and cutting-edge AI research."/></p>
+                  <p><TranslatedText text="I thrive on solving complex problems, whether it's optimizing IT infrastructure, developing efficient code, or researching novel AI training algorithms for Spiking Neural Networks. I possess strong analytical and communication skills, allowing me to convey technical ideas clearly and work effectively in collaborative environments."/></p>
+                  <p><TranslatedText text="Driven by a willingness to learn, I am continuously exploring new technologies. I am currently focused on enhancing my skills in full-stack development with Django and leveraging AI to create smarter, more efficient applications."/></p>
               </div>
           </div>
       </section>
@@ -183,8 +203,8 @@ export default function Home() {
             <div key={index} className="mb-12 relative">
                 <div className="absolute left-[-34px] top-1.5 w-4 h-4 bg-primary rounded-full border-4 border-background"></div>
                 <p className="text-sm text-muted-foreground">{exp.duration}</p>
-                <h3 className="text-xl font-bold text-accent">{exp.title}</h3>
-                <p className="font-semibold text-foreground mb-2">{exp.company}</p>
+                <h3 className="text-xl font-bold text-accent"><TranslatedText text={exp.title}/></h3>
+                <p className="font-semibold text-foreground mb-2"><TranslatedText text={exp.company}/></p>
                 <ul className="list-disc list-inside text-muted-foreground space-y-1">
                   {exp.details.map((d, i) => <li key={i}><TranslatedText text={d} /></li>)}
                 </ul>
@@ -201,7 +221,7 @@ export default function Home() {
             <TranslatedText text="I'm always open to discussing new projects, creative ideas, or opportunities to be part of an ambitious vision. Feel free to reach out." />
           </p>
           <Button asChild size="lg" className="mb-8">
-            <a href="mailto:musondasalimu@outlook.com"><TranslatedText text="musondasalimu@outlook.com"/></a>
+            <a href="mailto:musondasalim@gmail.com"><TranslatedText text="musondasalim@gmail.com"/></a>
           </Button>
           <SocialIcons className="flex space-x-6 justify-center" />
         </div>

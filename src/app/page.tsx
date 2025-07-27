@@ -6,7 +6,7 @@ import Link from 'next/link';
 import TranslatedText from '@/app/components/translated-text';
 import { Button } from '@/components/ui/button';
 import { SocialIcons } from '@/components/social-icons';
-import { Briefcase, GraduationCap, Star, Award, Languages, BrainCircuit, Globe, Smartphone, Server, Network, Shield, Code, Mic, Gamepad2, Film, Camera, ArrowRight, BookMark } from 'lucide-react';
+import { Briefcase, GraduationCap, Star, Award, Languages, BrainCircuit, Globe, Smartphone, Server, Network, Shield, Code, Mic, Gamepad2, Film, Camera, ArrowRight, BookMark, Download } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
@@ -166,12 +166,18 @@ export default function Home() {
         <p className="max-w-2xl mx-auto mt-4 text-foreground">
           <TranslatedText text="IT professional with an MSc in Informatics and System Administration experience. Skilled in Python, cybersecurity, and IT infrastructure management. Currently expanding expertise in Django and AI tools to build innovative solutions." />
         </p>
-        <div className="mt-8 flex justify-center gap-4">
+        <div className="mt-8 flex flex-wrap justify-center gap-4">
           <Button asChild size="lg">
             <a href="mailto:musondasalim@gmail.com"><TranslatedText text="Get in Touch" /></a>
           </Button>
           <Button asChild size="lg" variant="outline">
             <Link href="#projects"><TranslatedText text="View My Work" /></Link>
+          </Button>
+          <Button asChild size="lg" variant="secondary">
+            <a href="/Muzo_Salimu_CV.pdf" download>
+                <Download className="mr-2 h-5 w-5" />
+                <TranslatedText text="Download CV" />
+            </a>
           </Button>
         </div>
       </section>
@@ -224,8 +230,8 @@ export default function Home() {
         <div className="space-y-12 max-w-4xl mx-auto">
           {projects.map((project) => (
              <div key={project.title} className="flex flex-col md:flex-row items-center gap-8 p-6 rounded-lg border bg-card/50 shadow-lg">
-                <div className="md:w-1/3">
-                     <Link href={project.link} target={project.link === '#' ? '_self' : '_blank'}>
+                <div className="md:w-1/3 flex-shrink-0">
+                     <Link href={project.link} target={project.link.startsWith('/') ? '_self' : '_blank'}>
                         <Image 
                             src={project.image} 
                             alt={project.title} 
@@ -243,7 +249,7 @@ export default function Home() {
                         {project.tags.map(tag => <Badge key={tag} variant="secondary"><TranslatedText text={tag} /></Badge>)}
                     </div>
                     <Button asChild>
-                        <Link href={project.link} target={project.link === '#' ? '_self' : '_blank'}>
+                        <Link href={project.link} target={project.link.startsWith('/') ? '_self' : '_blank'}>
                             <TranslatedText text={project.link === '#' ? 'View Details' : 'Visit Project'}/>
                         </Link>
                     </Button>

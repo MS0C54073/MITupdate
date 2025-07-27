@@ -87,7 +87,7 @@ export default function Home() {
       {/* Hero Section */}
       <section id="home" className="py-20 text-center">
         <Image
-          src="https://placehold.co/150x150.png"
+          src="https://drive.google.com/uc?id=1SEG-a3e_1xHx0-P7gD6MUysCSt6kg96U"
           alt="Muzo's Profile Picture"
           width={150}
           height={150}

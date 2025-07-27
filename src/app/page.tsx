@@ -52,6 +52,16 @@ const projects = [
 
 const experiences = [
     {
+        title: "Software Engineer for AI Training Data",
+        company: "Invisible Technologies",
+        duration: "2025 June –",
+        details: [
+            "Evaluated AI-generated code quality and provided human-readable summaries.",
+            "Solved coding problems with functional and efficient solutions.",
+            "Wrote robust test cases to confirm code effectiveness."
+        ]
+    },
+    {
         title: "System Administrator (Temporal Contract)",
         company: "Embassy of the Republic of Zambia in Moscow, Russia",
         duration: "2025",
@@ -64,7 +74,7 @@ const experiences = [
     {
         title: "Software Engineer for AI Training Data",
         company: "Outlier",
-        duration: "2024 – Feb 2024",
+        duration: "2024 – Feb 2025",
         details: [
             "Evaluated AI-generated code quality and provided human-readable summaries.",
             "Solved coding problems with functional and efficient solutions.",

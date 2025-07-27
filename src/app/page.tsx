@@ -148,7 +148,7 @@ export default function Home() {
           <h2 className="text-3xl font-bold text-center mb-12"><TranslatedText text="About Me"/></h2>
           <div className="flex flex-col md:flex-row items-center gap-10">
               <Image
-                src="https://placehold.co/300x400.png"
+                src="https://drive.google.com/uc?id=1SEG-a3e_1xHx0-P7gD6MUysCSt6kg96U"
                 alt="About Muzo"
                 width={300}
                 height={400}

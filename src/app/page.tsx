@@ -111,6 +111,39 @@ const experiences = [
     },
 ];
 
+const education = [
+    {
+        degree: "Master's of Science, Informatics and Computer Engineering",
+        university: "Novosibirsk State Technical University | Novosibirsk, Russia",
+        duration: "September 2022 - July 2024",
+    },
+    {
+        degree: "Diploma of Professional Retraining, Management in the Digital Economy",
+        university: "Novosibirsk State Technical University",
+        duration: "September 2023 - December 2023",
+    },
+    {
+        degree: "Diploma of Professional Retraining, Technological Entrepreneurship and Innovation Management",
+        university: "Novosibirsk State Technical University",
+        duration: "September 2023 - December 2023",
+    },
+    {
+        degree: "Diploma of Professional Retraining, Development of Digital Twins",
+        university: "Novosibirsk State Technical University",
+        duration: "September 2023 - December 2023",
+    },
+    {
+        degree: "Diploma of Professional Retraining, Management of High Tech Programs and Projects",
+        university: "Pskov State University",
+        duration: "September 2023 - December 2023",
+    },
+    {
+        degree: "Bachelor's of Science, Software and Administration of Information Systems",
+        university: "Kursk State University | Kursk, Russia",
+        duration: "September 2017 - July 2021",
+    },
+];
+
 export default function Home() {
   return (
     <div className="container mx-auto py-12 px-4 md:px-6 lg:px-8">
@@ -229,9 +262,25 @@ export default function Home() {
           ))}
         </div>
       </section>
+      
+      {/* Education Section */}
+      <section id="education" className="py-20 border-t bg-muted/50 rounded-lg">
+        <h2 className="text-3xl font-bold text-center mb-12"><TranslatedText text="Education" /></h2>
+        <div className="max-w-3xl mx-auto relative pl-8">
+          <div className="absolute left-0 top-0 h-full w-0.5 bg-border"></div>
+          {education.map((edu, index) => (
+            <div key={index} className="mb-12 relative">
+              <div className="absolute left-[-34px] top-1.5 w-4 h-4 bg-primary rounded-full border-4 border-background"></div>
+              <p className="text-sm text-muted-foreground">{edu.duration}</p>
+              <h3 className="text-xl font-bold text-accent"><TranslatedText text={edu.degree}/></h3>
+              <p className="font-semibold text-foreground"><TranslatedText text={edu.university}/></p>
+            </div>
+          ))}
+        </div>
+      </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-20 border-t bg-muted/50 rounded-lg">
+      <section id="contact" className="py-20 border-t">
         <div className="text-center max-w-2xl mx-auto">
           <h2 className="text-3xl font-bold"><TranslatedText text="Let's Connect" /></h2>
           <p className="text-muted-foreground mt-4 mb-8">

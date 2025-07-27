@@ -6,7 +6,7 @@ import Link from 'next/link';
 import TranslatedText from '@/app/components/translated-text';
 import { Button } from '@/components/ui/button';
 import { SocialIcons } from '@/components/social-icons';
-import { Briefcase, GraduationCap, Star, Award, Languages, BrainCircuit, Globe, Smartphone, Server, Network, Shield, Code, Mic, Gamepad2, Film, Camera } from 'lucide-react';
+import { Briefcase, GraduationCap, Star, Award, Languages, BrainCircuit, Globe, Smartphone, Server, Network, Shield, Code, Mic, Gamepad2, Film, Camera, ArrowRight } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
@@ -135,7 +135,7 @@ export default function Home() {
         </p>
         <div className="mt-8 flex justify-center gap-4">
           <Button asChild size="lg">
-            <Link href="#contact"><TranslatedText text="Get in Touch" /></Link>
+            <a href="mailto:musondasalim@gmail.com"><TranslatedText text="Get in Touch" /></a>
           </Button>
           <Button asChild size="lg" variant="outline">
             <Link href="#projects"><TranslatedText text="View My Work" /></Link>
@@ -180,7 +180,14 @@ export default function Home() {
 
       {/* Projects Section */}
       <section id="projects" className="py-20 border-t">
-        <h2 className="text-3xl font-bold text-center mb-12"><TranslatedText text="Featured Projects" /></h2>
+        <div className="text-center mb-12">
+            <Button asChild size="lg" className="text-3xl font-bold h-auto py-3 px-6">
+                <Link href="https://github.com/MS0C54073" target="_blank">
+                    <TranslatedText text="Featured Projects" />
+                    <ArrowRight className="ml-3 h-6 w-6" />
+                </Link>
+            </Button>
+        </div>
         <div className="grid md:grid-cols-1 lg:grid-cols-3 gap-8">
           {projects.map((project) => (
             <Card key={project.title} className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col">

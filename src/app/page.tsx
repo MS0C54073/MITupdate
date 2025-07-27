@@ -28,7 +28,7 @@ const projects = [
     title: 'AI-Powered Portfolio Website',
     description: 'This very website, a dynamic personal portfolio featuring real-time, AI-powered language translation using Genkit, a modern tech stack with Next.js, and a fully responsive design.',
     tags: ['Next.js', 'React', 'TypeScript', 'Genkit', 'Tailwind CSS', 'Firebase'],
-    link: '#',
+    link: 'https://tinyurl.com/zedzareer',
     image: 'https://placehold.co/600x400.png',
     imageHint: 'modern website design'
   },
@@ -64,7 +64,7 @@ const experiences = [
     {
         title: "System Administrator (Temporal Contract)",
         company: "Embassy of the Republic of Zambia in Moscow, Russia",
-        duration: "2025 may- 2025 July",
+        duration: "2025 May – 2025 July",
         details: [
             "Maintain embassy IT systems and integration of the SmartZambia portal.",
             "Implement cybersecurity protocols and optimize system performance.",

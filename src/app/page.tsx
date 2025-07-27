@@ -222,23 +222,32 @@ export default function Home() {
             </Button>
         </div>
         <div className="space-y-12 max-w-4xl mx-auto">
-          {projects.map((project, index) => (
-            <div key={project.title} className="grid md:grid-cols-2 gap-8 items-center">
-              <div className={index % 2 === 0 ? 'md:order-1' : 'md:order-2'}>
-                <h3 className="text-2xl font-bold text-accent mb-2"><TranslatedText text={project.title} /></h3>
-                <p className="text-muted-foreground mb-4"><TranslatedText text={project.description} /></p>
-                <div className="flex flex-wrap gap-2 mb-4">
-                    {project.tags.map(tag => <Badge key={tag} variant="secondary"><TranslatedText text={tag} /></Badge>)}
+          {projects.map((project) => (
+             <div key={project.title} className="flex flex-col md:flex-row items-center gap-8 p-6 rounded-lg border bg-card/50 shadow-lg">
+                <div className="md:w-1/3">
+                     <Link href={project.link} target={project.link === '#' ? '_self' : '_blank'}>
+                        <Image 
+                            src={project.image} 
+                            alt={project.title} 
+                            width={400} 
+                            height={250} 
+                            data-ai-hint={project.imageHint} 
+                            className="rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 w-full h-auto object-cover"
+                        />
+                    </Link>
                 </div>
-                <Button asChild>
-                    <Link href={project.link} target={project.link === '#' ? '_self' : '_blank'}><TranslatedText text={project.link === '#' ? 'View Details' : 'Visit Project'/></Link>
-                </Button>
-              </div>
-              <div className={index % 2 === 0 ? 'md:order-2' : 'md:order-1'}>
-                <Link href={project.link} target={project.link === '#' ? '_self' : '_blank'}>
-                    <Image src={project.image} alt={project.title} width={600} height={400} data-ai-hint={project.imageHint} className="rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 w-full h-auto object-cover"/>
-                </Link>
-              </div>
+                <div className="md:w-2/3">
+                    <h3 className="text-2xl font-bold text-accent mb-2"><TranslatedText text={project.title} /></h3>
+                    <p className="text-muted-foreground mb-4"><TranslatedText text={project.description} /></p>
+                    <div className="flex flex-wrap gap-2 mb-4">
+                        {project.tags.map(tag => <Badge key={tag} variant="secondary"><TranslatedText text={tag} /></Badge>)}
+                    </div>
+                    <Button asChild>
+                        <Link href={project.link} target={project.link === '#' ? '_self' : '_blank'}>
+                            <TranslatedText text={project.link === '#' ? 'View Details' : 'Visit Project'}/>
+                        </Link>
+                    </Button>
+                </div>
             </div>
           ))}
         </div>

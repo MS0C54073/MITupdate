@@ -174,7 +174,7 @@ export default function Home() {
             <Link href="#projects"><TranslatedText text="View My Work" /></Link>
           </Button>
           <Button asChild size="lg" variant="secondary">
-            <a href="/Muzo_Salimu_CV.pdf" download>
+            <a href="/Muzo_Salimu_CV.pdf" download="Muzo_Salimu_CV.pdf">
                 <Download className="mr-2 h-5 w-5" />
                 <TranslatedText text="Download CV" />
             </a>

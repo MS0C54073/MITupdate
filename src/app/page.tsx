@@ -221,25 +221,25 @@ export default function Home() {
                 </Link>
             </Button>
         </div>
-        <div className="grid md:grid-cols-1 lg:grid-cols-3 gap-8">
-          {projects.map((project) => (
-            <Card key={project.title} className="overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col">
-                <Image src={project.image} alt={project.title} width={600} height={400} data-ai-hint={project.imageHint} className="w-full h-48 object-cover"/>
-                <CardHeader>
-                    <CardTitle><TranslatedText text={project.title} /></CardTitle>
-                </CardHeader>
-                <CardContent className="flex-grow">
-                    <p className="text-muted-foreground mb-4"><TranslatedText text={project.description} /></p>
-                    <div className="flex flex-wrap gap-2">
-                        {project.tags.map(tag => <Badge key={tag} variant="secondary"><TranslatedText text={tag} /></Badge>)}
-                    </div>
-                </CardContent>
-                <div className="p-6 pt-0">
-                    <Button asChild className="w-full">
-                        <Link href={project.link} target={project.link === '#' ? '_self' : '_blank'}><TranslatedText text={project.link === '#' ? 'View Details' : 'Visit Project'}/></Link>
-                    </Button>
+        <div className="space-y-12 max-w-4xl mx-auto">
+          {projects.map((project, index) => (
+            <div key={project.title} className="grid md:grid-cols-2 gap-8 items-center">
+              <div className={index % 2 === 0 ? 'md:order-1' : 'md:order-2'}>
+                <h3 className="text-2xl font-bold text-accent mb-2"><TranslatedText text={project.title} /></h3>
+                <p className="text-muted-foreground mb-4"><TranslatedText text={project.description} /></p>
+                <div className="flex flex-wrap gap-2 mb-4">
+                    {project.tags.map(tag => <Badge key={tag} variant="secondary"><TranslatedText text={tag} /></Badge>)}
                 </div>
-            </Card>
+                <Button asChild>
+                    <Link href={project.link} target={project.link === '#' ? '_self' : '_blank'}><TranslatedText text={project.link === '#' ? 'View Details' : 'Visit Project'/></Link>
+                </Button>
+              </div>
+              <div className={index % 2 === 0 ? 'md:order-2' : 'md:order-1'}>
+                <Link href={project.link} target={project.link === '#' ? '_self' : '_blank'}>
+                    <Image src={project.image} alt={project.title} width={600} height={400} data-ai-hint={project.imageHint} className="rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 w-full h-auto object-cover"/>
+                </Link>
+              </div>
+            </div>
           ))}
         </div>
       </section>

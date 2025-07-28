@@ -189,6 +189,13 @@ const references = [
         company: "TechMahindra Limited Zambia",
         email: "mwansa.kapoka@sc.com",
         phone: "+260 978980443"
+    },
+    {
+        name: "Allan Mwimbu",
+        title: "Supervior | First Secretary Political",
+        company: "Embassy of the Republic of Zambia in Moscow, Russia",
+        email: null,
+        phone: "+79855159011"
     }
 ];
 
@@ -381,10 +388,12 @@ export default function Home() {
                                 <span>{ref.email}</span>
                             </a>
                         )}
-                        <p className="flex items-center gap-2 text-sm text-muted-foreground">
-                            <Phone className="h-4 w-4" />
-                            <span>{ref.phone}</span>
-                        </p>
+                        {ref.phone && (
+                            <p className="flex items-center gap-2 text-sm text-muted-foreground">
+                                <Phone className="h-4 w-4" />
+                                <span>{ref.phone}</span>
+                            </p>
+                        )}
                     </CardContent>
                 </Card>
             ))}

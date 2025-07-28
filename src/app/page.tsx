@@ -6,8 +6,8 @@ import Link from 'next/link';
 import TranslatedText from '@/app/components/translated-text';
 import { Button } from '@/components/ui/button';
 import { SocialIcons } from '@/components/social-icons';
-import { Briefcase, GraduationCap, Star, Award, Languages, BrainCircuit, Globe, Smartphone, Server, Network, Shield, Code, Mic, Gamepad2, Film, Camera, ArrowRight, BookMark, Download } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Briefcase, GraduationCap, Star, Award, Languages, BrainCircuit, Globe, Smartphone, Server, Network, Shield, Code, Mic, Gamepad2, Film, Camera, ArrowRight, BookMark, Download, Mail, Phone, Users } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
 const skills = [
@@ -166,6 +166,30 @@ const certifications = [
     { title: 'Introduction to Cybersecurity Tools & Cyber Attacks', issuer: 'IBM', date: 'Feb 2022', credentialId: 'RJR6MQHGE65M' },
     { title: 'C++ (Basic) Certificate', issuer: 'HackerRank', date: 'Sep 2020', credentialId: 'DEA4F08FE541' },
     { title: 'Python (Basic) Certificate', issuer: 'HackerRank', date: 'Aug 2020', credentialId: '6E56080D33F3' }
+];
+
+const references = [
+    {
+        name: "Mwansa Kapoka",
+        title: "Team Leader",
+        company: "TechMahindra Limited Zambia",
+        email: "mwansa.kapoka@sc.com",
+        phone: "+260 978980443"
+    },
+    {
+        name: "Innocent Mukupa",
+        title: "ICT Manager",
+        company: "Pensions & Insurance Authority",
+        email: "Innocent.mukupa@pia.org.zm",
+        phone: "+260-211-251401 | +260-211-251405"
+    },
+    {
+        name: "Uraeva Elena Evgenievna",
+        title: "Senior Lecturer",
+        company: "Kursk State University",
+        email: "lenikus@yandex.ru",
+        phone: "+74712700556"
+    }
 ];
 
 export default function Home() {
@@ -337,6 +361,33 @@ export default function Home() {
                                 </div>
                             </div>
                         )}
+                    </CardContent>
+                </Card>
+            ))}
+        </div>
+      </section>
+
+       {/* References Section */}
+      <section id="references" className="py-20 border-t bg-muted/50 rounded-lg">
+        <h2 className="text-3xl font-bold text-center mb-12"><TranslatedText text="References"/></h2>
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {references.map((ref, index) => (
+                <Card key={index} className="flex flex-col">
+                    <CardHeader>
+                        <CardTitle className="text-xl text-primary">{ref.name}</CardTitle>
+                        <CardDescription>
+                            <TranslatedText text={ref.title}/> at <TranslatedText text={ref.company}/>
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex-grow space-y-2">
+                        <a href={`mailto:${ref.email}`} className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary">
+                            <Mail className="h-4 w-4" />
+                            <span>{ref.email}</span>
+                        </a>
+                        <p className="flex items-center gap-2 text-sm text-muted-foreground">
+                            <Phone className="h-4 w-4" />
+                            <span>{ref.phone}</span>
+                        </p>
                     </CardContent>
                 </Card>
             ))}

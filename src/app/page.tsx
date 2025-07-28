@@ -144,6 +144,36 @@ const education = [
     },
 ];
 
+const certifications = [
+    { title: 'EF SET English Certificate (C1 Advanced)', issuer: 'EF SET', date: 'Sep 2024' },
+    { title: 'Teacher Of English To Speakers Of Other Languages (TEFL)', issuer: 'Teacher Record', date: 'Sep 2023', credentialId: 'TR2672252278' },
+    { title: 'Automate Cybersecurity Tasks with Python', issuer: 'Google', date: 'Aug 2023', credentialId: 'C7XRV7CQNCQM', skills: ['PEP 8 style guide'] },
+    { title: 'Assets, Threats, and Vulnerabilities', issuer: 'Google', date: 'Aug 2023', credentialId: 'VX5TA2Q2S67K' },
+    { title: 'Connect and Protect: Networks and Network Security', issuer: 'Google', date: 'Aug 2023', credentialId: 'QTMMW72GVFNR' },
+    { title: 'Google Cybersecurity', issuer: 'Google', date: 'Aug 2023', credentialId: 'ZQRFL5JFN79Z', skills: ['SQL', 'SIEM', 'IDS', 'Linux', 'Python'] },
+    { title: 'Introduction to Artificial Intelligence (AI)', issuer: 'IBM', date: 'Aug 2023', credentialId: 'ZQRFL5JFN79Z' },
+    { title: 'Introduction to Cloud Computing', issuer: 'IBM', date: 'Aug 2023', credentialId: '6V7R3J56LE33' },
+    { title: 'Key Technologies for Business', issuer: 'IBM', date: 'Aug 2023', credentialId: 'ED6HPWDG6QVB' },
+    { title: 'Play It Safe: Manage Security Risks', issuer: 'Google', date: 'Aug 2023', credentialId: 'SM23C5AREJRM' },
+    { title: 'Put It to Work: Prepare for Cybersecurity Jobs', issuer: 'Google', date: 'Aug 2023', credentialId: 'LSZUYQUMHPP8' },
+    { title: 'Sound the Alarm: Detection and Response', issuer: 'Google', date: 'Aug 2023', credentialId: 'DBENMJKEDA46' },
+    { title: 'Tools of the Trade: Linux and SQL', issuer: 'Google', date: 'Aug 2023', credentialId: 'PMN4CB7GLMC7' },
+    { title: 'Cybersecurity Compliance Framework & System Administration', issuer: 'IBM', date: 'Jun 2022', credentialId: 'SARK6MHGJE2W' },
+    { title: 'Cybersecurity Roles, Processes & Operating System Security', issuer: 'IBM', date: 'Jun 2022', credentialId: '9SSFKD6DLP7N' },
+    { title: 'IT Fundamentals for Cybersecurity', issuer: 'IBM', date: 'Jun 2022', credentialId: 'BDSXYEGVZUWK', skills: ['Networking', 'Databases', 'Cybersecurity', 'OS Security', 'Cyber Attacks'] },
+    { title: 'Introduction to Cybersecurity Tools & Cyber Attacks', issuer: 'Coursera', date: 'Jun 2022' },
+    { title: 'Network Security & Database Vulnerabilities', issuer: 'IBM', date: 'Jun 2022', credentialId: 'NTDBPW657286' },
+    { title: 'Foundations of Digital Marketing and E-commerce', issuer: 'Google', date: 'May 2022', credentialId: 'F7MG9YAXM94Y' },
+    { title: 'Foundations of Project Management', issuer: 'Google', date: 'May 2022', credentialId: 'KBKA6QSQRLGV' },
+    { title: 'Crash Course on Python', issuer: 'Google', date: 'Feb 2022', credentialId: '739MZ344RHQ2' },
+    { title: 'Exploratory Data Analysis for Machine Learning', issuer: 'IBM', date: 'Feb 2022', credentialId: '65JUNKQNLLNE' },
+    { title: 'Foundations of User Experience (UX) Design', issuer: 'Google', date: 'Feb 2022', credentialId: 'LQUUB69CBRJU' },
+    { title: 'Foundations: Data, Data, Everywhere', issuer: 'Google', date: 'Feb 2022', credentialId: 'J5KRN8LFPNPK' },
+    { title: 'Introduction to Cybersecurity Tools & Cyber Attacks', issuer: 'IBM', date: 'Feb 2022', credentialId: 'RJR6MQHGE65M' },
+    { title: 'C++ (Basic) Certificate', issuer: 'HackerRank', date: 'Sep 2020', credentialId: 'DEA4F08FE541' },
+    { title: 'Python (Basic) Certificate', issuer: 'HackerRank', date: 'Aug 2020', credentialId: '6E56080D33F3' }
+];
+
 export default function Home() {
   return (
     <div className="container mx-auto py-12 px-4 md:px-6 lg:px-8">
@@ -295,13 +325,42 @@ export default function Home() {
       </section>
 
       {/* Certifications Section */}
-      <section id="certifications" className="py-20 border-t text-center">
-        <Button asChild size="lg" className="text-3xl font-bold h-auto py-3 px-6">
-            <Link href="https://www.coursera.org/user/d5bf15915278f56a6f96c3b5195c6d11" target="_blank">
-                <TranslatedText text="Licenses & Certifications" />
-                <ArrowRight className="ml-3 h-6 w-6" />
-            </Link>
-        </Button>
+      <section id="certifications" className="py-20 border-t">
+        <div className="text-center mb-12">
+            <Button asChild size="lg" className="text-3xl font-bold h-auto py-3 px-6">
+                <Link href="https://www.coursera.org/user/d5bf15915278f56a6f96c3b5195c6d11" target="_blank">
+                    <TranslatedText text="Licenses &amp; Certifications" />
+                    <ArrowRight className="ml-3 h-6 w-6" />
+                </Link>
+            </Button>
+        </div>
+        <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+            {certifications.map((cert, index) => (
+                <Card key={index} className="bg-card/50">
+                    <CardHeader>
+                        <CardTitle className="text-lg text-accent"><TranslatedText text={cert.title} /></CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-sm text-muted-foreground">
+                            <TranslatedText text="Issued by "/> <strong><TranslatedText text={cert.issuer}/></strong> - <TranslatedText text={cert.date}/>
+                        </p>
+                        {cert.credentialId && (
+                             <p className="text-xs text-muted-foreground mt-1">
+                                <TranslatedText text="Credential ID: "/> {cert.credentialId}
+                            </p>
+                        )}
+                        {cert.skills && (
+                            <div className="mt-2">
+                                <h4 className="text-xs font-semibold text-foreground mb-1"><TranslatedText text="Skills:"/></h4>
+                                <div className="flex flex-wrap gap-1">
+                                    {cert.skills.map(skill => <Badge key={skill} variant="secondary"><TranslatedText text={skill}/></Badge>)}
+                                </div>
+                            </div>
+                        )}
+                    </CardContent>
+                </Card>
+            ))}
+        </div>
       </section>
 
       {/* Contact Section */}

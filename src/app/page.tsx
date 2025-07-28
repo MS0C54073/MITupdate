@@ -27,26 +27,20 @@ const projects = [
   {
     title: 'AI-Powered Portfolio Website',
     description: 'This very website, a dynamic personal portfolio featuring real-time, AI-powered language translation using Genkit, a modern tech stack with Next.js, and a fully responsive design.',
-    tags: ['Next.js', 'React', 'TypeScript', 'Genkit', 'Tailwind CSS', 'Firebase'],
+    tags: ['Next.js', 'React', 'TypeScript', 'Genkit', 'Tailwind CSS'],
     link: 'https://tinyurl.com/zedzareer',
-    image: 'https://placehold.co/600x400.png',
-    imageHint: 'modern website design'
   },
   {
     title: 'E-commerce Platform MVP',
     description: 'Designed and built a minimum viable product for an e-commerce platform. Focused on RESTful API design, user authentication, and inventory management concepts.',
     tags: ['Node.js', 'Express', 'MongoDB', 'React'],
     link: '#',
-    image: 'https://placehold.co/600x400.png',
-    imageHint: 'online shopping cart'
   },
   {
     title: 'Affiliate Marketing Portal',
     description: 'A dedicated portal for an affiliate marketing campaign, featuring dynamic promotional content, region-specific links, and user engagement elements.',
     tags: ['Next.js', 'Marketing', 'UI/UX'],
     link: '/affiliate-marketing-manager',
-    image: 'https://placehold.co/600x400.png',
-    imageHint: 'marketing analytics dashboard'
   }
 ];
 
@@ -257,33 +251,19 @@ export default function Home() {
                 </Link>
             </Button>
         </div>
-        <div className="space-y-12 max-w-4xl mx-auto">
+        <div className="space-y-8 max-w-4xl mx-auto">
           {projects.map((project) => (
-             <div key={project.title} className="flex flex-col md:flex-row items-center gap-8 p-6 rounded-lg border bg-card/50 shadow-lg">
-                <div className="md:w-1/3 flex-shrink-0">
-                     <Link href={project.link} target={project.link.startsWith('/') ? '_self' : '_blank'}>
-                        <Image 
-                            src={project.image} 
-                            alt={project.title} 
-                            width={400} 
-                            height={250} 
-                            data-ai-hint={project.imageHint} 
-                            className="rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 w-full h-auto object-cover"
-                        />
+             <div key={project.title} className="p-6 rounded-lg border bg-card/50 shadow-lg">
+                <h3 className="text-2xl font-bold text-accent mb-2"><TranslatedText text={project.title} /></h3>
+                <p className="text-muted-foreground mb-4"><TranslatedText text={project.description} /></p>
+                <div className="flex flex-wrap gap-2 mb-4">
+                    {project.tags.map(tag => <Badge key={tag} variant="secondary"><TranslatedText text={tag} /></Badge>)}
+                </div>
+                <Button asChild>
+                    <Link href={project.link} target={project.link.startsWith('/') ? '_self' : '_blank'}>
+                        <TranslatedText text={project.link === '#' ? 'View Details' : 'Visit Project'}/>
                     </Link>
-                </div>
-                <div className="md:w-2/3">
-                    <h3 className="text-2xl font-bold text-accent mb-2"><TranslatedText text={project.title} /></h3>
-                    <p className="text-muted-foreground mb-4"><TranslatedText text={project.description} /></p>
-                    <div className="flex flex-wrap gap-2 mb-4">
-                        {project.tags.map(tag => <Badge key={tag} variant="secondary"><TranslatedText text={tag} /></Badge>)}
-                    </div>
-                    <Button asChild>
-                        <Link href={project.link} target={project.link.startsWith('/') ? '_self' : '_blank'}>
-                            <TranslatedText text={project.link === '#' ? 'View Details' : 'Visit Project'}/>
-                        </Link>
-                    </Button>
-                </div>
+                </Button>
             </div>
           ))}
         </div>

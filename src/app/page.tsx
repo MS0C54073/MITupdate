@@ -17,7 +17,7 @@ const skills = [
     { name: 'Next.js', icon: <Globe className="h-6 w-6" /> },
     { name: 'TypeScript', icon: <Code className="h-6 w-6" /> },
     { name: 'React', icon: <Globe className="h-6 w-6" /> },
-    { name: 'Firebase', icon: <Server className="h-6 w-6" /> },
+    { name: 'n8n', icon: <BrainCircuit className="h-6 w-6" /> },
     { name: 'Cybersecurity', icon: <Shield className="h-6 w-6" /> },
     { name: 'System Admin', icon: <Server className="h-6 w-6" /> },
     { name: 'Networking', icon: <Network className="h-6 w-6" /> },
@@ -64,7 +64,7 @@ const experiences = [
     {
         title: "System Administrator (Temporal Contract)",
         company: "Embassy of the Republic of Zambia in Moscow, Russia",
-        duration: "2025 May – 2025 July",
+        duration: "May 2024 – July 2024",
         details: [
             "Maintain embassy IT systems and integration of the SmartZambia portal.",
             "Implement cybersecurity protocols and optimize system performance.",

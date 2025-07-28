@@ -170,25 +170,25 @@ const certifications = [
 
 const references = [
     {
-        name: "Mwansa Kapoka",
-        title: "Team Leader",
-        company: "TechMahindra Limited Zambia",
-        email: "mwansa.kapoka@sc.com",
-        phone: "+260 978980443"
+        name: "Kaumba Samazaka",
+        title: "First Secretary Political",
+        company: "Embassy of the Republic of Zambia in Moscow, Russia",
+        email: null,
+        phone: "+79858902623"
     },
     {
         name: "Innocent Mukupa",
         title: "ICT Manager",
         company: "Pensions & Insurance Authority",
         email: "Innocent.mukupa@pia.org.zm",
-        phone: "+260-211-251401 | +260-211-251405"
+        phone: "+260-211-251401 | +260-211-251405 | Fax: +260-211-251492"
     },
     {
-        name: "Uraeva Elena Evgenievna",
-        title: "Senior Lecturer",
-        company: "Kursk State University",
-        email: "lenikus@yandex.ru",
-        phone: "+74712700556"
+        name: "Mwansa Kapoka",
+        title: "Team Leader",
+        company: "TechMahindra Limited Zambia",
+        email: "mwansa.kapoka@sc.com",
+        phone: "+260 978980443"
     }
 ];
 
@@ -268,12 +268,7 @@ export default function Home() {
       {/* Projects Section */}
       <section id="projects" className="py-20 border-t">
         <div className="text-center mb-12">
-            <Button asChild size="lg" className="text-3xl font-bold h-auto py-3 px-6">
-                <Link href="https://github.com/MS0C54073" target="_blank">
-                    <TranslatedText text="Featured Projects" />
-                    <ArrowRight className="ml-3 h-6 w-6" />
-                </Link>
-            </Button>
+            <h2 className="text-3xl font-bold"><TranslatedText text="Featured Projects" /></h2>
         </div>
         <div className="space-y-8 max-w-4xl mx-auto">
           {projects.map((project) => (
@@ -380,10 +375,12 @@ export default function Home() {
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="flex-grow space-y-2">
-                        <a href={`mailto:${ref.email}`} className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary">
-                            <Mail className="h-4 w-4" />
-                            <span>{ref.email}</span>
-                        </a>
+                        {ref.email && (
+                            <a href={`mailto:${ref.email}`} className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary">
+                                <Mail className="h-4 w-4" />
+                                <span>{ref.email}</span>
+                            </a>
+                        )}
                         <p className="flex items-center gap-2 text-sm text-muted-foreground">
                             <Phone className="h-4 w-4" />
                             <span>{ref.phone}</span>

@@ -145,7 +145,7 @@ const education = [
 ];
 
 const certifications = [
-    { title: 'EF SET English Certificate (C1 Advanced)', issuer: 'EF SET', date: 'Sep 2024' },
+    { title: 'EF SET English Certificate', issuer: 'EF SET', date: 'Sep 2024' },
     { title: 'Teacher Of English To Speakers Of Other Languages (TEFL)', issuer: 'Teacher Record', date: 'Sep 2023', credentialId: 'TR2672252278' },
     { title: 'Automate Cybersecurity Tasks with Python', issuer: 'Google', date: 'Aug 2023', credentialId: 'C7XRV7CQNCQM', skills: ['PEP 8 style guide'] },
     { title: 'Assets, Threats, and Vulnerabilities', issuer: 'Google', date: 'Aug 2023', credentialId: 'VX5TA2Q2S67K' },

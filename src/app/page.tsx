@@ -6,7 +6,7 @@ import Link from 'next/link';
 import TranslatedText from '@/app/components/translated-text';
 import { Button } from '@/components/ui/button';
 import { SocialIcons } from '@/components/social-icons';
-import { Briefcase, GraduationCap, Star, Award, Languages, BrainCircuit, Globe, Smartphone, Server, Network, Shield, Code, Mic, Gamepad2, Film, Camera, ArrowRight, BookMark, Download, Mail, Phone, Users } from 'lucide-react';
+import { Briefcase, GraduationCap, Star, Award, Languages, BrainCircuit, Globe, Smartphone, Server, Network, Shield, Code, Mic, Gamepad2, Film, Camera, ArrowRight, BookMark, Download, Mail, Phone, Users, ExternalLink } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
@@ -25,23 +25,37 @@ const skills = [
 
 const projects = [
   {
-    title: 'AI-Powered Portfolio Website',
-    description: 'This very website, a dynamic personal portfolio featuring real-time, AI-powered language translation using Genkit, a modern tech stack with Next.js, and a fully responsive design.',
-    tags: ['Next.js', 'React', 'TypeScript', 'Genkit', 'Tailwind CSS'],
-    link: 'https://tinyurl.com/zedzareer',
+    title: 'MULTI-VENDOR ECOMMERCE WEBSITE (FINAL YEAR PROJECT)',
+    link: 'https://github.com/MS0C54073/Final-Year-Project',
   },
   {
-    title: 'E-commerce Platform MVP',
-    description: 'Designed and built a minimum viable product for an e-commerce platform. Focused on RESTful API design, user authentication, and inventory management concepts.',
-    tags: ['Node.js', 'Express', 'MongoDB', 'React'],
-    link: '#',
+    title: 'TEXT FILES ARCHIVING PROGRAM (High-level language programming)',
+    link: 'https://github.com/MS0C54073/TEXT-FILES-ARCHIVING-PROGRAM-Cplusplus-Builder',
   },
   {
-    title: 'Affiliate Marketing Portal',
-    description: 'A dedicated portal for an affiliate marketing campaign, featuring dynamic promotional content, region-specific links, and user engagement elements.',
-    tags: ['Next.js', 'Marketing', 'UI/UX'],
-    link: '/affiliate-marketing-manager',
-  }
+    title: 'PBX SUBSCRIBERS (Data structures and algorithms)',
+    link: 'https://github.com/MS0C54073/QueueDatabaseCplusplus',
+  },
+  {
+    title: 'DEVELOPMENT OF A COMPILER (Theory of formal languages and translations)',
+    link: 'https://github.com/MS0C54073/Compiler',
+  },
+  {
+    title: 'STOPWATCH (COMPUTING SYSTEMS ARCHITECTURE)',
+    link: 'https://github.com/MS0C54073/Stopwatch-in-8051',
+  },
+  {
+    title: 'STOCK PRICE PREDICTION',
+    link: 'https://github.com/MS0C54073/Stocks-Price-Prediction-Python',
+  },
+  {
+    title: 'DETECTING FAKE NEWS WITH PYTHON',
+    link: 'https://github.com/MS0C54073/store-locator.git',
+  },
+  {
+    title: 'STORE-LOCATOR',
+    link: 'https://github.com/MS0C54073/store-locator',
+  },
 ];
 
 const experiences = [
@@ -274,23 +288,27 @@ export default function Home() {
 
       {/* Projects Section */}
       <section id="projects" className="py-20 border-t">
-        <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold"><TranslatedText text="Featured Projects" /></h2>
-        </div>
-        <div className="space-y-8 max-w-4xl mx-auto">
-          {projects.map((project) => (
-             <div key={project.title} className="p-6 rounded-lg border bg-card/50 shadow-lg">
-                <h3 className="text-2xl font-bold text-accent mb-2"><TranslatedText text={project.title} /></h3>
-                <p className="text-muted-foreground mb-4"><TranslatedText text={project.description} /></p>
-                <div className="flex flex-wrap gap-2 mb-4">
-                    {project.tags.map(tag => <Badge key={tag} variant="secondary"><TranslatedText text={tag} /></Badge>)}
-                </div>
-                <Button asChild>
-                    <Link href={project.link} target={project.link.startsWith('/') ? '_self' : '_blank'}>
-                        <TranslatedText text={project.link === '#' ? 'View Details' : 'Visit Project'}/>
-                    </Link>
-                </Button>
-            </div>
+        <h2 className="text-3xl font-bold text-center mb-12"><TranslatedText text="Projects" /></h2>
+        <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+          {projects.map((project, index) => (
+            <a 
+              key={index}
+              href={project.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group block"
+            >
+              <Card className="bg-card/50 hover:bg-accent/20 hover:border-primary transition-all duration-300 h-full">
+                <CardContent className="p-4 flex items-center gap-4">
+                  <ExternalLink className="h-5 w-5 text-primary flex-shrink-0" />
+                  <div>
+                    <h3 className="font-semibold text-accent group-hover:text-primary transition-colors">
+                      <TranslatedText text={project.title} />
+                    </h3>
+                  </div>
+                </CardContent>
+              </Card>
+            </a>
           ))}
         </div>
       </section>

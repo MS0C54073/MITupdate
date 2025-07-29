@@ -265,8 +265,8 @@ export default function Home() {
               />
               <div className="text-lg text-muted-foreground space-y-4">
                   <p><TranslatedText text="I am a versatile and experienced professional with a Master's degree in Informatics and a passion for technology. My journey has taken me through system administration, software engineering, and cutting-edge AI research."/></p>
-                  <p><TranslatedText text="I thrive on solving complex problems, whether it's optimizing IT infrastructure, developing efficient code, or researching novel AI training algorithms for Spiking Neural Networks. I possess strong analytical and communication skills, allowing me to convey technical ideas clearly and work effectively in collaborative environments."/></p>
-                  <p><TranslatedText text="Driven by a willingness to learn, I am continuously exploring new technologies. I am currently focused on enhancing my skills in full-stack development with Django and leveraging AI to create smarter, more efficient applications."/></p>
+                  <p><TranslatedText text="I thrive on solving complex problems, whether optimizing IT infrastructure or developing efficient code. But I'm most excited about the future of development. I'm actively exploring new AI-driven development paradigms like Vibe Coding and leveraging powerful automation tools like n8n to build smarter, more efficient applications."/></p>
+                  <p><TranslatedText text="Driven by a willingness to learn, I am continuously pushing the boundaries of what's possible, merging my skills in full-stack development and AI to create next-generation solutions."/></p>
               </div>
           </div>
       </section>
@@ -353,7 +353,7 @@ export default function Home() {
         <div className="text-center mb-12">
             <Button asChild size="lg" className="text-3xl font-bold h-auto py-3 px-6">
                 <Link href="https://www.coursera.org/user/d5bf15915278f56a6f96c3b5195c6d11" target="_blank">
-                    <TranslatedText text="Licenses &amp; Certifications" />
+                    <TranslatedText text="Licenses & Certifications" />
                     <ArrowRight className="ml-3 h-6 w-6" />
                 </Link>
             </Button>

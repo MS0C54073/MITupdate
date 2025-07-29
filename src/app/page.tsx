@@ -56,6 +56,10 @@ const projects = [
     title: 'STORE-LOCATOR',
     link: 'https://github.com/MS0C54073/store-locator',
   },
+  {
+    title: 'Career Connect Zambia (CCZ), personal project.',
+    link: 'https://github.com/MS0C54073/CCZ',
+  },
 ];
 
 const experiences = [

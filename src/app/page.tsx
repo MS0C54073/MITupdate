@@ -25,6 +25,10 @@ const skills = [
 
 const projects = [
   {
+    title: 'Career Connect Zambia (CCZ), personal project.',
+    link: 'https://github.com/MS0C54073/CCZ',
+  },
+  {
     title: 'MULTI-VENDOR ECOMMERCE WEBSITE (FINAL YEAR PROJECT)',
     link: 'https://github.com/MS0C54073/Final-Year-Project',
   },
@@ -55,10 +59,6 @@ const projects = [
   {
     title: 'STORE-LOCATOR',
     link: 'https://github.com/MS0C54073/store-locator',
-  },
-  {
-    title: 'Career Connect Zambia (CCZ), personal project.',
-    link: 'https://github.com/MS0C54073/CCZ',
   },
 ];
 
@@ -292,7 +292,14 @@ export default function Home() {
 
       {/* Projects Section */}
       <section id="projects" className="py-20 border-t">
-        <h2 className="text-3xl font-bold text-center mb-12"><TranslatedText text="Projects" /></h2>
+        <div className="text-center mb-12">
+            <Button asChild size="lg" className="text-3xl font-bold h-auto py-3 px-6">
+                <a href="https://github.com/MS0C54073" target="_blank" rel="noopener noreferrer">
+                    <TranslatedText text="Projects" />
+                    <ArrowRight className="ml-3 h-6 w-6" />
+                </a>
+            </Button>
+        </div>
         <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
           {projects.map((project, index) => (
             <a 

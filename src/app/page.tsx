@@ -245,7 +245,7 @@ export default function Home() {
             <a href="mailto:musondasalim@gmail.com"><TranslatedText text="Get in Touch" /></a>
           </Button>
           <Button asChild size="lg" variant="outline">
-            <a href="/Muzo_Salimu_CV.pdf" target="_blank" rel="noopener noreferrer">
+            <a href="/Muzo_Salimu_CV.pdf" download="Muzo_Salimu_CV.pdf" target="_blank" rel="noopener noreferrer">
                 <Eye className="mr-2 h-5 w-5" />
                 <TranslatedText text="Preview CV" />
             </a>

@@ -6,7 +6,7 @@ import Link from 'next/link';
 import TranslatedText from '@/app/components/translated-text';
 import { Button } from '@/components/ui/button';
 import { SocialIcons } from '@/components/social-icons';
-import { Briefcase, GraduationCap, Star, Award, Languages, BrainCircuit, Globe, Smartphone, Server, Network, Shield, Code, Mic, Gamepad2, Film, Camera, ArrowRight, BookMark, Download, Mail, Phone, Users, ExternalLink } from 'lucide-react';
+import { Briefcase, GraduationCap, Star, Award, Languages, BrainCircuit, Globe, Smartphone, Server, Network, Shield, Code, Mic, Gamepad2, Film, Camera, ArrowRight, BookMark, Download, Mail, Phone, Users, ExternalLink, Eye } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
@@ -244,7 +244,10 @@ export default function Home() {
             <a href="mailto:musondasalim@gmail.com"><TranslatedText text="Get in Touch" /></a>
           </Button>
           <Button asChild size="lg" variant="outline">
-            <Link href="#projects"><TranslatedText text="View My Work" /></Link>
+            <a href="/Muzo_Salimu_CV.pdf" target="_blank" rel="noopener noreferrer">
+                <Eye className="mr-2 h-5 w-5" />
+                <TranslatedText text="Preview CV" />
+            </a>
           </Button>
           <Button asChild size="lg" variant="secondary">
             <a href="/Muzo_Salimu_CV.pdf" download="Muzo_Salimu_CV.pdf">
@@ -259,14 +262,6 @@ export default function Home() {
       <section id="about" className="py-20 border-t">
           <h2 className="text-3xl font-bold text-center mb-12"><TranslatedText text="About Me"/></h2>
           <div className="flex flex-col md:flex-row items-center gap-10">
-              <Image
-                src="https://drive.google.com/uc?id=1SEG-a3e_1xHx0-P7gD6MUysCSt6kg96U"
-                alt="About Muzo"
-                width={300}
-                height={400}
-                data-ai-hint="professional portrait"
-                className="rounded-lg shadow-xl object-cover"
-              />
               <div className="text-lg text-muted-foreground space-y-4">
                   <p><TranslatedText text="I am a versatile and experienced professional with a Master's degree in Informatics and a passion for technology. My journey has taken me through system administration, software engineering, and cutting-edge AI research."/></p>
                   <p><TranslatedText text="I thrive on solving complex problems, whether optimizing IT infrastructure or developing efficient code. But I'm most excited about the future of development. I'm actively exploring new AI-driven development paradigms like Vibe Coding and leveraging powerful automation tools like n8n to build smarter, more efficient applications."/></p>
@@ -445,3 +440,5 @@ export default function Home() {
     </div>
   );
 }
+
+    

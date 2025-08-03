@@ -157,6 +157,7 @@ const education = [
 ];
 
 const certifications = [
+    { title: 'Introduction to Cybersecurity', issuer: 'SMART ZAMBIA INSTITUTE (Cisco Networking Academy)', date: 'Jul 2025' },
     { title: 'EF SET English Certificate', issuer: 'EF SET', date: 'Sep 2024' },
     { title: 'Teacher Of English To Speakers Of Other Languages (TEFL)', issuer: 'Teacher Record', date: 'Sep 2023', credentialId: 'TR2672252278' },
     { title: 'Automate Cybersecurity Tasks with Python', issuer: 'Google', date: 'Aug 2023', credentialId: 'C7XRV7CQNCQM', skills: ['PEP 8 style guide'] },
@@ -440,5 +441,7 @@ export default function Home() {
     </div>
   );
 }
+
+    
 
     

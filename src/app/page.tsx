@@ -156,6 +156,14 @@ const education = [
     },
 ];
 
+const awards = [
+    {
+        title: "WINNER of 'International Olympiad of the Financial University for Youth (Master's Degree - 2023-2024)'",
+        issuer: "Financial University",
+        date: "2024",
+    },
+];
+
 const certifications = [
     { title: 'Introduction to Cybersecurity', issuer: 'SMART ZAMBIA INSTITUTE (Cisco Networking Academy)', date: 'Jul 2025' },
     { title: 'EF SET English Certificate', issuer: 'EF SET', date: 'Sep 2024' },
@@ -355,6 +363,28 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Awards Section */}
+      <section id="awards" className="py-20 border-t">
+        <h2 className="text-3xl font-bold text-center mb-12"><TranslatedText text="Awards & Achievements"/></h2>
+        <div className="max-w-4xl mx-auto grid grid-cols-1 gap-6">
+            {awards.map((award, index) => (
+                <Card key={index} className="bg-card/50">
+                    <CardHeader>
+                        <div className="flex items-start gap-4">
+                            <Award className="h-8 w-8 text-accent flex-shrink-0 mt-1" />
+                            <div>
+                                <CardTitle className="text-lg text-accent"><TranslatedText text={award.title} /></CardTitle>
+                                <CardDescription className="mt-1">
+                                    <TranslatedText text="Awarded by "/> <strong><TranslatedText text={award.issuer}/></strong> - <TranslatedText text={award.date}/>
+                                </CardDescription>
+                            </div>
+                        </div>
+                    </CardHeader>
+                </Card>
+            ))}
+        </div>
+      </section>
+      
       {/* Certifications Section */}
       <section id="certifications" className="py-20 border-t">
         <div className="text-center mb-12">

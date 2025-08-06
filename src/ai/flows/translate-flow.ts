@@ -37,7 +37,6 @@ export async function translate(input: TranslateInput): Promise<TranslateOutput>
 
 const prompt = ai.definePrompt({
   name: 'translatePrompt',
-  model: 'googleai/gemini-1.5-flash',
   input: {
     schema: TranslateInputSchema,
   },

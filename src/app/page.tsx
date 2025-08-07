@@ -6,9 +6,10 @@ import Link from 'next/link';
 import TranslatedText from '@/app/components/translated-text';
 import { Button } from '@/components/ui/button';
 import { SocialIcons } from '@/components/social-icons';
-import { Briefcase, GraduationCap, Star, Award, Languages, BrainCircuit, Globe, Smartphone, Server, Network, Shield, Code, Mic, Gamepad2, Film, Camera, ArrowRight, BookMark, Download, Mail, Phone, Users, ExternalLink, Eye } from 'lucide-react';
+import { Briefcase, GraduationCap, Star, Award, Languages, BrainCircuit, Globe, Smartphone, Server, Network, Shield, Code, Mic, Gamepad2, Film, Camera, ArrowRight, BookMark, Download, Mail, Phone, Users, ExternalLink, Eye, Github } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
 
 const skills = [
     { name: 'Python', icon: <Code className="h-6 w-6" /> },
@@ -27,6 +28,7 @@ const projects = [
   {
     title: 'Career Connect Zambia (CCZ), personal project.',
     link: 'https://github.com/MS0C54073/CCZ',
+    demo: 'https://shorturl.at/jLk8n',
   },
   {
     title: 'MULTI-VENDOR ECOMMERCE WEBSITE (FINAL YEAR PROJECT)',
@@ -305,26 +307,70 @@ export default function Home() {
             </Button>
         </div>
         <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
-          {projects.map((project, index) => (
-            <a 
-              key={index}
-              href={project.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group block"
-            >
-              <Card className="bg-card/50 hover:bg-accent/20 hover:border-primary transition-all duration-300 h-full">
-                <CardContent className="p-4 flex items-center gap-4">
-                  <ExternalLink className="h-5 w-5 text-primary flex-shrink-0" />
-                  <div>
-                    <h3 className="font-semibold text-accent group-hover:text-primary transition-colors">
-                      <TranslatedText text={project.title} />
-                    </h3>
-                  </div>
-                </CardContent>
-              </Card>
-            </a>
-          ))}
+          {projects.map((project, index) => {
+            if (project.demo) {
+              return (
+                <Card key={index} className="bg-card/50 hover:bg-accent/20 hover:border-primary transition-all duration-300 h-full flex flex-col">
+                  <CardContent className="p-4 flex-grow flex flex-col justify-between">
+                    <div>
+                      <h3 className="font-semibold text-accent group-hover:text-primary transition-colors">
+                        <TranslatedText text={project.title} />
+                      </h3>
+                    </div>
+                    <div className="mt-4">
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button variant="outline" className="w-full"><TranslatedText text="View Project" /></Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle><TranslatedText text={project.title} /></DialogTitle>
+                            <DialogDescription>
+                              <TranslatedText text="View the project's source code on GitHub or check out the live demo." />
+                            </DialogDescription>
+                          </DialogHeader>
+                          <DialogFooter className="sm:justify-center gap-4">
+                             <Button asChild>
+                                <a href={project.link} target="_blank" rel="noopener noreferrer">
+                                  <Github className="mr-2 h-4 w-4" />
+                                  <TranslatedText text="View on GitHub" />
+                                </a>
+                              </Button>
+                              <Button asChild variant="secondary">
+                                <a href={project.demo} target="_blank" rel="noopener noreferrer">
+                                  <ExternalLink className="mr-2 h-4 w-4" />
+                                  <TranslatedText text="View Demo" />
+                                </a>
+                              </Button>
+                          </DialogFooter>
+                        </DialogContent>
+                      </Dialog>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            }
+            return (
+              <a 
+                key={index}
+                href={project.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group block"
+              >
+                <Card className="bg-card/50 hover:bg-accent/20 hover:border-primary transition-all duration-300 h-full">
+                  <CardContent className="p-4 flex items-center gap-4">
+                    <ExternalLink className="h-5 w-5 text-primary flex-shrink-0" />
+                    <div>
+                      <h3 className="font-semibold text-accent group-hover:text-primary transition-colors">
+                        <TranslatedText text={project.title} />
+                      </h3>
+                    </div>
+                  </CardContent>
+                </Card>
+              </a>
+            )
+          })}
         </div>
       </section>
 
@@ -471,7 +517,5 @@ export default function Home() {
     </div>
   );
 }
-
-    
 
     

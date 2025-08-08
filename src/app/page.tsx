@@ -6,10 +6,16 @@ import Link from 'next/link';
 import TranslatedText from '@/app/components/translated-text';
 import { Button } from '@/components/ui/button';
 import { SocialIcons } from '@/components/social-icons';
-import { Briefcase, GraduationCap, Star, Award, Languages, BrainCircuit, Globe, Smartphone, Server, Network, Shield, Code, Mic, Gamepad2, Film, Camera, ArrowRight, BookMark, Download, Mail, Phone, Users, ExternalLink, Eye, Github } from 'lucide-react';
+import { Briefcase, GraduationCap, Star, Award, Languages, BrainCircuit, Globe, Smartphone, Server, Network, Shield, Code, Mic, Gamepad2, Film, Camera, ArrowRight, BookMark, Download, Mail, Phone, Users, ExternalLink, Eye, Github, ChevronDown } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+
 
 const skills = [
     { name: 'Python', icon: <Code className="h-6 w-6" /> },
@@ -317,34 +323,28 @@ export default function Home() {
                         <TranslatedText text={project.title} />
                       </h3>
                     </div>
-                    <div className="mt-4">
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button variant="outline" className="w-full"><TranslatedText text="View Project" /></Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                          <DialogHeader>
-                            <DialogTitle><TranslatedText text={project.title} /></DialogTitle>
-                            <DialogDescription>
-                              <TranslatedText text="View the project's source code on GitHub or check out the live demo." />
-                            </DialogDescription>
-                          </DialogHeader>
-                          <DialogFooter className="sm:justify-center gap-4">
-                             <Button asChild>
-                                <a href={project.link} target="_blank" rel="noopener noreferrer">
-                                  <Github className="mr-2 h-4 w-4" />
-                                  <TranslatedText text="View on GitHub" />
-                                </a>
-                              </Button>
-                              <Button asChild variant="secondary">
-                                <a href={project.demo} target="_blank" rel="noopener noreferrer">
-                                  <ExternalLink className="mr-2 h-4 w-4" />
-                                  <TranslatedText text="View Demo" />
-                                </a>
-                              </Button>
-                          </DialogFooter>
-                        </DialogContent>
-                      </Dialog>
+                    <div className="mt-4 flex">
+                        <Button asChild variant="outline" className="flex-grow rounded-r-none focus:z-10">
+                           <a href={project.link} target="_blank" rel="noopener noreferrer">
+                              <Github className="mr-2 h-4 w-4" />
+                              <TranslatedText text="View GitHub" />
+                            </a>
+                        </Button>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="outline" size="icon" className="-ml-px rounded-l-none focus:z-10">
+                                    <ChevronDown className="h-4 w-4" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuItem asChild>
+                                    <a href={project.demo} target="_blank" rel="noopener noreferrer">
+                                        <ExternalLink className="mr-2 h-4 w-4" />
+                                        <TranslatedText text="Live Demo" />
+                                    </a>
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </div>
                   </CardContent>
                 </Card>
@@ -517,5 +517,3 @@ export default function Home() {
     </div>
   );
 }
-
-    

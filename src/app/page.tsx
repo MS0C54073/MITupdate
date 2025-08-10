@@ -37,6 +37,10 @@ const projects = [
     demo: 'https://shorturl.at/jLk8n',
   },
   {
+    title: 'Circuit Minds Web',
+    link: 'https://github.com/MS0C54073/CM_Electronics',
+  },
+  {
     title: 'MULTI-VENDOR ECOMMERCE WEBSITE (FINAL YEAR PROJECT)',
     link: 'https://github.com/MS0C54073/Final-Year-Project',
   },

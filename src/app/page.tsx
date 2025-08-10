@@ -511,7 +511,9 @@ export default function Home() {
           <Button asChild size="lg" className="mb-8">
             <a href="mailto:musondasalim@gmail.com"><TranslatedText text="musondasalim@gmail.com"/></a>
           </Button>
-          <SocialIcons className="flex space-x-6 justify-center" />
+          <div className="flex space-x-6 justify-center">
+            <TranslatedText text="Find me on:" />
+          </div>
         </div>
       </section>
     </div>

@@ -301,7 +301,6 @@ export default function AffiliateMarketingManagerPage() {
       </main>
        <footer className="text-center py-6 border-t border-border">
          <div className="flex flex-col items-center gap-4">
-            <SocialIcons className="flex space-x-4 justify-center" />
             <Button variant="link" asChild>
             <Link href="/">
                 <TranslatedText text="Return to Homepage" />

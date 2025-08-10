@@ -2,6 +2,7 @@
 import type {Metadata, Viewport} from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
+import './social-bar.css';
 import {ModeToggle} from '@/components/mode-toggle';
 import {ThemeProvider} from '@/components/theme-provider';
 import {TranslationProvider} from './translator';
@@ -17,12 +18,11 @@ import { AuthProvider } from './auth-context';
 import AuthNav from './components/auth-nav';
 import Link from 'next/link';
 import { MuzoInTechLogo } from '@/components/icons';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Construction } from 'lucide-react';
-import TranslatedText from './components/translated-text';
+import { SocialIcons } from '@/components/social-icons';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Menu } from 'lucide-react';
+import TranslatedText from './components/translated-text';
 
 
 const inter = Inter({
@@ -174,6 +174,7 @@ export default function RootLayout({
                   </div>
 
                   <ViewModeWrapper>
+                     <SocialIcons className="social-bar" />
                     <main className="pt-20">
                         {children}
                     </main>

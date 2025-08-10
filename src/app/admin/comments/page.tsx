@@ -11,7 +11,6 @@ import { useEffect, useState } from 'react';
 import { db } from '@/lib/firebase';
 import { collection, getDocs, orderBy, query, Timestamp, limit, startAfter, type QueryDocumentSnapshot, type DocumentData } from 'firebase/firestore';
 import type { DisplayComment } from '@/lib/types'; 
-import { SocialIcons } from '@/components/social-icons';
 import AuthModal from '@/app/components/auth-modal';
 
 export default function AdminCommentsPage() {
@@ -208,7 +207,6 @@ export default function AdminCommentsPage() {
       </main>
       <footer className="text-center py-6 border-t border-border">
         <div className="flex flex-col items-center gap-4">
-            <SocialIcons className="flex space-x-4 justify-center" />
             <Button variant="link" asChild>
             <Link href="/admin/dashboard">
                 <TranslatedText text="Return to Dashboard" />

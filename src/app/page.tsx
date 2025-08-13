@@ -177,6 +177,7 @@ const awards = [
 ];
 
 const certifications = [
+    { title: 'AI Agents and Agentic AI in Python: Powered by Generative AI', issuer: 'Vanderbilt University', date: 'Aug 2025', credentialId: 'K42YL24QMRT3' },
     { title: 'Introduction to Cybersecurity', issuer: 'SMART ZAMBIA INSTITUTE (Cisco Networking Academy)', date: 'Jul 2025' },
     { title: 'EF SET English Certificate', issuer: 'EF SET', date: 'Sep 2024' },
     { title: 'Teacher Of English To Speakers Of Other Languages (TEFL)', issuer: 'Teacher Record', date: 'Sep 2023', credentialId: 'TR2672252278' },

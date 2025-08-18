@@ -214,6 +214,13 @@ const certifications = [
 
 const references = [
     {
+        name: "Prof. Aaron B. Zyambo",
+        title: "CEO & Lead Consultant",
+        company: "Mega Vision Logistics Int'l Ltd",
+        email: "abzyambo@yahoo.com",
+        phone: "+260 97 9793999"
+    },
+    {
         name: "Kaumba Samazaka",
         title: "First Secretary Political",
         company: "Embassy of the Republic of Zambia in Moscow, Russia",

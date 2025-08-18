@@ -2,7 +2,7 @@
 
 ## About Me (Project AIM)
 
-This project is a dynamic and interactive personal portfolio website for Musonda Salimu, an IT Professional, Software Engineer, and AI Enthusiast. It's designed to showcase a comprehensive overview of my skills, projects, and professional experience.
+This project is a dynamic and interactive personal portfolio website , I am an IT Professional, Software Engineer, and AI Enthusiast. It's designed to showcase a comprehensive overview of my skills, projects, and professional experience.
 
 Key features of this website include:
 -   **AI-Powered Translations**: The entire site can be translated into multiple languages in real-time using Google's generative AI.

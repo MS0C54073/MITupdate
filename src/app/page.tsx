@@ -620,11 +620,23 @@ export default function Home() {
           <p className="text-muted-foreground mt-4 mb-8">
             <TranslatedText text="I'm always open to discussing new projects, creative ideas, or opportunities to be part of an ambitious vision. Feel free to reach out." />
           </p>
-          <Button asChild size="lg" className="mb-8">
-            <a href="mailto:musondasalim@gmail.com"><TranslatedText text="musondasalim@gmail.com"/></a>
-          </Button>
+          <div className="flex flex-col items-center gap-4 mb-8">
+            <Button asChild size="lg">
+              <a href="mailto:musondasalim@gmail.com"><TranslatedText text="musondasalim@gmail.com"/></a>
+            </Button>
+            <div className="flex flex-col sm:flex-row gap-x-6 gap-y-2 text-muted-foreground">
+              <a href="tel:+260977288260" className="flex items-center gap-2 hover:text-primary">
+                <Phone className="h-4 w-4" />
+                <span>+260977288260</span>
+              </a>
+              <a href="tel:+79014213578" className="flex items-center gap-2 hover:text-primary">
+                <Phone className="h-4 w-4" />
+                <span>+79014213578</span>
+              </a>
+            </div>
+          </div>
           <div className="flex space-x-6 justify-center">
-            <TranslatedText text="Find me on:" />
+            <SocialIcons className="flex space-x-4 justify-center" />
           </div>
         </div>
       </section>

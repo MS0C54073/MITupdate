@@ -6,7 +6,7 @@ import Link from 'next/link';
 import TranslatedText from '@/app/components/translated-text';
 import { Button } from '@/components/ui/button';
 import { SocialIcons } from '@/components/social-icons';
-import { Briefcase, GraduationCap, Star, Award, Languages, BrainCircuit, Globe, Smartphone, Server, Network, Shield, Code, Mic, Gamepad2, Film, Camera, ArrowRight, BookMark, Download, Mail, Phone, Users, ExternalLink, Eye, Github, ChevronDown } from 'lucide-react';
+import { Briefcase, GraduationCap, Star, Award, Languages, BrainCircuit, Globe, Smartphone, Server, Network, Shield, Code, Mic, Gamepad2, Film, Camera, ArrowRight, BookMark, Download, Mail, Phone, Users, ExternalLink, Eye, Github, ChevronDown, Loader2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -15,6 +15,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { jsPDF } from 'jspdf';
+import { useState } from 'react';
+import { getAnalytics, logEvent } from "firebase/analytics";
+import { app } from '@/lib/firebase';
 
 
 const skills = [
@@ -240,6 +244,113 @@ const references = [
 ];
 
 export default function Home() {
+    const [isGenerating, setIsGenerating] = useState(false);
+
+    const generateCv = (outputType: 'preview' | 'download') => {
+        setIsGenerating(true);
+
+        try {
+            const analytics = getAnalytics(app);
+            logEvent(analytics, 'cv_generated', {
+                type: outputType,
+            });
+
+            const doc = new jsPDF();
+            const pageWidth = doc.internal.pageSize.getWidth();
+            const margin = 20;
+            const contentWidth = pageWidth - margin * 2;
+            let y = 20;
+
+            // --- Header ---
+            doc.setFontSize(22);
+            doc.setFont('helvetica', 'bold');
+            doc.text("Musonda Salimu", pageWidth / 2, y, { align: 'center' });
+            y += 8;
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'normal');
+            doc.text("IT Professional | Software Engineer | AI Enthusiast", pageWidth / 2, y, { align: 'center' });
+            y += 6;
+            doc.text("musondasalim@gmail.com | +7 (901) 421-3578", pageWidth / 2, y, { align: 'center' });
+            y += 10;
+            doc.line(margin, y, pageWidth - margin, y); // Horizontal line
+            y += 10;
+            
+            // --- About Section ---
+            doc.setFontSize(16);
+            doc.setFont('helvetica', 'bold');
+            doc.text("About Me", margin, y);
+            y += 8;
+            doc.setFontSize(11);
+            doc.setFont('helvetica', 'normal');
+            const aboutText = "IT professional with an MSc in Informatics and System Administration experience. Skilled in Python, cybersecurity, and IT infrastructure management. Currently expanding expertise in Django and AI tools to build innovative solutions.";
+            const splitAbout = doc.splitTextToSize(aboutText, contentWidth);
+            doc.text(splitAbout, margin, y);
+            y += (splitAbout.length * 5) + 10;
+
+            // --- Skills Section ---
+            doc.setFontSize(16);
+            doc.setFont('helvetica', 'bold');
+            doc.text("Skills", margin, y);
+            y += 8;
+            doc.setFontSize(11);
+            doc.setFont('helvetica', 'normal');
+            const skillsText = skills.map(s => s.name).join(' • ');
+            const splitSkills = doc.splitTextToSize(skillsText, contentWidth);
+            doc.text(splitSkills, margin, y);
+            y += (splitSkills.length * 5) + 10;
+
+            // --- Work Experience ---
+            doc.setFontSize(16);
+            doc.setFont('helvetica', 'bold');
+            doc.text("Work Experience", margin, y);
+            y += 8;
+            experiences.forEach(exp => {
+                doc.setFontSize(12);
+                doc.setFont('helvetica', 'bold');
+                doc.text(exp.title, margin, y);
+                doc.setFontSize(11);
+                doc.setFont('helvetica', 'italic');
+                doc.text(`${exp.company} | ${exp.duration}`, margin, y += 5);
+                doc.setFont('helvetica', 'normal');
+                exp.details.forEach(detail => {
+                    const splitDetail = doc.splitTextToSize(`• ${detail}`, contentWidth - 5);
+                    doc.text(splitDetail, margin + 5, y += 6);
+                    y += (splitDetail.length - 1) * 5;
+                });
+                y += 8;
+            });
+
+            // --- Education ---
+            if (y > 250) { doc.addPage(); y = 20; }
+            doc.setFontSize(16);
+            doc.setFont('helvetica', 'bold');
+            doc.text("Education", margin, y);
+            y += 8;
+            education.forEach(edu => {
+                doc.setFontSize(12);
+                doc.setFont('helvetica', 'bold');
+                doc.text(edu.degree, margin, y);
+                doc.setFontSize(11);
+                doc.setFont('helvetica', 'italic');
+                doc.text(`${edu.university} | ${edu.duration}`, margin, y += 5);
+                y += 8;
+            });
+
+
+            if (outputType === 'preview') {
+                doc.output('dataurlnewwindow');
+            } else {
+                doc.save('My_CV.pdf');
+            }
+        } catch (error) {
+            console.error("Error generating PDF:", error);
+            // Optionally, show a toast notification for the error
+        } finally {
+            setIsGenerating(false);
+        }
+    };
+
+
   return (
     <div className="container mx-auto py-12 px-4 md:px-6 lg:px-8">
       {/* Hero Section */}
@@ -265,18 +376,14 @@ export default function Home() {
           <Button asChild size="lg">
             <a href="mailto:musondasalim@gmail.com"><TranslatedText text="Get in Touch" /></a>
           </Button>
-          <Button asChild size="lg" variant="outline">
-            <a href="/Muzo_Salimu_CV.pdf" target="_blank" rel="noopener noreferrer">
-              <Eye className="mr-2 h-5 w-5" />
-              <TranslatedText text="Preview CV" />
-            </a>
-          </Button>
-          <Button asChild size="lg" variant="secondary">
-            <a href="/Muzo_Salimu_CV.pdf" download>
-              <Download className="mr-2 h-5 w-5" />
-              <TranslatedText text="Download CV" />
-            </a>
-          </Button>
+           <Button onClick={() => generateCv('preview')} size="lg" variant="outline" disabled={isGenerating}>
+                {isGenerating ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Eye className="mr-2 h-5 w-5" />}
+                <TranslatedText text="Preview CV" />
+            </Button>
+            <Button onClick={() => generateCv('download')} size="lg" variant="secondary" disabled={isGenerating}>
+                {isGenerating ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Download className="mr-2 h-5 w-5" />}
+                <TranslatedText text="Download CV" />
+            </Button>
         </div>
       </section>
 

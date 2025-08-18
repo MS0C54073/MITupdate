@@ -6,7 +6,7 @@ import Link from 'next/link';
 import TranslatedText from '@/app/components/translated-text';
 import { Button } from '@/components/ui/button';
 import { SocialIcons } from '@/components/social-icons';
-import { Briefcase, GraduationCap, Star, Award, Languages, BrainCircuit, Globe, Smartphone, Server, Network, Shield, Code, Mic, Gamepad2, Film, Camera, ArrowRight, BookMark, Download, Mail, Phone, Users, ExternalLink, Eye, Github, ChevronDown, Loader2 } from 'lucide-react';
+import { Briefcase, GraduationCap, Star, Award, Languages, BrainCircuit, Globe, Smartphone, Server, Network, Shield, Code, Mic, Gamepad2, Film, Camera, ArrowRight, BookMark, Download, Mail, Phone, Users, ExternalLink, Eye, Github, ChevronDown, Loader2, Check } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -16,9 +16,20 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { jsPDF } from 'jspdf';
-import { useState } from 'react';
+import { useState, type ComponentType } from 'react';
 import { getAnalytics, logEvent } from "firebase/analytics";
-import { app } from '@/lib/firebase';
+import { app, db, storage } from '@/lib/firebase';
+import { useForm, type SubmitHandler } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { useToast } from '@/hooks/use-toast';
+import { cn } from '@/lib/utils';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import type { Order } from '@/lib/types';
 
 
 const skills = [
@@ -250,8 +261,72 @@ const references = [
     }
 ];
 
+const orderSchema = z.object({
+  name: z.string().min(1, { message: 'Name is required' }),
+  email: z.string().email({ message: 'Invalid email address' }).optional().or(z.literal('')),
+  phone: z.string().optional(),
+  details: z.string().min(10, { message: 'Please provide some details about your project.' }),
+  attachment: z.any().optional(), 
+});
+type OrderFormData = z.infer<typeof orderSchema>;
+
+
 export default function Home() {
     const [isGenerating, setIsGenerating] = useState(false);
+    const { toast } = useToast();
+    const [orderStatus, setOrderStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+
+    const { register, handleSubmit, reset, formState: { errors } } = useForm<OrderFormData>({
+      resolver: zodResolver(orderSchema),
+      defaultValues: {
+        name: '',
+        email: '',
+        phone: '',
+        details: '',
+        attachment: null,
+      }
+    });
+
+    const onOrderSubmit: SubmitHandler<OrderFormData> = async (data) => {
+      setOrderStatus('submitting');
+      try {
+        const file = data.attachment?.[0];
+        let attachmentName = null;
+        let attachmentUrl = null;
+
+        if (file) {
+          attachmentName = file.name;
+          const storageRef = ref(storage, `orders/${Date.now()}_${attachmentName}`);
+          const uploadTask = await uploadBytes(storageRef, file);
+          attachmentUrl = await getDownloadURL(uploadTask.ref);
+        }
+        
+        const orderPayload: Omit<Order, 'id'> = {
+          name: data.name,
+          email: data.email || '', 
+          phone: data.phone || '', 
+          details: data.details || '', 
+          status: 'pending',
+          attachmentName: attachmentName,
+          attachmentUrl: attachmentUrl,
+          timestamp: serverTimestamp(),
+        };
+        const docRef = await addDoc(collection(db, 'orders'), orderPayload);
+        toast({ 
+          variant: 'success', 
+          title: 'Success!', 
+          description: `Your request has been submitted! Order ID: ${docRef.id}` 
+        });
+        setOrderStatus('success');
+        reset(); 
+        setTimeout(() => setOrderStatus('idle'), 3000);
+      } catch (error) {
+        console.error("Error submitting order: ", error);
+        toast({ variant: 'destructive', title: 'Error', description: 'Failed to submit your request. Please try again.'});
+        setOrderStatus('error');
+        setTimeout(() => setOrderStatus('idle'), 3000);
+      }
+    };
 
     const generateCv = (outputType: 'preview' | 'download') => {
         setIsGenerating(true);
@@ -695,6 +770,72 @@ export default function Home() {
                 </Card>
             ))}
         </div>
+      </section>
+
+      {/* Services Section */}
+      <section id="services" className="py-20 border-t">
+        <div className="text-center max-w-2xl mx-auto">
+          <h2 className="text-3xl font-bold"><TranslatedText text="Let's Build Your Vision" /></h2>
+          <p className="text-muted-foreground mt-4 mb-8">
+            <TranslatedText text="Have an idea for a website or mobile app? I can help you build a functional prototype to bring your vision to life. Fill out the form below with your project details to get started." />
+          </p>
+        </div>
+        <Card className="max-w-xl mx-auto p-6 bg-card/80 backdrop-blur-sm shadow-xl">
+           <form onSubmit={handleSubmit(onOrderSubmit)}>
+              <div className="mb-4">
+                <Label htmlFor="order-name" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Name:" /></Label>
+                <Input type="text" id="order-name" {...register("name")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary" />
+                {errors.name && <p className="text-destructive text-xs italic mt-1"><TranslatedText text={errors.name.message || ""} /></p>}
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <Label htmlFor="order-email" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Email (Optional):" /></Label>
+                    <Input type="email" id="order-email" {...register("email")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary" />
+                    {errors.email && <p className="text-destructive text-xs italic mt-1"><TranslatedText text={errors.email.message || ""} /></p>}
+                  </div>
+                  <div>
+                    <Label htmlFor="order-phone" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Phone (Optional):" /></Label>
+                    <Input type="tel" id="order-phone" {...register("phone")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary" />
+                  </div>
+              </div>
+              <div className="mb-4">
+                <Label htmlFor="order-details" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Project Details:" /></Label>
+                <Textarea id="order-details" rows={4} {...register("details")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary"></Textarea>
+                 {errors.details && <p className="text-destructive text-xs italic mt-1"><TranslatedText text={errors.details.message || ""} /></p>}
+              </div>
+              <div className="mb-6">
+                <Label htmlFor="order-attachment" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Attach File (Optional):" /></Label>
+                <Input type="file" id="order-attachment" {...register("attachment")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90 focus:ring-2 focus:ring-primary" />
+              </div>
+              <div className="flex items-center justify-end">
+                <Button
+                  type="submit"
+                  disabled={orderStatus === 'submitting' || orderStatus === 'success'}
+                  className={cn(
+                    'font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors min-w-[160px] justify-center',
+                    orderStatus === 'submitting' && 'opacity-50 cursor-not-allowed',
+                    orderStatus === 'success'
+                      ? 'bg-button-success text-button-success-foreground hover:bg-button-success/90'
+                      : 'bg-accent hover:bg-accent/90 text-accent-foreground'
+                  )}
+                >
+                  {orderStatus === 'submitting' ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      <TranslatedText text="Submitting..." />
+                    </>
+                  ) : orderStatus === 'success' ? (
+                    <>
+                      <Check className="mr-2 h-4 w-4" />
+                      <TranslatedText text="Submitted!" />
+                    </>
+                  ) : (
+                    <TranslatedText text="Submit Request" />
+                  )}
+                </Button>
+              </div>
+            </form>
+        </Card>
       </section>
 
       {/* Contact Section */}

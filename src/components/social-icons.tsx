@@ -2,7 +2,7 @@
 'use client';
 
 import { Github, Linkedin, Youtube } from 'lucide-react';
-import { WhatsappIcon, TelegramIcon, CourseraIcon } from '@/components/icons';
+import { WhatsappIcon, TelegramIcon, CourseraIcon, TryHackMeIcon } from '@/components/icons';
 import {
   Tooltip,
   TooltipContent,
@@ -24,6 +24,7 @@ export function SocialIcons({ className }: { className?: string }) {
     { name: 'Telegram', href: 'https://t.me/MuzoSalim', icon: <TelegramIcon className={`${iconClasses} text-white`} />, bgClass: 'bg-[#229ED9] hover:bg-[#1A87B8]' },
     { name: 'Telegram Channel', href: 'https://tinyurl.com/a7pw8s3a', icon: <TelegramIcon className={`${iconClasses} text-white`} />, bgClass: 'bg-[#2AABEE] hover:bg-[#1A87B8]' },
     { name: 'Coursera', href: 'https://www.coursera.org/user/d5bf15915278f56a6f96c3b5195c6d11', icon: <CourseraIcon className={`${iconClasses} text-white`} />, bgClass: 'bg-[#0056d2] hover:bg-[#003b8f]' },
+    { name: 'TryHackMe', href: 'https://tryhackme.com/p/MuzoSali', icon: <TryHackMeIcon className={`${iconClasses} text-white`} />, bgClass: 'bg-[#881414] hover:bg-[#6d1010]' },
   ];
 
   return (

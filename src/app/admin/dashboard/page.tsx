@@ -74,7 +74,7 @@ export default function AdminDashboardPage() {
             id: doc.id,
             name: doc.data().name || 'N/A',
             details: doc.data().details || 'No details provided.',
-            email: '', phone: '', attachmentName: null, timestamp: ''
+            email: '', phone: '', attachmentName: null, timestamp: '', status: 'pending', attachmentUrl: null
         } as DisplayOrder)));
     }, (error) => console.error("Error fetching latest orders:", error));
     

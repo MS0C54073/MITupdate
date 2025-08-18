@@ -250,16 +250,26 @@ export default function Home() {
         setIsGenerating(true);
 
         try {
-            const analytics = getAnalytics(app);
-            logEvent(analytics, 'cv_generated', {
-                type: outputType,
-            });
+            if (typeof window !== "undefined") {
+              const analytics = getAnalytics(app);
+              logEvent(analytics, 'cv_generated', {
+                  type: outputType,
+              });
+            }
+
 
             const doc = new jsPDF();
             const pageWidth = doc.internal.pageSize.getWidth();
             const margin = 20;
             const contentWidth = pageWidth - margin * 2;
             let y = 20;
+
+            const checkPageBreak = () => {
+                if (y > 270) { // Check if new section fits, leave margin at bottom
+                    doc.addPage();
+                    y = 20;
+                }
+            };
 
             // --- Header ---
             doc.setFontSize(22);
@@ -270,7 +280,7 @@ export default function Home() {
             doc.setFont('helvetica', 'normal');
             doc.text("IT Professional | Software Engineer | AI Enthusiast", pageWidth / 2, y, { align: 'center' });
             y += 6;
-            doc.text("musondasalim@gmail.com | +7 (901) 421-3578", pageWidth / 2, y, { align: 'center' });
+            doc.text("musondasalim@gmail.com | +7 (901) 421-3578 | +260 977 288 260", pageWidth / 2, y, { align: 'center' });
             y += 10;
             doc.line(margin, y, pageWidth - margin, y); // Horizontal line
             y += 10;
@@ -288,6 +298,7 @@ export default function Home() {
             y += (splitAbout.length * 5) + 10;
 
             // --- Skills Section ---
+            checkPageBreak();
             doc.setFontSize(16);
             doc.setFont('helvetica', 'bold');
             doc.text("Skills", margin, y);
@@ -300,17 +311,20 @@ export default function Home() {
             y += (splitSkills.length * 5) + 10;
 
             // --- Work Experience ---
+            checkPageBreak();
             doc.setFontSize(16);
             doc.setFont('helvetica', 'bold');
             doc.text("Work Experience", margin, y);
             y += 8;
             experiences.forEach(exp => {
+                checkPageBreak();
                 doc.setFontSize(12);
                 doc.setFont('helvetica', 'bold');
                 doc.text(exp.title, margin, y);
                 doc.setFontSize(11);
                 doc.setFont('helvetica', 'italic');
                 doc.text(`${exp.company} | ${exp.duration}`, margin, y += 5);
+                y += 2;
                 doc.setFont('helvetica', 'normal');
                 exp.details.forEach(detail => {
                     const splitDetail = doc.splitTextToSize(`• ${detail}`, contentWidth - 5);
@@ -321,12 +335,13 @@ export default function Home() {
             });
 
             // --- Education ---
-            if (y > 250) { doc.addPage(); y = 20; }
+            checkPageBreak();
             doc.setFontSize(16);
             doc.setFont('helvetica', 'bold');
             doc.text("Education", margin, y);
             y += 8;
             education.forEach(edu => {
+                checkPageBreak();
                 doc.setFontSize(12);
                 doc.setFont('helvetica', 'bold');
                 doc.text(edu.degree, margin, y);
@@ -336,11 +351,73 @@ export default function Home() {
                 y += 8;
             });
 
+            // --- Awards ---
+            checkPageBreak();
+            doc.setFontSize(16);
+            doc.setFont('helvetica', 'bold');
+            doc.text("Awards & Achievements", margin, y);
+            y += 8;
+            awards.forEach(award => {
+                checkPageBreak();
+                doc.setFontSize(12);
+                doc.setFont('helvetica', 'bold');
+                const splitTitle = doc.splitTextToSize(award.title, contentWidth);
+                doc.text(splitTitle, margin, y);
+                y += (splitTitle.length * 5);
+                doc.setFontSize(11);
+                doc.setFont('helvetica', 'italic');
+                doc.text(`- ${award.issuer}, ${award.date}`, margin, y += 5);
+                y += 8;
+            });
+
+            // --- Certifications ---
+            checkPageBreak();
+            doc.setFontSize(16);
+            doc.setFont('helvetica', 'bold');
+            doc.text("Licenses & Certifications", margin, y);
+            y += 8;
+            certifications.forEach(cert => {
+                checkPageBreak();
+                doc.setFontSize(11);
+                doc.setFont('helvetica', 'bold');
+                const certText = `${cert.title}`;
+                const splitCert = doc.splitTextToSize(certText, contentWidth);
+                doc.text(splitCert, margin, y);
+                y += (splitCert.length * 4);
+                 doc.setFont('helvetica', 'normal');
+                doc.text(`  Issued by ${cert.issuer} - ${cert.date}`, margin, y += 4);
+                y += 6;
+            });
+            y+= 4; // Extra space after section
+
+            // --- References ---
+            checkPageBreak();
+            doc.setFontSize(16);
+            doc.setFont('helvetica', 'bold');
+            doc.text("References", margin, y);
+            y += 8;
+            references.forEach(ref => {
+                checkPageBreak();
+                doc.setFontSize(12);
+                doc.setFont('helvetica', 'bold');
+                doc.text(ref.name, margin, y);
+                doc.setFontSize(11);
+                doc.setFont('helvetica', 'normal');
+                doc.text(ref.title, margin, y += 5);
+                doc.text(ref.company, margin, y += 5);
+                if (ref.email) {
+                    doc.text(`Email: ${ref.email}`, margin, y += 5);
+                }
+                if (ref.phone) {
+                    doc.text(`Phone: ${ref.phone}`, margin, y += 5);
+                }
+                y += 8;
+            });
 
             if (outputType === 'preview') {
                 doc.output('dataurlnewwindow');
             } else {
-                doc.save('My_CV.pdf');
+                doc.save('Musonda_Salimu_CV.pdf');
             }
         } catch (error) {
             console.error("Error generating PDF:", error);

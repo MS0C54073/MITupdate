@@ -22,14 +22,40 @@ export const useTranslation = () => {
   return context;
 };
 
+// Helper to safely get language from local storage
+const getInitialLanguage = (): LanguageCode => {
+    if (typeof window === 'undefined') {
+        return 'en';
+    }
+    try {
+        const storedLang = localStorage.getItem('user-language');
+        if (storedLang && ['en', 'ru', 'ar', 'zh', 'fr', 'es'].includes(storedLang)) {
+            return storedLang as LanguageCode;
+        }
+    } catch (error) {
+        console.warn('Could not access local storage for language preference.', error);
+    }
+    return 'en';
+}
+
 interface TranslationProviderProps {
   children: ReactNode;
 }
 
 export const TranslationProvider: React.FC<TranslationProviderProps> = ({ children }) => {
-  const [language, setLanguage] = useState<LanguageCode>('en');
+  const [language, setLanguageState] = useState<LanguageCode>(getInitialLanguage);
   // Using a Map for the cache is slightly more performant for frequent lookups/updates
   const [sessionTranslationsCache, setSessionTranslationsCache] = useState<Map<string, string>>(new Map());
+  
+  const setLanguage = (newLanguage: LanguageCode) => {
+    try {
+      localStorage.setItem('user-language', newLanguage);
+    } catch (error) {
+       console.warn('Could not save language preference to local storage.', error);
+    }
+    setLanguageState(newLanguage);
+  };
+
 
   useEffect(() => {
     // Clear session cache when language changes

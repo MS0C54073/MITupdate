@@ -9,6 +9,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import TranslatedText from '@/app/components/translated-text';
+
 
 export function SocialIcons({ className }: { className?: string }) {
   const iconWrapperClasses = "h-9 w-9 rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110";
@@ -41,7 +43,7 @@ export function SocialIcons({ className }: { className?: string }) {
               </a>
             </TooltipTrigger>
             <TooltipContent>
-              <p>{link.name}</p>
+              <p><TranslatedText text={link.name} /></p>
             </TooltipContent>
           </Tooltip>
         ))}

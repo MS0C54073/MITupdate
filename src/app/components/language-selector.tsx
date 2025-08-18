@@ -1,7 +1,7 @@
 
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from '../translator';
 import { Button } from '@/components/ui/button';
 import {
@@ -39,8 +39,25 @@ const languages: Language[] = [
 
 export function LanguageSelector() {
   const { language, setLanguage } = useTranslation();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const currentLanguage = languages.find((lang) => lang.code === language) || languages[0];
+  
+  if (!isMounted) {
+      return (
+        <Button variant="outline" className="flex items-center justify-between gap-2 w-[150px]">
+           <div className="flex items-center gap-2">
+            <UnitedKingdomFlagIcon className="h-4 w-6 flex-shrink-0" />
+            <span className="truncate">English</span>
+          </div>
+          <ChevronDown className="h-4 w-4 opacity-50 flex-shrink-0" />
+        </Button>
+      )
+  }
 
   return (
     <DropdownMenu>

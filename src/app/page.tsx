@@ -6,7 +6,7 @@ import Link from 'next/link';
 import TranslatedText from '@/app/components/translated-text';
 import { Button } from '@/components/ui/button';
 import { SocialIcons } from '@/components/social-icons';
-import { Briefcase, GraduationCap, Star, Award, Languages, BrainCircuit, Globe, Smartphone, Server, Network, Shield, Code, Mic, Gamepad2, Film, Camera, ArrowRight, BookMark, Download, Mail, Phone, Users, ExternalLink, Eye, Github, ChevronDown, Loader2, Check } from 'lucide-react';
+import { ArrowRight, Award, BrainCircuit, Calendar, Code, Download, Eye, ExternalLink, Github, Globe, GraduationCap, Loader2, Mail, Network, Phone, Server, Shield, Smartphone, Star, Users, Check } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -22,7 +22,7 @@ import { app, db, storage } from '@/lib/firebase';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -346,8 +346,8 @@ export default function Home() {
             const contentWidth = pageWidth - margin * 2;
             let y = 20;
 
-            const checkPageBreak = () => {
-                if (y > 270) { // Check if new section fits, leave margin at bottom
+            const checkPageBreak = (neededHeight = 10) => {
+                if (y + neededHeight > 280) { // Check if new section fits, leave margin at bottom
                     doc.addPage();
                     y = 20;
                 }
@@ -399,7 +399,7 @@ export default function Home() {
             doc.text("Work Experience", margin, y);
             y += 8;
             experiences.forEach(exp => {
-                checkPageBreak();
+                checkPageBreak(30); // Estimate needed height
                 doc.setFontSize(12);
                 doc.setFont('helvetica', 'bold');
                 doc.text(exp.title, margin, y);
@@ -423,7 +423,7 @@ export default function Home() {
             doc.text("Education", margin, y);
             y += 8;
             education.forEach(edu => {
-                checkPageBreak();
+                checkPageBreak(20);
                 doc.setFontSize(12);
                 doc.setFont('helvetica', 'bold');
                 doc.text(edu.degree, margin, y);
@@ -440,7 +440,7 @@ export default function Home() {
             doc.text("Awards & Achievements", margin, y);
             y += 8;
             awards.forEach(award => {
-                checkPageBreak();
+                checkPageBreak(20);
                 doc.setFontSize(12);
                 doc.setFont('helvetica', 'bold');
                 const splitTitle = doc.splitTextToSize(award.title, contentWidth);
@@ -459,7 +459,7 @@ export default function Home() {
             doc.text("Licenses & Certifications", margin, y);
             y += 8;
             certifications.forEach(cert => {
-                checkPageBreak();
+                checkPageBreak(15);
                 doc.setFontSize(11);
                 doc.setFont('helvetica', 'bold');
                 const certText = `${cert.title}`;
@@ -479,7 +479,7 @@ export default function Home() {
             doc.text("References", margin, y);
             y += 8;
             references.forEach(ref => {
-                checkPageBreak();
+                checkPageBreak(25);
                 doc.setFontSize(12);
                 doc.setFont('helvetica', 'bold');
                 doc.text(ref.name, margin, y);
@@ -503,7 +503,11 @@ export default function Home() {
             }
         } catch (error) {
             console.error("Error generating PDF:", error);
-            // Optionally, show a toast notification for the error
+            toast({
+                variant: 'destructive',
+                title: 'PDF Generation Failed',
+                description: 'There was an error creating the CV. Please try again.',
+            });
         } finally {
             setIsGenerating(false);
         }
@@ -588,34 +592,25 @@ export default function Home() {
             if (project.demo) {
               return (
                 <Card key={index} className="bg-card/50 hover:bg-accent/20 hover:border-primary transition-all duration-300 h-full flex flex-col">
-                  <CardContent className="p-4 flex-grow flex flex-col justify-between">
-                    <div>
-                      <h3 className="font-semibold text-accent group-hover:text-primary transition-colors">
-                        <TranslatedText text={project.title} />
-                      </h3>
-                    </div>
-                    <div className="mt-4 flex">
+                  <CardHeader>
+                    <CardTitle className="text-accent group-hover:text-primary transition-colors">
+                      <TranslatedText text={project.title} />
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="flex-grow flex items-end">
+                    <div className="mt-4 flex w-full">
                         <Button asChild variant="outline" className="flex-grow rounded-r-none focus:z-10">
                            <a href={project.link} target="_blank" rel="noopener noreferrer">
                               <Github className="mr-2 h-4 w-4" />
-                              <TranslatedText text="View GitHub" />
+                              <TranslatedText text="GitHub" />
                             </a>
                         </Button>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="outline" size="icon" className="-ml-px rounded-l-none focus:z-10">
-                                    <ChevronDown className="h-4 w-4" />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                                <DropdownMenuItem asChild>
-                                    <a href={project.demo} target="_blank" rel="noopener noreferrer">
-                                        <ExternalLink className="mr-2 h-4 w-4" />
-                                        <TranslatedText text="Live Demo" />
-                                    </a>
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                        <Button asChild variant="default" className="-ml-px rounded-l-none focus:z-10">
+                            <a href={project.demo} target="_blank" rel="noopener noreferrer">
+                                <ExternalLink className="mr-2 h-4 w-4" />
+                                <TranslatedText text="Demo" />
+                            </a>
+                        </Button>
                     </div>
                   </CardContent>
                 </Card>
@@ -630,13 +625,18 @@ export default function Home() {
                 className="group block"
               >
                 <Card className="bg-card/50 hover:bg-accent/20 hover:border-primary transition-all duration-300 h-full">
-                  <CardContent className="p-4 flex items-center gap-4">
-                    <ExternalLink className="h-5 w-5 text-primary flex-shrink-0" />
-                    <div>
-                      <h3 className="font-semibold text-accent group-hover:text-primary transition-colors">
+                  <CardHeader>
+                    <CardTitle className="text-accent group-hover:text-primary transition-colors">
                         <TranslatedText text={project.title} />
-                      </h3>
-                    </div>
+                    </CardTitle>
+                  </CardHeader>
+                   <CardContent>
+                      <Button asChild variant="outline" className="w-full">
+                           <span className="flex items-center">
+                              <Github className="mr-2 h-4 w-4" />
+                              <TranslatedText text="View on GitHub" />
+                            </span>
+                        </Button>
                   </CardContent>
                 </Card>
               </a>

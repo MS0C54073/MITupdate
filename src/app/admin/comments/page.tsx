@@ -10,12 +10,11 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { db } from '@/lib/firebase';
 import { collection, getDocs, orderBy, query, Timestamp, limit, startAfter, type QueryDocumentSnapshot, type DocumentData } from 'firebase/firestore';
-import type { DisplayComment } from '@/lib/types'; 
-import AuthModal from '@/app/components/auth-modal';
+import type { DisplayComment } from '@/lib/types';
+import { useAuth } from '@/app/auth-context';
 
 export default function AdminCommentsPage() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [authChecked, setAuthChecked] = useState(false);
+  const { user, userProfile, loading: authLoading } = useAuth();
   const router = useRouter();
 
   const [comments, setComments] = useState<DisplayComment[]>([]);
@@ -28,19 +27,14 @@ export default function AdminCommentsPage() {
   const commentsPerPage = 15;
 
   useEffect(() => {
-    const adminLoggedIn = sessionStorage.getItem('isAdminLoggedIn');
-    if (adminLoggedIn === 'true') {
-      setIsLoggedIn(true);
-      fetchComments(true);
+    if (!authLoading) {
+      if (!user || userProfile?.role !== 'admin') {
+        router.push('/'); // Redirect non-admins to home
+      } else {
+        fetchComments(true);
+      }
     }
-    setAuthChecked(true);
-  }, []);
-
-  const handleLoginSuccess = () => {
-    sessionStorage.setItem('isAdminLoggedIn', 'true');
-    setIsLoggedIn(true);
-    fetchComments(true);
-  };
+  }, [user, userProfile, authLoading, router]);
   
   const mapDocToComment = (doc: QueryDocumentSnapshot<DocumentData>): DisplayComment => {
     const data = doc.data();
@@ -104,22 +98,12 @@ export default function AdminCommentsPage() {
     }
   };
 
-  if (!authChecked) {
+  if (authLoading || (!user && !authLoading)) {
     return (
       <div className="flex justify-center items-center min-h-screen">
           <Loader2 className="h-16 w-16 animate-spin text-primary" />
       </div>
     );
-  }
-  
-  if (!isLoggedIn) {
-      return (
-        <AuthModal 
-          isOpen={true} 
-          onClose={() => router.push('/')} 
-          onLoginSuccess={handleLoginSuccess}
-        />
-      );
   }
 
   return (

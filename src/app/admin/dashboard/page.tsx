@@ -20,11 +20,10 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { SocialIcons } from '@/components/social-icons';
-import AuthModal from '@/app/components/auth-modal';
+import { useAuth } from '@/app/auth-context';
 
 export default function AdminDashboardPage() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [authChecked, setAuthChecked] = useState(false);
+  const { user, userProfile, loading: authLoading } = useAuth();
   const router = useRouter();
 
   const [newCommentsCount, setNewCommentsCount] = useState(0);
@@ -33,12 +32,12 @@ export default function AdminDashboardPage() {
   const [latestComments, setLatestComments] = useState<DisplayComment[]>([]);
   const [latestOrders, setLatestOrders] = useState<DisplayOrder[]>([]);
   const [latestReviews, setLatestReviews] = useState<DisplayReview[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loadingData, setLoadingData] = useState(true);
   
   const totalNotifications = newCommentsCount + newOrdersCount + newReviewsCount;
 
   const fetchData = async () => {
-    setLoading(true);
+    setLoadingData(true);
     try {
       const commentsCollection = collection(db, "comments");
       const ordersCollection = collection(db, "orders");
@@ -87,10 +86,10 @@ export default function AdminDashboardPage() {
             rating: doc.data().rating || 0,
             timestamp: ''
         } as DisplayReview)));
-        setLoading(false);
+        setLoadingData(false);
     }, (error) => {
       console.error("Error fetching latest reviews:", error);
-      setLoading(false);
+      setLoadingData(false);
     });
 
     return () => {
@@ -101,36 +100,21 @@ export default function AdminDashboardPage() {
   };
 
   useEffect(() => {
-    const adminLoggedIn = sessionStorage.getItem('isAdminLoggedIn');
-    if (adminLoggedIn === 'true') {
-      setIsLoggedIn(true);
-      fetchData();
+    if (!authLoading) {
+      if (!user || userProfile?.role !== 'admin') {
+        router.push('/'); // Redirect non-admins to home
+      } else {
+        fetchData();
+      }
     }
-    setAuthChecked(true);
-  }, []);
+  }, [user, userProfile, authLoading, router]);
 
-  const handleLoginSuccess = () => {
-    sessionStorage.setItem('isAdminLoggedIn', 'true');
-    setIsLoggedIn(true);
-    fetchData();
-  };
-
-  if (!authChecked || loading) {
+  if (authLoading || loadingData || !user) {
     return (
       <div className="flex justify-center items-center min-h-screen">
           <Loader2 className="h-16 w-16 animate-spin text-primary" />
       </div>
     );
-  }
-  
-  if (!isLoggedIn) {
-      return (
-        <AuthModal 
-          isOpen={true} 
-          onClose={() => router.push('/')} 
-          onLoginSuccess={handleLoginSuccess}
-        />
-      );
   }
 
   return (
@@ -147,7 +131,7 @@ export default function AdminDashboardPage() {
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="relative">
                 <Bell className="h-6 w-6 text-primary" />
-                 {loading ? (
+                 {loadingData ? (
                   <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-xs text-destructive-foreground">
                     <Loader2 className="h-2 w-2 animate-spin" />
                   </span>
@@ -163,7 +147,7 @@ export default function AdminDashboardPage() {
                 <TranslatedText text="Notifications" />
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              {loading ? (
+              {loadingData ? (
                 <div className="p-2 text-center text-sm text-muted-foreground flex items-center justify-center">
                   <Loader2 className="h-4 w-4 animate-spin mr-2" />
                   <TranslatedText text="Loading..."/>

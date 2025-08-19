@@ -22,7 +22,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import TranslatedText from '@/app/components/translated-text';
 import { ArrowLeft, Loader2, Upload, Trash2 } from 'lucide-react';
-import AuthModal from '@/app/components/auth-modal';
+import { useAuth } from '@/app/auth-context';
 
 const imageSections = [
   { id: 'affiliate_gallery', name: 'Affiliate Page Gallery' },
@@ -51,8 +51,7 @@ const imageUploadSchema = z.object({
 type ImageUploadFormData = z.infer<typeof imageUploadSchema>;
 
 export default function ManageImagesPage() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [authChecked, setAuthChecked] = useState(false);
+  const { user, userProfile, loading: authLoading } = useAuth();
   const router = useRouter();
   const { toast } = useToast();
 
@@ -90,19 +89,14 @@ export default function ManageImagesPage() {
   };
 
   useEffect(() => {
-    const adminLoggedIn = sessionStorage.getItem('isAdminLoggedIn');
-    if (adminLoggedIn === 'true') {
-      setIsLoggedIn(true);
-      fetchImages();
+    if (!authLoading) {
+      if (!user || userProfile?.role !== 'admin') {
+        router.push('/'); // Redirect non-admins to home
+      } else {
+        fetchImages();
+      }
     }
-    setAuthChecked(true);
-  }, []);
-
-  const handleLoginSuccess = () => {
-    sessionStorage.setItem('isAdminLoggedIn', 'true');
-    setIsLoggedIn(true);
-    fetchImages();
-  };
+  }, [user, userProfile, authLoading, router]);
 
   const onSubmit: SubmitHandler<ImageUploadFormData> = async (data) => {
     setSubmitting(true);
@@ -168,18 +162,8 @@ export default function ManageImagesPage() {
     return acc;
   }, {} as Record<SectionId, DisplaySiteImage[]>);
 
-  if (!authChecked) {
+  if (authLoading || (!user && !authLoading)) {
     return <div className="flex h-screen items-center justify-center"><Loader2 className="h-16 w-16 animate-spin" /></div>;
-  }
-  
-  if (!isLoggedIn) {
-      return (
-        <AuthModal 
-          isOpen={true} 
-          onClose={() => router.push('/')} 
-          onLoginSuccess={handleLoginSuccess}
-        />
-      );
   }
 
   return (

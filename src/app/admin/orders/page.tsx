@@ -11,12 +11,11 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { db } from '@/lib/firebase';
 import { collection, getDocs, orderBy, query, Timestamp, limit, startAfter, type QueryDocumentSnapshot, type DocumentData } from 'firebase/firestore';
-import type { DisplayOrder } from '@/lib/types'; 
-import AuthModal from '@/app/components/auth-modal';
+import type { DisplayOrder } from '@/lib/types';
+import { useAuth } from '@/app/auth-context';
 
 export default function AdminOrdersPage() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [authChecked, setAuthChecked] = useState(false);
+  const { user, userProfile, loading: authLoading } = useAuth();
   const router = useRouter();
 
   const [orders, setOrders] = useState<DisplayOrder[]>([]);
@@ -29,20 +28,15 @@ export default function AdminOrdersPage() {
   const ordersPerPage = 15;
 
   useEffect(() => {
-    const adminLoggedIn = sessionStorage.getItem('isAdminLoggedIn');
-    if (adminLoggedIn === 'true') {
-      setIsLoggedIn(true);
-      fetchOrders(true);
+    if (!authLoading) {
+      if (!user || userProfile?.role !== 'admin') {
+        router.push('/'); // Redirect non-admins to home
+      } else {
+        fetchOrders(true);
+      }
     }
-    setAuthChecked(true);
-  }, []);
+  }, [user, userProfile, authLoading, router]);
 
-  const handleLoginSuccess = () => {
-    sessionStorage.setItem('isAdminLoggedIn', 'true');
-    setIsLoggedIn(true);
-    fetchOrders(true);
-  };
-  
   const mapDocToOrder = (doc: QueryDocumentSnapshot<DocumentData>): DisplayOrder => {
     const data = doc.data();
     let formattedTimestamp = 'Pending...';
@@ -109,22 +103,12 @@ export default function AdminOrdersPage() {
     }
   };
 
-  if (!authChecked || (isLoggedIn && loading)) {
+  if (authLoading || (loading && !orders.length) || !user) {
     return (
       <div className="flex justify-center items-center min-h-screen">
           <Loader2 className="h-16 w-16 animate-spin text-primary" />
       </div>
     );
-  }
-  
-  if (!isLoggedIn) {
-      return (
-        <AuthModal 
-          isOpen={true} 
-          onClose={() => router.push('/')} 
-          onLoginSuccess={handleLoginSuccess}
-        />
-      );
   }
 
   return (
@@ -148,7 +132,7 @@ export default function AdminOrdersPage() {
           <h2 className="text-3xl font-semibold text-foreground mb-6">
             <TranslatedText text="Client Requests" />
           </h2>
-          {loading && (
+          {loading && orders.length === 0 && (
             <div className="flex justify-center items-center py-10">
               <Loader2 className="h-12 w-12 animate-spin text-primary" />
               <p className="ml-4 text-lg text-muted-foreground"><TranslatedText text="Loading orders..." /></p>

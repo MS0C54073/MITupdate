@@ -1,3 +1,4 @@
+
 'use client';
 
 import React from 'react';
@@ -7,7 +8,7 @@ import { signOut } from 'firebase/auth';
 import { useAuth } from '@/app/auth-context';
 import { auth } from '@/lib/firebase';
 import { Button } from '@/components/ui/button';
-import { LogOut, User, Loader2, LogIn, UserPlus, Shield } from 'lucide-react';
+import { LogOut, User, Loader2, LogIn, Shield } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -43,28 +44,17 @@ export default function AuthNav() {
   if (!user) {
     return (
       <div className="flex items-center">
-        <Button variant="outline" asChild className="rounded-r-none focus:z-10">
-          <Link href="/admin/dashboard">
-            <Shield className="mr-2 h-4 w-4" />
-            <TranslatedText text="Admins" />
-          </Link>
-        </Button>
-        <Button variant="outline" asChild className="-ml-px rounded-none focus:z-10">
+        <Button asChild>
           <Link href="/login">
             <LogIn className="mr-2 h-4 w-4" />
-            <TranslatedText text="Client" />
-          </Link>
-        </Button>
-        <Button asChild className="-ml-px rounded-l-none focus:z-10">
-          <Link href="/signup">
-            <UserPlus className="mr-2 h-4 w-4" />
-            <TranslatedText text="Sign Up" />
+            <TranslatedText text="Login" />
           </Link>
         </Button>
       </div>
     );
   }
-
+  
+  // This logic now correctly handles both regular users and admins within the same dropdown.
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -86,8 +76,8 @@ export default function AuthNav() {
         {userProfile?.role === 'admin' ? (
           <DropdownMenuItem asChild>
             <Link href="/admin/dashboard">
-              <User className="mr-2 h-4 w-4" />
-              <span><TranslatedText text="Admin Dashboard" /></span>
+              <Shield className="mr-2 h-4 w-4" />
+              <span><TranslatedText text="Admin Panel" /></span>
             </Link>
           </DropdownMenuItem>
         ) : (

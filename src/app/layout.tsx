@@ -2,7 +2,6 @@
 import type {Metadata, Viewport} from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-import './social-bar.css';
 import {ModeToggle} from '@/components/mode-toggle';
 import {ThemeProvider} from '@/components/theme-provider';
 import {TranslationProvider} from './translator';
@@ -126,9 +125,9 @@ export default function RootLayout({
                         </Link>
                         
                         {/* Desktop Nav */}
-                        <nav className="hidden md:flex items-center gap-6">
+                        <nav className="hidden lg:flex items-center gap-1">
                             {navLinks.map(link => (
-                                <Button key={link.href} variant="link" asChild>
+                                <Button key={link.href} variant="link" asChild size="sm">
                                     <Link href={link.href} className="text-sm font-medium hover:text-primary">
                                         <TranslatedText text={link.text} />
                                     </Link>
@@ -136,8 +135,8 @@ export default function RootLayout({
                             ))}
                         </nav>
 
-                        {/* Mobile Nav */}
-                        <div className="md:hidden">
+                        {/* Mobile & Tablet Nav */}
+                        <div className="lg:hidden">
                             <Sheet>
                                 <SheetTrigger asChild>
                                     <Button variant="ghost" size="icon">
@@ -155,18 +154,25 @@ export default function RootLayout({
                                             </SheetTrigger>
                                         ))}
                                     </nav>
+                                    <div className="mt-8 pt-4 border-t">
+                                      <SocialIcons className="flex flex-wrap justify-center gap-4" />
+                                    </div>
                                 </SheetContent>
                             </Sheet>
                         </div>
 
-                         <div className="hidden md:flex items-center gap-2">
+                         <div className="hidden lg:flex items-center gap-2">
+                            <AuthNav />
                             <LanguageSelector />
                             <ModeToggle />
+                            <ViewModeToggle />
+                            <BackgroundThemeToggle />
                         </div>
                     </div>
                   </header>
                   
-                  <div className="fixed top-24 right-4 z-50 flex flex-col items-end space-y-2 md:hidden">
+                  <div className="fixed top-24 right-4 z-50 flex flex-col items-end space-y-2 lg:hidden">
+                    <AuthNav />
                     <LanguageSelector />
                     <ModeToggle />
                     <ViewModeToggle />

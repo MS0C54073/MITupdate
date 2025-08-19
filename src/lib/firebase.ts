@@ -18,6 +18,14 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
+// Check if the Firebase API key is provided
+if (!firebaseConfig.apiKey) {
+  throw new Error(
+    'Firebase API Key is missing. Please add NEXT_PUBLIC_FIREBASE_API_KEY to your .env.local file.'
+  );
+}
+
+
 let app: FirebaseApp;
 let db: Firestore;
 let storage: FirebaseStorage;

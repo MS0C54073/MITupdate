@@ -7,7 +7,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.75rem; /* 12px */
-  z-index: 40; /* Lowered z-index to avoid overlap with header */
+  z-index: 60; /* Increased z-index to be above header (z-50) */
   padding: 0.5rem;
   background-color: hsl(var(--card) / 0.5);
   backdrop-filter: blur(4px);

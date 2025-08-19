@@ -2,6 +2,7 @@
 import type {Metadata, Viewport} from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
+import './social-bar.css'; // <--- Import the CSS file
 import {ModeToggle} from '@/components/mode-toggle';
 import {ThemeProvider} from '@/components/theme-provider';
 import {TranslationProvider} from './translator';

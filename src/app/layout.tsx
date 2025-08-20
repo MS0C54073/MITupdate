@@ -20,7 +20,7 @@ import Link from 'next/link';
 import { MuzoInTechLogo } from '@/components/icons';
 import { SocialIcons } from '@/components/social-icons';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Menu } from 'lucide-react';
 import TranslatedText from './components/translated-text';
 
@@ -146,6 +146,11 @@ export default function RootLayout({
                                     </Button>
                                 </SheetTrigger>
                                 <SheetContent side="right">
+                                    <SheetHeader>
+                                        <SheetTitle className="sr-only">
+                                            <TranslatedText text="Navigation" />
+                                        </SheetTitle>
+                                    </SheetHeader>
                                     <nav className="flex flex-col gap-4 mt-8">
                                         {navLinks.map(link => (
                                             <SheetTrigger asChild key={link.href}>

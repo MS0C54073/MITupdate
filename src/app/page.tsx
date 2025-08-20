@@ -333,10 +333,18 @@ export default function Home() {
 
         try {
             if (typeof window !== "undefined") {
-              const analytics = getAnalytics(app);
-              logEvent(analytics, 'cv_generated', {
-                  type: outputType,
-              });
+              // Check for API key before attempting to use Analytics
+              if (process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
+                const analytics = getAnalytics(app);
+                logEvent(analytics, 'cv_generated', {
+                    type: outputType,
+                });
+              } else {
+                console.warn(
+                  'Firebase Analytics is disabled. CV generation event will not be logged. ' +
+                  'Please ensure NEXT_PUBLIC_FIREBASE_API_KEY is set in your .env.local file.'
+                );
+              }
             }
 
 

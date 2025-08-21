@@ -39,10 +39,19 @@ export default function LoginPage() {
       router.push('/dashboard');
     } catch (error: any) {
       console.error('Login failed:', error);
+      let description = 'An unexpected error occurred. Please try again.';
+      if (error.code === 'auth/api-key-not-valid') {
+        description = 'The Firebase API Key is not valid. Please check your .env.local file and ensure NEXT_PUBLIC_FIREBASE_API_KEY is set correctly.';
+      } else if (error.code === 'auth/invalid-credential') {
+        description = 'Invalid email or password. Please check your credentials and try again.';
+      } else {
+        description = error.message;
+      }
+      
       toast({
         variant: 'destructive',
         title: 'Login Failed',
-        description: error.message || 'An unexpected error occurred. Please try again.',
+        description: description,
       });
       setLoading(false);
     }

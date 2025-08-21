@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -21,45 +22,45 @@ export default function MyCommentsPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!authLoading && !user) {
+    if (authLoading) return; // Wait for auth state to resolve
+    
+    if (!user) {
       router.push('/login');
+      return;
     }
-  }, [user, authLoading, router]);
 
-  useEffect(() => {
-    if (user) {
-      const fetchComments = async () => {
-        setLoading(true);
-        setError(null);
-        try {
-          const commentsCollection = collection(db, 'comments');
-          const q = query(
-            commentsCollection, 
-            where('userId', '==', user.uid), 
-            orderBy('timestamp', 'desc')
-          );
-          const querySnapshot = await getDocs(q);
-          const fetchedComments = querySnapshot.docs.map(doc => {
-            const data = doc.data();
-            return {
-              id: doc.id,
-              name: data.name || 'Anonymous',
-              email: data.email || 'Not Provided',
-              comment: data.comment || 'No comment provided',
-              timestamp: (data.timestamp as Timestamp)?.toDate().toLocaleString() ?? 'No date',
-            };
-          });
-          setComments(fetchedComments);
-        } catch (err) {
-          console.error("Error fetching user comments: ", err);
-          setError('Failed to load your comments. Please try again.');
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchComments();
-    }
-  }, [user]);
+    const fetchComments = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const commentsCollection = collection(db, 'comments');
+        const q = query(
+          commentsCollection, 
+          where('userId', '==', user.uid), 
+          orderBy('timestamp', 'desc')
+        );
+        const querySnapshot = await getDocs(q);
+        const fetchedComments = querySnapshot.docs.map(doc => {
+          const data = doc.data();
+          return {
+            id: doc.id,
+            name: data.name || 'Anonymous',
+            email: data.email || 'Not Provided',
+            comment: data.comment || 'No comment provided',
+            timestamp: (data.timestamp as Timestamp)?.toDate().toLocaleString() ?? 'No date',
+            userId: data.userId || null,
+          };
+        });
+        setComments(fetchedComments);
+      } catch (err) {
+        console.error("Error fetching user comments: ", err);
+        setError('Failed to load your comments. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchComments();
+  }, [user, authLoading, router]);
 
   if (authLoading || loading || !user) {
     return (

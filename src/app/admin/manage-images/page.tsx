@@ -162,7 +162,7 @@ export default function ManageImagesPage() {
     return acc;
   }, {} as Record<SectionId, DisplaySiteImage[]>);
 
-  if (authLoading || (!user && !authLoading)) {
+  if (authLoading || (!user && !authLoading) || loading) {
     return <div className="flex h-screen items-center justify-center"><Loader2 className="h-16 w-16 animate-spin" /></div>;
   }
 

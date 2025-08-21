@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -22,49 +23,50 @@ export default function MyOrdersPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!authLoading && !user) {
-      router.push('/login');
-    }
-  }, [user, authLoading, router]);
+    if (authLoading) return; // Wait for auth state to resolve
 
-  useEffect(() => {
-    if (user) {
-      const fetchOrders = async () => {
-        setLoading(true);
-        setError(null);
-        try {
-          const ordersCollection = collection(db, 'orders');
-          const q = query(
-            ordersCollection, 
-            where('userId', '==', user.uid), 
-            orderBy('timestamp', 'desc')
-          );
-          const querySnapshot = await getDocs(q);
-          const fetchedOrders = querySnapshot.docs.map(doc => {
-            const data = doc.data();
-            return {
-              id: doc.id,
-              name: data.name || 'N/A',
-              email: data.email || 'Not Provided',
-              phone: data.phone || 'Not Provided',
-              details: data.details || 'No details provided.',
-              status: data.status || 'pending',
-              attachmentName: data.attachmentName || null,
-              attachmentUrl: data.attachmentUrl || null,
-              timestamp: (data.timestamp as Timestamp)?.toDate().toLocaleString() ?? 'No date',
-            };
-          });
-          setOrders(fetchedOrders);
-        } catch (err) {
-          console.error("Error fetching user orders: ", err);
-          setError('Failed to load your orders. Please try again.');
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchOrders();
+    if (!user) {
+      router.push('/login');
+      return;
     }
-  }, [user]);
+
+    const fetchOrders = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const ordersCollection = collection(db, 'orders');
+        const q = query(
+          ordersCollection, 
+          where('userId', '==', user.uid), 
+          orderBy('timestamp', 'desc')
+        );
+        const querySnapshot = await getDocs(q);
+        const fetchedOrders = querySnapshot.docs.map(doc => {
+          const data = doc.data();
+          return {
+            id: doc.id,
+            name: data.name || 'N/A',
+            email: data.email || 'Not Provided',
+            phone: data.phone || 'Not Provided',
+            details: data.details || 'No details provided.',
+            status: data.status || 'pending',
+            attachmentName: data.attachmentName || null,
+            attachmentUrl: data.attachmentUrl || null,
+            timestamp: (data.timestamp as Timestamp)?.toDate().toLocaleString() ?? 'No date',
+            userId: data.userId || null,
+          };
+        });
+        setOrders(fetchedOrders);
+      } catch (err) {
+        console.error("Error fetching user orders: ", err);
+        setError('Failed to load your orders. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchOrders();
+  }, [user, authLoading, router]);
 
   if (authLoading || loading || !user) {
     return (

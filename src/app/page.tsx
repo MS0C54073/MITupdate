@@ -30,7 +30,6 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import type { Order } from '@/lib/types';
-import AuthModal from '@/app/components/auth-modal';
 
 
 const skills = [
@@ -276,7 +275,6 @@ export default function Home() {
     const [isGenerating, setIsGenerating] = useState(false);
     const { toast } = useToast();
     const [orderStatus, setOrderStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
-    const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
 
     const { register, handleSubmit, reset, formState: { errors } } = useForm<OrderFormData>({
@@ -526,11 +524,6 @@ export default function Home() {
 
 
   return (
-    <>
-      <AuthModal 
-        isOpen={isAuthModalOpen} 
-        onClose={() => setIsAuthModalOpen(false)} 
-      />
       <div className="container mx-auto py-12 px-4 md:px-6 lg:px-8">
         {/* Hero Section */}
         <section id="home" className="py-20 text-center">
@@ -883,12 +876,10 @@ export default function Home() {
         </section>
         
         <footer className="text-center py-6 mt-8 border-t border-border">
-            <Button variant="ghost" onClick={() => setIsAuthModalOpen(true)}>
-                <UserCog className="mr-2 h-4 w-4" />
-                <TranslatedText text="Admin Access" />
-            </Button>
+            <p className="text-sm text-muted-foreground">
+                <TranslatedText text="© 2025 Musonda Salimu. All Rights Reserved." />
+            </p>
         </footer>
       </div>
-    </>
   );
 }

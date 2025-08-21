@@ -55,6 +55,7 @@ export default function AdminOrdersPage() {
       attachmentName: data.attachmentName || null,
       attachmentUrl: data.attachmentUrl || null,
       timestamp: formattedTimestamp,
+      userId: data.userId || null,
     };
   };
 
@@ -103,7 +104,7 @@ export default function AdminOrdersPage() {
     }
   };
 
-  if (authLoading || (loading && !orders.length) || !user) {
+  if (authLoading || (!user && !authLoading) || loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
           <Loader2 className="h-16 w-16 animate-spin text-primary" />
@@ -132,19 +133,13 @@ export default function AdminOrdersPage() {
           <h2 className="text-3xl font-semibold text-foreground mb-6">
             <TranslatedText text="Client Requests" />
           </h2>
-          {loading && orders.length === 0 && (
-            <div className="flex justify-center items-center py-10">
-              <Loader2 className="h-12 w-12 animate-spin text-primary" />
-              <p className="ml-4 text-lg text-muted-foreground"><TranslatedText text="Loading orders..." /></p>
-            </div>
-          )}
           {error && (
              <div className="text-center py-10 text-destructive bg-destructive/10 rounded-md p-4">
               <p className="text-lg font-semibold"><TranslatedText text="An Error Occurred" /></p>
               <p className="text-sm"><TranslatedText text={error} /></p>
             </div>
           )}
-          {!loading && !error && orders.length > 0 ? (
+          {!error && orders.length > 0 ? (
             <div className="space-y-6">
               {orders.map((order) => (
                 <div id={order.id} key={order.id} className="p-4 bg-background/50 rounded-lg border shadow-md scroll-mt-20 target:ring-2 target:ring-primary transition-all duration-300">

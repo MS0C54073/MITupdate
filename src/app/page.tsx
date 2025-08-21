@@ -6,7 +6,7 @@ import Link from 'next/link';
 import TranslatedText from '@/app/components/translated-text';
 import { Button } from '@/components/ui/button';
 import { SocialIcons } from '@/components/social-icons';
-import { ArrowRight, Award, BrainCircuit, Calendar, Code, Download, Eye, ExternalLink, Github, Globe, GraduationCap, Loader2, Mail, Network, Phone, Server, Shield, Smartphone, Star, Users, Check } from 'lucide-react';
+import { ArrowRight, Award, BrainCircuit, Calendar, Code, Download, Eye, ExternalLink, Github, Globe, GraduationCap, Loader2, Mail, Network, Phone, Server, Shield, Smartphone, Star, Users, Check, UserCog } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -30,6 +30,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import type { Order } from '@/lib/types';
+import AuthModal from '@/app/components/auth-modal';
 
 
 const skills = [
@@ -275,6 +276,8 @@ export default function Home() {
     const [isGenerating, setIsGenerating] = useState(false);
     const { toast } = useToast();
     const [orderStatus, setOrderStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+    const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+
 
     const { register, handleSubmit, reset, formState: { errors } } = useForm<OrderFormData>({
       resolver: zodResolver(orderSchema),
@@ -301,7 +304,7 @@ export default function Home() {
           attachmentUrl = await getDownloadURL(uploadTask.ref);
         }
         
-        const orderPayload: Omit<Order, 'id'> = {
+        const orderPayload: Omit<Order, 'id' | 'userId'> = {
           name: data.name,
           email: data.email || '', 
           phone: data.phone || '', 
@@ -523,356 +526,369 @@ export default function Home() {
 
 
   return (
-    <div className="container mx-auto py-12 px-4 md:px-6 lg:px-8">
-      {/* Hero Section */}
-      <section id="home" className="py-20 text-center">
-        <Image
-          src="https://drive.google.com/uc?id=1SEG-a3e_1xHx0-P7gD6MUysCSt6kg96U"
-          alt="Muzo's Profile Picture"
-          width={150}
-          height={150}
-          data-ai-hint="profile picture"
-          className="rounded-full mx-auto mb-6 shadow-lg border-4 border-primary object-cover"
-        />
-        <h1 className="text-4xl md:text-5xl font-bold text-primary">
-          <TranslatedText text="Musonda Salimu" />
-        </h1>
-        <p className="text-xl md:text-2xl text-muted-foreground mt-2">
-          <TranslatedText text="IT Professional | Software Engineer | AI Enthusiast" />
-        </p>
-        <p className="max-w-2xl mx-auto mt-4 text-foreground">
-          <TranslatedText text="IT professional with an MSc in Informatics and System Administration experience. Skilled in Python, cybersecurity, and IT infrastructure management. Currently expanding expertise in Django and AI tools to build innovative solutions." />
-        </p>
-        <div className="mt-8 flex flex-wrap justify-center gap-4">
-          <Button asChild size="lg">
-            <a href="mailto:musondasalim@gmail.com"><TranslatedText text="Get in Touch" /></a>
-          </Button>
-           <Button onClick={() => generateCv('preview')} size="lg" variant="outline" disabled={isGenerating}>
-                {isGenerating ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Eye className="mr-2 h-5 w-5" />}
-                <TranslatedText text="Preview CV" />
+    <>
+      <AuthModal 
+        isOpen={isAuthModalOpen} 
+        onClose={() => setIsAuthModalOpen(false)} 
+      />
+      <div className="container mx-auto py-12 px-4 md:px-6 lg:px-8">
+        {/* Hero Section */}
+        <section id="home" className="py-20 text-center">
+          <Image
+            src="https://drive.google.com/uc?id=1SEG-a3e_1xHx0-P7gD6MUysCSt6kg96U"
+            alt="Muzo's Profile Picture"
+            width={150}
+            height={150}
+            data-ai-hint="profile picture"
+            className="rounded-full mx-auto mb-6 shadow-lg border-4 border-primary object-cover"
+          />
+          <h1 className="text-4xl md:text-5xl font-bold text-primary">
+            <TranslatedText text="Musonda Salimu" />
+          </h1>
+          <p className="text-xl md:text-2xl text-muted-foreground mt-2">
+            <TranslatedText text="IT Professional | Software Engineer | AI Enthusiast" />
+          </p>
+          <p className="max-w-2xl mx-auto mt-4 text-foreground">
+            <TranslatedText text="IT professional with an MSc in Informatics and System Administration experience. Skilled in Python, cybersecurity, and IT infrastructure management. Currently expanding expertise in Django and AI tools to build innovative solutions." />
+          </p>
+          <div className="mt-8 flex flex-wrap justify-center gap-4">
+            <Button asChild size="lg">
+              <a href="mailto:musondasalim@gmail.com"><TranslatedText text="Get in Touch" /></a>
             </Button>
-            <Button onClick={() => generateCv('download')} size="lg" variant="secondary" disabled={isGenerating}>
-                {isGenerating ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Download className="mr-2 h-5 w-5" />}
-                <TranslatedText text="Download CV" />
-            </Button>
-        </div>
-      </section>
-
-      {/* About Section */}
-      <section id="about" className="py-20 border-t">
-          <h2 className="text-3xl font-bold text-center mb-12"><TranslatedText text="About Me"/></h2>
-          <div className="flex flex-col md:flex-row items-center gap-10">
-              <div className="text-lg text-muted-foreground space-y-4">
-                  <p><TranslatedText text="I am a versatile and experienced professional with a Master's degree in Informatics and a passion for technology. My journey has taken me through system administration, software engineering, and cutting-edge AI research."/></p>
-                  <p><TranslatedText text="I thrive on solving complex problems, whether optimizing IT infrastructure or developing efficient code. But I'm most excited about the future of development. I'm actively exploring new AI-driven development paradigms like Vibe Coding and leveraging powerful automation tools like n8n to build smarter, more efficient applications."/></p>
-                  <p><TranslatedText text="Driven by a willingness to learn, I am continuously pushing the boundaries of what's possible, merging my skills in full-stack development and AI to create next-generation solutions."/></p>
-              </div>
+            <Button onClick={() => generateCv('preview')} size="lg" variant="outline" disabled={isGenerating}>
+                  {isGenerating ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Eye className="mr-2 h-5 w-5" />}
+                  <TranslatedText text="Preview CV" />
+              </Button>
+              <Button onClick={() => generateCv('download')} size="lg" variant="secondary" disabled={isGenerating}>
+                  {isGenerating ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Download className="mr-2 h-5 w-5" />}
+                  <TranslatedText text="Download CV" />
+              </Button>
           </div>
-      </section>
+        </section>
 
-      {/* Skills Section */}
-      <section id="skills" className="py-20 border-t bg-muted/50 rounded-lg">
-        <h2 className="text-3xl font-bold text-center mb-12"><TranslatedText text="Technical Skills" /></h2>
-        <div className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
-          {skills.map(skill => (
-            <div key={skill.name} className="flex flex-col items-center gap-2 text-center">
-              <div className="w-16 h-16 bg-background rounded-full flex items-center justify-center shadow-md text-primary">
-                {skill.icon}
+        {/* About Section */}
+        <section id="about" className="py-20 border-t">
+            <h2 className="text-3xl font-bold text-center mb-12"><TranslatedText text="About Me"/></h2>
+            <div className="flex flex-col md:flex-row items-center gap-10">
+                <div className="text-lg text-muted-foreground space-y-4">
+                    <p><TranslatedText text="I am a versatile and experienced professional with a Master's degree in Informatics and a passion for technology. My journey has taken me through system administration, software engineering, and cutting-edge AI research."/></p>
+                    <p><TranslatedText text="I thrive on solving complex problems, whether optimizing IT infrastructure or developing efficient code. But I'm most excited about the future of development. I'm actively exploring new AI-driven development paradigms like Vibe Coding and leveraging powerful automation tools like n8n to build smarter, more efficient applications."/></p>
+                    <p><TranslatedText text="Driven by a willingness to learn, I am continuously pushing the boundaries of what's possible, merging my skills in full-stack development and AI to create next-generation solutions."/></p>
+                </div>
+            </div>
+        </section>
+
+        {/* Skills Section */}
+        <section id="skills" className="py-20 border-t bg-muted/50 rounded-lg">
+          <h2 className="text-3xl font-bold text-center mb-12"><TranslatedText text="Technical Skills" /></h2>
+          <div className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
+            {skills.map(skill => (
+              <div key={skill.name} className="flex flex-col items-center gap-2 text-center">
+                <div className="w-16 h-16 bg-background rounded-full flex items-center justify-center shadow-md text-primary">
+                  {skill.icon}
+                </div>
+                <p className="font-semibold text-foreground"><TranslatedText text={skill.name} /></p>
               </div>
-              <p className="font-semibold text-foreground"><TranslatedText text={skill.name} /></p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Projects Section */}
-      <section id="projects" className="py-20 border-t">
-        <div className="text-center mb-12">
-            <Button asChild size="lg" className="text-3xl font-bold h-auto py-3 px-6">
-                <a href="https://github.com/MS0C54073" target="_blank" rel="noopener noreferrer">
-                    <TranslatedText text="Projects" />
-                    <ArrowRight className="ml-3 h-6 w-6" />
-                </a>
-            </Button>
-        </div>
-        <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
-          {projects.map((project, index) => {
-            if (project.demo) {
-              return (
-                <Card key={index} className="bg-card/50 hover:bg-accent/20 hover:border-primary transition-all duration-300 h-full flex flex-col">
-                  <CardHeader>
-                    <CardTitle className="text-accent group-hover:text-primary transition-colors">
-                      <TranslatedText text={project.title} />
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="flex-grow flex items-end">
-                    <div className="mt-4 flex w-full">
-                        <Button asChild variant="outline" className="flex-grow rounded-r-none focus:z-10">
-                           <a href={project.link} target="_blank" rel="noopener noreferrer">
-                              <Github className="mr-2 h-4 w-4" />
-                              <TranslatedText text="GitHub" />
-                            </a>
-                        </Button>
-                        <Button asChild variant="default" className="-ml-px rounded-l-none focus:z-10">
-                            <a href={project.demo} target="_blank" rel="noopener noreferrer">
-                                <ExternalLink className="mr-2 h-4 w-4" />
-                                <TranslatedText text="Demo" />
-                            </a>
-                        </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              );
-            }
-            return (
-              <a 
-                key={index}
-                href={project.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group block"
-              >
-                <Card className="bg-card/50 hover:bg-accent/20 hover:border-primary transition-all duration-300 h-full">
-                  <CardHeader>
-                    <CardTitle className="text-accent group-hover:text-primary transition-colors">
-                        <TranslatedText text={project.title} />
-                    </CardTitle>
-                  </CardHeader>
-                   <CardContent>
-                      <Button asChild variant="outline" className="w-full">
-                           <span className="flex items-center">
-                              <Github className="mr-2 h-4 w-4" />
-                              <TranslatedText text="View on GitHub" />
-                            </span>
-                        </Button>
-                  </CardContent>
-                </Card>
-              </a>
-            )
-          })}
-        </div>
-      </section>
-
-      {/* Experience Section */}
-      <section id="experience" className="py-20 border-t">
-        <h2 className="text-3xl font-bold text-center mb-12"><TranslatedText text="Work Experience" /></h2>
-        <div className="max-w-3xl mx-auto relative pl-8">
-          <div className="absolute left-0 top-0 h-full w-0.5 bg-border"></div>
-          {experiences.map((exp, index) => (
-            <div key={index} className="mb-12 relative">
-                <div className="absolute left-[-34px] top-1.5 w-4 h-4 bg-primary rounded-full border-4 border-background"></div>
-                <p className="text-sm text-muted-foreground">{exp.duration}</p>
-                <h3 className="text-xl font-bold text-accent"><TranslatedText text={exp.title}/></h3>
-                <p className="font-semibold text-foreground mb-2"><TranslatedText text={exp.company}/></p>
-                <ul className="list-disc list-inside text-muted-foreground space-y-1">
-                  {exp.details.map((d, i) => <li key={i}><TranslatedText text={d} /></li>)}
-                </ul>
-            </div>
-          ))}
-        </div>
-      </section>
-      
-      {/* Education Section */}
-      <section id="education" className="py-20 border-t bg-muted/50 rounded-lg">
-        <h2 className="text-3xl font-bold text-center mb-12"><TranslatedText text="Education" /></h2>
-        <div className="max-w-3xl mx-auto relative pl-8">
-          <div className="absolute left-0 top-0 h-full w-0.5 bg-border"></div>
-          {education.map((edu, index) => (
-            <div key={index} className="mb-12 relative">
-              <div className="absolute left-[-34px] top-1.5 w-4 h-4 bg-primary rounded-full border-4 border-background"></div>
-              <p className="text-sm text-muted-foreground">{edu.duration}</p>
-              <h3 className="text-xl font-bold text-accent"><TranslatedText text={edu.degree}/></h3>
-              <p className="font-semibold text-foreground"><TranslatedText text={edu.university}/></p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Awards Section */}
-      <section id="awards" className="py-20 border-t">
-        <h2 className="text-3xl font-bold text-center mb-12"><TranslatedText text="Awards & Achievements"/></h2>
-        <div className="max-w-4xl mx-auto grid grid-cols-1 gap-6">
-            {awards.map((award, index) => (
-                <Card key={index} className="bg-card/50">
-                    <CardHeader>
-                        <div className="flex items-start gap-4">
-                            <Award className="h-8 w-8 text-accent flex-shrink-0 mt-1" />
-                            <div>
-                                <CardTitle className="text-lg text-accent"><TranslatedText text={award.title} /></CardTitle>
-                                <CardDescription className="mt-1">
-                                    <TranslatedText text="Awarded by "/> <strong><TranslatedText text={award.issuer}/></strong> - <TranslatedText text={award.date}/>
-                                </CardDescription>
-                            </div>
-                        </div>
-                    </CardHeader>
-                </Card>
             ))}
-        </div>
-      </section>
-      
-      {/* Certifications Section */}
-      <section id="certifications" className="py-20 border-t">
-        <div className="text-center mb-12">
-            <Button asChild size="lg" className="text-3xl font-bold h-auto py-3 px-6">
-                <Link href="https://www.coursera.org/user/d5bf15915278f56a6f96c3b5195c6d11" target="_blank">
-                    <TranslatedText text="Licenses & Certifications" />
-                    <ArrowRight className="ml-3 h-6 w-6" />
-                </Link>
-            </Button>
-        </div>
-        <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
-            {certifications.map((cert, index) => (
-                <Card key={index} className="bg-card/50">
+          </div>
+        </section>
+
+        {/* Projects Section */}
+        <section id="projects" className="py-20 border-t">
+          <div className="text-center mb-12">
+              <Button asChild size="lg" className="text-3xl font-bold h-auto py-3 px-6">
+                  <a href="https://github.com/MS0C54073" target="_blank" rel="noopener noreferrer">
+                      <TranslatedText text="Projects" />
+                      <ArrowRight className="ml-3 h-6 w-6" />
+                  </a>
+              </Button>
+          </div>
+          <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+            {projects.map((project, index) => {
+              if (project.demo) {
+                return (
+                  <Card key={index} className="bg-card/50 hover:bg-accent/20 hover:border-primary transition-all duration-300 h-full flex flex-col">
                     <CardHeader>
-                        <CardTitle className="text-lg text-accent"><TranslatedText text={cert.title} /></CardTitle>
+                      <CardTitle className="text-accent group-hover:text-primary transition-colors">
+                        <TranslatedText text={project.title} />
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="flex-grow flex items-end">
+                      <div className="mt-4 flex w-full">
+                          <Button asChild variant="outline" className="flex-grow rounded-r-none focus:z-10">
+                            <a href={project.link} target="_blank" rel="noopener noreferrer">
+                                <Github className="mr-2 h-4 w-4" />
+                                <TranslatedText text="GitHub" />
+                              </a>
+                          </Button>
+                          <Button asChild variant="default" className="-ml-px rounded-l-none focus:z-10">
+                              <a href={project.demo} target="_blank" rel="noopener noreferrer">
+                                  <ExternalLink className="mr-2 h-4 w-4" />
+                                  <TranslatedText text="Demo" />
+                              </a>
+                          </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              }
+              return (
+                <a 
+                  key={index}
+                  href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group block"
+                >
+                  <Card className="bg-card/50 hover:bg-accent/20 hover:border-primary transition-all duration-300 h-full">
+                    <CardHeader>
+                      <CardTitle className="text-accent group-hover:text-primary transition-colors">
+                          <TranslatedText text={project.title} />
+                      </CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <p className="text-sm text-muted-foreground">
-                            <TranslatedText text="Issued by "/> <strong><TranslatedText text={cert.issuer}/></strong> - <TranslatedText text={cert.date}/>
-                        </p>
-                        {cert.credentialId && (
-                             <p className="text-xs text-muted-foreground mt-1">
-                                <TranslatedText text="Credential ID: "/> {cert.credentialId}
-                            </p>
-                        )}
-                        {cert.skills && (
-                            <div className="mt-2">
-                                <h4 className="text-xs font-semibold text-foreground mb-1"><TranslatedText text="Skills:"/></h4>
-                                <div className="flex flex-wrap gap-1">
-                                    {cert.skills.map(skill => <Badge key={skill} variant="secondary"><TranslatedText text={skill}/></Badge>)}
-                                </div>
-                            </div>
-                        )}
+                        <Button asChild variant="outline" className="w-full">
+                            <span className="flex items-center">
+                                <Github className="mr-2 h-4 w-4" />
+                                <TranslatedText text="View on GitHub" />
+                              </span>
+                          </Button>
                     </CardContent>
-                </Card>
+                  </Card>
+                </a>
+              )
+            })}
+          </div>
+        </section>
+
+        {/* Experience Section */}
+        <section id="experience" className="py-20 border-t">
+          <h2 className="text-3xl font-bold text-center mb-12"><TranslatedText text="Work Experience" /></h2>
+          <div className="max-w-3xl mx-auto relative pl-8">
+            <div className="absolute left-0 top-0 h-full w-0.5 bg-border"></div>
+            {experiences.map((exp, index) => (
+              <div key={index} className="mb-12 relative">
+                  <div className="absolute left-[-34px] top-1.5 w-4 h-4 bg-primary rounded-full border-4 border-background"></div>
+                  <p className="text-sm text-muted-foreground">{exp.duration}</p>
+                  <h3 className="text-xl font-bold text-accent"><TranslatedText text={exp.title}/></h3>
+                  <p className="font-semibold text-foreground mb-2"><TranslatedText text={exp.company}/></p>
+                  <ul className="list-disc list-inside text-muted-foreground space-y-1">
+                    {exp.details.map((d, i) => <li key={i}><TranslatedText text={d} /></li>)}
+                  </ul>
+              </div>
             ))}
-        </div>
-      </section>
-
-       {/* References Section */}
-      <section id="references" className="py-20 border-t bg-muted/50 rounded-lg hidden">
-        <h2 className="text-3xl font-bold text-center mb-12"><TranslatedText text="References"/></h2>
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {references.map((ref, index) => (
-                <Card key={index} className="flex flex-col">
-                    <CardHeader>
-                        <CardTitle className="text-xl text-primary">{ref.name}</CardTitle>
-                        <CardDescription>
-                            <TranslatedText text={ref.title}/> at <TranslatedText text={ref.company}/>
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent className="flex-grow space-y-2">
-                        {ref.email && (
-                            <a href={`mailto:${ref.email}`} className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary">
-                                <Mail className="h-4 w-4" />
-                                <span>{ref.email}</span>
-                            </a>
-                        )}
-                        {ref.phone && (
-                            <p className="flex items-center gap-2 text-sm text-muted-foreground">
-                                <Phone className="h-4 w-4" />
-                                <span>{ref.phone}</span>
-                            </p>
-                        )}
-                    </CardContent>
-                </Card>
+          </div>
+        </section>
+        
+        {/* Education Section */}
+        <section id="education" className="py-20 border-t bg-muted/50 rounded-lg">
+          <h2 className="text-3xl font-bold text-center mb-12"><TranslatedText text="Education" /></h2>
+          <div className="max-w-3xl mx-auto relative pl-8">
+            <div className="absolute left-0 top-0 h-full w-0.5 bg-border"></div>
+            {education.map((edu, index) => (
+              <div key={index} className="mb-12 relative">
+                <div className="absolute left-[-34px] top-1.5 w-4 h-4 bg-primary rounded-full border-4 border-background"></div>
+                <p className="text-sm text-muted-foreground">{edu.duration}</p>
+                <h3 className="text-xl font-bold text-accent"><TranslatedText text={edu.degree}/></h3>
+                <p className="font-semibold text-foreground"><TranslatedText text={edu.university}/></p>
+              </div>
             ))}
-        </div>
-      </section>
+          </div>
+        </section>
 
-      {/* Services Section */}
-      <section id="services" className="py-20 border-t">
-        <div className="text-center max-w-2xl mx-auto">
-          <h2 className="text-3xl font-bold"><TranslatedText text="Let's Build Your Vision" /></h2>
-          <p className="text-muted-foreground mt-4 mb-8">
-            <TranslatedText text="Have an idea for a website or mobile app? I can help you build a functional prototype to bring your vision to life. Fill out the form below with your project details to get started." />
-          </p>
-        </div>
-        <Card className="max-w-xl mx-auto p-6 bg-card/80 backdrop-blur-sm shadow-xl">
-           <form onSubmit={handleSubmit(onOrderSubmit)}>
-              <div className="mb-4">
-                <Label htmlFor="order-name" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Name:" /></Label>
-                <Input type="text" id="order-name" {...register("name")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary" />
-                {errors.name && <p className="text-destructive text-xs italic mt-1"><TranslatedText text={errors.name.message || ""} /></p>}
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                  <div>
-                    <Label htmlFor="order-email" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Email (Optional):" /></Label>
-                    <Input type="email" id="order-email" {...register("email")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary" />
-                    {errors.email && <p className="text-destructive text-xs italic mt-1"><TranslatedText text={errors.email.message || ""} /></p>}
-                  </div>
-                  <div>
-                    <Label htmlFor="order-phone" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Phone (Optional):" /></Label>
-                    <Input type="tel" id="order-phone" {...register("phone")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary" />
-                  </div>
-              </div>
-              <div className="mb-4">
-                <Label htmlFor="order-details" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Project Details:" /></Label>
-                <Textarea id="order-details" rows={4} {...register("details")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary"></Textarea>
-                 {errors.details && <p className="text-destructive text-xs italic mt-1"><TranslatedText text={errors.details.message || ""} /></p>}
-              </div>
-              <div className="mb-6">
-                <Label htmlFor="order-attachment" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Attach File (Optional):" /></Label>
-                <Input type="file" id="order-attachment" {...register("attachment")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90 focus:ring-2 focus:ring-primary" />
-              </div>
-              <div className="flex items-center justify-end">
-                <Button
-                  type="submit"
-                  disabled={orderStatus === 'submitting' || orderStatus === 'success'}
-                  className={cn(
-                    'font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors min-w-[160px] justify-center',
-                    orderStatus === 'submitting' && 'opacity-50 cursor-not-allowed',
-                    orderStatus === 'success'
-                      ? 'bg-button-success text-button-success-foreground hover:bg-button-success/90'
-                      : 'bg-accent hover:bg-accent/90 text-accent-foreground'
-                  )}
-                >
-                  {orderStatus === 'submitting' ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      <TranslatedText text="Submitting..." />
-                    </>
-                  ) : orderStatus === 'success' ? (
-                    <>
-                      <Check className="mr-2 h-4 w-4" />
-                      <TranslatedText text="Submitted!" />
-                    </>
-                  ) : (
-                    <TranslatedText text="Submit Request" />
-                  )}
-                </Button>
-              </div>
-            </form>
-        </Card>
-      </section>
+        {/* Awards Section */}
+        <section id="awards" className="py-20 border-t">
+          <h2 className="text-3xl font-bold text-center mb-12"><TranslatedText text="Awards & Achievements"/></h2>
+          <div className="max-w-4xl mx-auto grid grid-cols-1 gap-6">
+              {awards.map((award, index) => (
+                  <Card key={index} className="bg-card/50">
+                      <CardHeader>
+                          <div className="flex items-start gap-4">
+                              <Award className="h-8 w-8 text-accent flex-shrink-0 mt-1" />
+                              <div>
+                                  <CardTitle className="text-lg text-accent"><TranslatedText text={award.title} /></CardTitle>
+                                  <CardDescription className="mt-1">
+                                      <TranslatedText text="Awarded by "/> <strong><TranslatedText text={award.issuer}/></strong> - <TranslatedText text={award.date}/>
+                                  </CardDescription>
+                              </div>
+                          </div>
+                      </CardHeader>
+                  </Card>
+              ))}
+          </div>
+        </section>
+        
+        {/* Certifications Section */}
+        <section id="certifications" className="py-20 border-t">
+          <div className="text-center mb-12">
+              <Button asChild size="lg" className="text-3xl font-bold h-auto py-3 px-6">
+                  <Link href="https://www.coursera.org/user/d5bf15915278f56a6f96c3b5195c6d11" target="_blank">
+                      <TranslatedText text="Licenses & Certifications" />
+                      <ArrowRight className="ml-3 h-6 w-6" />
+                  </Link>
+              </Button>
+          </div>
+          <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+              {certifications.map((cert, index) => (
+                  <Card key={index} className="bg-card/50">
+                      <CardHeader>
+                          <CardTitle className="text-lg text-accent"><TranslatedText text={cert.title} /></CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                          <p className="text-sm text-muted-foreground">
+                              <TranslatedText text="Issued by "/> <strong><TranslatedText text={cert.issuer}/></strong> - <TranslatedText text={cert.date}/>
+                          </p>
+                          {cert.credentialId && (
+                              <p className="text-xs text-muted-foreground mt-1">
+                                  <TranslatedText text="Credential ID: "/> {cert.credentialId}
+                              </p>
+                          )}
+                          {cert.skills && (
+                              <div className="mt-2">
+                                  <h4 className="text-xs font-semibold text-foreground mb-1"><TranslatedText text="Skills:"/></h4>
+                                  <div className="flex flex-wrap gap-1">
+                                      {cert.skills.map(skill => <Badge key={skill} variant="secondary"><TranslatedText text={skill}/></Badge>)}
+                                  </div>
+                              </div>
+                          )}
+                      </CardContent>
+                  </Card>
+              ))}
+          </div>
+        </section>
 
-      {/* Contact Section */}
-      <section id="contact" className="py-20 border-t">
-        <div className="text-center max-w-2xl mx-auto">
-          <h2 className="text-3xl font-bold"><TranslatedText text="Let's Connect" /></h2>
-          <p className="text-muted-foreground mt-4 mb-8">
-            <TranslatedText text="I'm always open to discussing new projects, creative ideas, or opportunities to be part of an ambitious vision. Feel free to reach out." />
-          </p>
-          <div className="flex flex-col items-center gap-4 mb-8">
-            <Button asChild size="lg">
-              <a href="mailto:musondasalim@gmail.com"><TranslatedText text="musondasalim@gmail.com"/></a>
-            </Button>
-            <div className="flex flex-col sm:flex-row gap-x-6 gap-y-2 text-muted-foreground">
-              <a href="tel:+260977288260" className="flex items-center gap-2 hover:text-primary">
-                <Phone className="h-4 w-4" />
-                <span>+260977288260</span>
-              </a>
-              <a href="tel:+79014213578" className="flex items-center gap-2 hover:text-primary">
-                <Phone className="h-4 w-4" />
-                <span>+79014213578</span>
-              </a>
+        {/* References Section (Hidden on page, used for PDF) */}
+        <section id="references" className="py-20 border-t bg-muted/50 rounded-lg hidden">
+          <h2 className="text-3xl font-bold text-center mb-12"><TranslatedText text="References"/></h2>
+          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {references.map((ref, index) => (
+                  <Card key={index} className="flex flex-col">
+                      <CardHeader>
+                          <CardTitle className="text-xl text-primary">{ref.name}</CardTitle>
+                          <CardDescription>
+                              <TranslatedText text={ref.title}/> at <TranslatedText text={ref.company}/>
+                          </CardDescription>
+                      </CardHeader>
+                      <CardContent className="flex-grow space-y-2">
+                          {ref.email && (
+                              <a href={`mailto:${ref.email}`} className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary">
+                                  <Mail className="h-4 w-4" />
+                                  <span>{ref.email}</span>
+                              </a>
+                          )}
+                          {ref.phone && (
+                              <p className="flex items-center gap-2 text-sm text-muted-foreground">
+                                  <Phone className="h-4 w-4" />
+                                  <span>{ref.phone}</span>
+                              </p>
+                          )}
+                      </CardContent>
+                  </Card>
+              ))}
+          </div>
+        </section>
+
+        {/* Services Section */}
+        <section id="services" className="py-20 border-t">
+          <div className="text-center max-w-2xl mx-auto">
+            <h2 className="text-3xl font-bold"><TranslatedText text="Let's Build Your Vision" /></h2>
+            <p className="text-muted-foreground mt-4 mb-8">
+              <TranslatedText text="Have an idea for a website or mobile app? I can help you build a functional prototype to bring your vision to life. Fill out the form below with your project details to get started." />
+            </p>
+          </div>
+          <Card className="max-w-xl mx-auto p-6 bg-card/80 backdrop-blur-sm shadow-xl">
+            <form onSubmit={handleSubmit(onOrderSubmit)}>
+                <div className="mb-4">
+                  <Label htmlFor="order-name" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Name:" /></Label>
+                  <Input type="text" id="order-name" {...register("name")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary" />
+                  {errors.name && <p className="text-destructive text-xs italic mt-1"><TranslatedText text={errors.name.message || ""} /></p>}
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                      <Label htmlFor="order-email" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Email (Optional):" /></Label>
+                      <Input type="email" id="order-email" {...register("email")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary" />
+                      {errors.email && <p className="text-destructive text-xs italic mt-1"><TranslatedText text={errors.email.message || ""} /></p>}
+                    </div>
+                    <div>
+                      <Label htmlFor="order-phone" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Phone (Optional):" /></Label>
+                      <Input type="tel" id="order-phone" {...register("phone")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary" />
+                    </div>
+                </div>
+                <div className="mb-4">
+                  <Label htmlFor="order-details" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Project Details:" /></Label>
+                  <Textarea id="order-details" rows={4} {...register("details")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline focus:ring-2 focus:ring-primary"></Textarea>
+                  {errors.details && <p className="text-destructive text-xs italic mt-1"><TranslatedText text={errors.details.message || ""} /></p>}
+                </div>
+                <div className="mb-6">
+                  <Label htmlFor="order-attachment" className="block text-foreground text-sm font-bold mb-2"><TranslatedText text="Attach File (Optional):" /></Label>
+                  <Input type="file" id="order-attachment" {...register("attachment")} className="shadow appearance-none border rounded w-full py-2 px-3 bg-background/70 text-foreground leading-tight focus:outline-none focus:shadow-outline file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90 focus:ring-2 focus:ring-primary" />
+                </div>
+                <div className="flex items-center justify-end">
+                  <Button
+                    type="submit"
+                    disabled={orderStatus === 'submitting' || orderStatus === 'success'}
+                    className={cn(
+                      'font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors min-w-[160px] justify-center',
+                      orderStatus === 'submitting' && 'opacity-50 cursor-not-allowed',
+                      orderStatus === 'success'
+                        ? 'bg-button-success text-button-success-foreground hover:bg-button-success/90'
+                        : 'bg-accent hover:bg-accent/90 text-accent-foreground'
+                    )}
+                  >
+                    {orderStatus === 'submitting' ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        <TranslatedText text="Submitting..." />
+                      </>
+                    ) : orderStatus === 'success' ? (
+                      <>
+                        <Check className="mr-2 h-4 w-4" />
+                        <TranslatedText text="Submitted!" />
+                      </>
+                    ) : (
+                      <TranslatedText text="Submit Request" />
+                    )}
+                  </Button>
+                </div>
+              </form>
+          </Card>
+        </section>
+
+        {/* Contact Section */}
+        <section id="contact" className="py-20 border-t">
+          <div className="text-center max-w-2xl mx-auto">
+            <h2 className="text-3xl font-bold"><TranslatedText text="Let's Connect" /></h2>
+            <p className="text-muted-foreground mt-4 mb-8">
+              <TranslatedText text="I'm always open to discussing new projects, creative ideas, or opportunities to be part of an ambitious vision. Feel free to reach out." />
+            </p>
+            <div className="flex flex-col items-center gap-4 mb-8">
+              <Button asChild size="lg">
+                <a href="mailto:musondasalim@gmail.com"><TranslatedText text="musondasalim@gmail.com"/></a>
+              </Button>
+              <div className="flex flex-col sm:flex-row gap-x-6 gap-y-2 text-muted-foreground">
+                <a href="tel:+260977288260" className="flex items-center gap-2 hover:text-primary">
+                  <Phone className="h-4 w-4" />
+                  <span>+260977288260</span>
+                </a>
+                <a href="tel:+79014213578" className="flex items-center gap-2 hover:text-primary">
+                  <Phone className="h-4 w-4" />
+                  <span>+79014213578</span>
+                </a>
+              </div>
+            </div>
+            <div className="flex space-x-6 justify-center">
+              <SocialIcons className="flex space-x-4 justify-center" />
             </div>
           </div>
-          <div className="flex space-x-6 justify-center">
-            <SocialIcons className="flex space-x-4 justify-center" />
-          </div>
-        </div>
-      </section>
-    </div>
+        </section>
+        
+        <footer className="text-center py-6 mt-8 border-t border-border">
+            <Button variant="ghost" onClick={() => setIsAuthModalOpen(true)}>
+                <UserCog className="mr-2 h-4 w-4" />
+                <TranslatedText text="Admin Access" />
+            </Button>
+        </footer>
+      </div>
+    </>
   );
 }

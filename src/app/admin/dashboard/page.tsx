@@ -36,74 +36,74 @@ export default function AdminDashboardPage() {
   
   const totalNotifications = newCommentsCount + newOrdersCount + newReviewsCount;
 
-  const fetchData = async () => {
-    setLoadingData(true);
-    try {
-      const commentsCollection = collection(db, "comments");
-      const ordersCollection = collection(db, "orders");
-      const reviewsCollection = collection(db, "reviews");
-
-      const [commentsSnapshot, ordersSnapshot, reviewsSnapshot] = await Promise.all([
-        getCountFromServer(commentsCollection),
-        getCountFromServer(ordersCollection),
-        getCountFromServer(reviewsCollection)
-      ]);
-      setNewCommentsCount(commentsSnapshot.data().count);
-      setNewOrdersCount(ordersSnapshot.data().count);
-      setNewReviewsCount(reviewsSnapshot.data().count);
-
-    } catch (error) {
-      console.error("Error fetching counts:", error);
-    }
-    
-    const latestCommentsQuery = query(collection(db, "comments"), orderBy("timestamp", "desc"), limit(3));
-    const latestCommentsUnsubscribe = onSnapshot(latestCommentsQuery, (snapshot) => {
-        setLatestComments(snapshot.docs.map(doc => ({
-            id: doc.id,
-            name: doc.data().name || 'Anonymous',
-            comment: doc.data().comment || 'No comment provided',
-            email: '',
-            timestamp: ''
-        } as DisplayComment)));
-    }, (error) => console.error("Error fetching latest comments:", error));
-
-    const latestOrdersQuery = query(collection(db, "orders"), orderBy("timestamp", "desc"), limit(3));
-    const latestOrdersUnsubscribe = onSnapshot(latestOrdersQuery, (snapshot) => {
-        setLatestOrders(snapshot.docs.map(doc => ({
-            id: doc.id,
-            name: doc.data().name || 'N/A',
-            details: doc.data().details || 'No details provided.',
-            email: '', phone: '', attachmentName: null, timestamp: '', status: 'pending', attachmentUrl: null
-        } as DisplayOrder)));
-    }, (error) => console.error("Error fetching latest orders:", error));
-    
-    const latestReviewsQuery = query(collection(db, "reviews"), orderBy("timestamp", "desc"), limit(3));
-    const latestReviewsUnsubscribe = onSnapshot(latestReviewsQuery, (snapshot) => {
-        setLatestReviews(snapshot.docs.map(doc => ({
-            id: doc.id,
-            name: doc.data().name || 'Anonymous',
-            review: doc.data().review || 'No review text.',
-            rating: doc.data().rating || 0,
-            timestamp: ''
-        } as DisplayReview)));
-        setLoadingData(false);
-    }, (error) => {
-      console.error("Error fetching latest reviews:", error);
-      setLoadingData(false);
-    });
-
-    return () => {
-      latestCommentsUnsubscribe();
-      latestOrdersUnsubscribe();
-      latestReviewsUnsubscribe();
-    }
-  };
-
   useEffect(() => {
     if (!authLoading) {
       if (!user || userProfile?.role !== 'admin') {
         router.push('/'); // Redirect non-admins to home
       } else {
+        const fetchData = async () => {
+          setLoadingData(true);
+          try {
+            const commentsCollection = collection(db, "comments");
+            const ordersCollection = collection(db, "orders");
+            const reviewsCollection = collection(db, "reviews");
+
+            const [commentsSnapshot, ordersSnapshot, reviewsSnapshot] = await Promise.all([
+              getCountFromServer(commentsCollection),
+              getCountFromServer(ordersCollection),
+              getCountFromServer(reviewsCollection)
+            ]);
+            setNewCommentsCount(commentsSnapshot.data().count);
+            setNewOrdersCount(ordersSnapshot.data().count);
+            setNewReviewsCount(reviewsSnapshot.data().count);
+
+          } catch (error) {
+            console.error("Error fetching counts:", error);
+          }
+          
+          const unsubscribes: (() => void)[] = [];
+
+          const latestCommentsQuery = query(collection(db, "comments"), orderBy("timestamp", "desc"), limit(3));
+          unsubscribes.push(onSnapshot(latestCommentsQuery, (snapshot) => {
+              setLatestComments(snapshot.docs.map(doc => ({
+                  id: doc.id,
+                  name: doc.data().name || 'Anonymous',
+                  comment: doc.data().comment || 'No comment provided',
+                  email: '',
+                  timestamp: ''
+              } as DisplayComment)));
+          }, (error) => console.error("Error fetching latest comments:", error)));
+
+          const latestOrdersQuery = query(collection(db, "orders"), orderBy("timestamp", "desc"), limit(3));
+          unsubscribes.push(onSnapshot(latestOrdersQuery, (snapshot) => {
+              setLatestOrders(snapshot.docs.map(doc => ({
+                  id: doc.id,
+                  name: doc.data().name || 'N/A',
+                  details: doc.data().details || 'No details provided.',
+                  email: '', phone: '', attachmentName: null, timestamp: '', status: 'pending', attachmentUrl: null
+              } as DisplayOrder)));
+          }, (error) => console.error("Error fetching latest orders:", error)));
+          
+          const latestReviewsQuery = query(collection(db, "reviews"), orderBy("timestamp", "desc"), limit(3));
+          unsubscribes.push(onSnapshot(latestReviewsQuery, (snapshot) => {
+              setLatestReviews(snapshot.docs.map(doc => ({
+                  id: doc.id,
+                  name: doc.data().name || 'Anonymous',
+                  review: doc.data().review || 'No review text.',
+                  rating: doc.data().rating || 0,
+                  timestamp: ''
+              } as DisplayReview)));
+              setLoadingData(false);
+          }, (error) => {
+            console.error("Error fetching latest reviews:", error);
+            setLoadingData(false);
+          }));
+
+          return () => {
+            unsubscribes.forEach(unsub => unsub());
+          };
+        };
+        
         fetchData();
       }
     }

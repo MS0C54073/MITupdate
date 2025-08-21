@@ -14,7 +14,7 @@ export interface Comment {
   email?: string;
   comment?: string;
   timestamp: Timestamp | ReturnType<typeof import('firebase/firestore').serverTimestamp>; // Firestore Timestamp or ServerTimestamp sentinel
-  userId?: string;
+  userId?: string | null;
 }
 
 export interface Order {
@@ -27,7 +27,7 @@ export interface Order {
   attachmentName?: string | null;
   attachmentUrl?: string | null;
   timestamp: Timestamp | ReturnType<typeof import('firebase/firestore').serverTimestamp>; // Firestore Timestamp or ServerTimestamp sentinel
-  userId?: string;
+  userId?: string | null;
 }
 
 export interface Review {
@@ -36,6 +36,7 @@ export interface Review {
   review?: string;
   rating: number; // 1 to 5
   timestamp: Timestamp | ReturnType<typeof import('firebase/firestore').serverTimestamp>;
+  userId?: string | null;
 }
 
 // Data from Firestore for blog posts
@@ -68,6 +69,7 @@ export interface DisplayComment {
   email: string; // Defaulted if not present
   comment: string; // Defaulted if not present
   timestamp: string; // Formatted timestamp string
+  userId: string | null;
 }
 
 export interface DisplayOrder {
@@ -80,6 +82,7 @@ export interface DisplayOrder {
   attachmentName: string | null;
   attachmentUrl: string | null;
   timestamp: string; // Formatted timestamp string
+  userId: string | null;
 }
 
 export interface DisplayReview {
@@ -124,5 +127,3 @@ export interface FullDisplayBlogPost {
     imageUrl: string;
     imageHint: string;
 }
-
-    

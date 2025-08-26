@@ -96,6 +96,7 @@ const navLinks = [
     { href: '#education', text: 'Education' },
     { href: '#awards', text: 'Awards' },
     { href: '#certifications', text: 'Certifications' },
+    { href: '/it-service-calculator', text: 'IT Service Calculator' },
     { href: '#references', text: 'References' },
     { href: '#contact', text: 'Contact' },
 ];

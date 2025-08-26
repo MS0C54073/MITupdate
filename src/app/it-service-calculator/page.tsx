@@ -12,7 +12,7 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Slider } from '@/components/ui/slider';
 import TranslatedText from '@/app/components/translated-text';
-import { ArrowLeft, Calculator, Download, Mail, MessageCircle } from 'lucide-react';
+import { ArrowLeft, Calculator, Download, Mail } from 'lucide-react';
 import { WhatsappIcon } from '@/components/icons';
 
 // --- Configuration Object for easy editing ---

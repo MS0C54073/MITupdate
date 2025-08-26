@@ -19,6 +19,10 @@ import { useToast } from '@/hooks/use-toast';
 // --- Configuration Object for easy editing ---
 const serviceConfig = {
   vatRate: 0.16, // 16%
+  currencies: {
+    USD: { name: 'US Dollar', symbol: '$', rate: 1 },
+    ZMW: { name: 'Zambian Kwacha', symbol: 'K', rate: 25.50 }, // Example rate, updatable
+  },
   services: {
     web_development: {
       name: 'Web Development',
@@ -106,6 +110,7 @@ const serviceConfig = {
 
 type ServiceId = keyof typeof serviceConfig.services;
 type SlaId = keyof typeof serviceConfig.slaTiers;
+type CurrencyId = keyof typeof serviceConfig.currencies;
 
 export default function ItServiceCalculatorPage() {
   const { toast } = useToast();
@@ -114,24 +119,31 @@ export default function ItServiceCalculatorPage() {
   const [customServiceName, setCustomServiceName] = useState('');
   const [selectedSla, setSelectedSla] = useState<SlaId>('standard');
   const [selectedFeatures, setSelectedFeatures] = useState<Record<string, boolean>>({});
+  const [selectedCurrency, setSelectedCurrency] = useState<CurrencyId>('USD');
   const [totalCost, setTotalCost] = useState({ subtotal: 0, vat: 0, total: 0 });
 
   const currentService = serviceConfig.services[selectedService];
+  const currencyInfo = serviceConfig.currencies[selectedCurrency];
 
   useEffect(() => {
+    const currencyRate = serviceConfig.currencies[selectedCurrency].rate;
     const slaMultiplier = serviceConfig.slaTiers[selectedSla].multiplier;
-    const baseForQuantity = currentService.baseRate * quantity;
+    
+    // All base prices are in USD, so we calculate in USD first
+    const baseForQuantityUSD = currentService.baseRate * quantity;
 
-    const featuresCost = currentService.features.reduce((acc, feature) => {
+    const featuresCostUSD = currentService.features.reduce((acc, feature) => {
       if (selectedFeatures[feature.id]) {
         return acc + feature.price;
       }
       return acc;
     }, 0);
 
-    const subtotalBeforeSla = baseForQuantity + featuresCost;
-    const finalSubtotal = subtotalBeforeSla * slaMultiplier;
+    const subtotalBeforeSlaUSD = baseForQuantityUSD + featuresCostUSD;
+    const finalSubtotalUSD = subtotalBeforeSlaUSD * slaMultiplier;
 
+    // Convert to selected currency
+    const finalSubtotal = finalSubtotalUSD * currencyRate;
     const vatAmount = finalSubtotal * serviceConfig.vatRate;
     const finalTotal = finalSubtotal + vatAmount;
 
@@ -140,7 +152,7 @@ export default function ItServiceCalculatorPage() {
       vat: vatAmount,
       total: finalTotal,
     });
-  }, [selectedService, quantity, selectedSla, selectedFeatures, currentService]);
+  }, [selectedService, quantity, selectedSla, selectedFeatures, selectedCurrency, currentService]);
 
   const handleServiceChange = (value: string) => {
     setSelectedService(value as ServiceId);
@@ -157,6 +169,7 @@ export default function ItServiceCalculatorPage() {
   
   const getQuoteText = (forUrl = false) => {
     const nl = forUrl ? '%0A' : '\n';
+    const symbol = currencyInfo.symbol;
     let serviceName = currentService.name;
     if (selectedService === 'other' && customServiceName) {
       serviceName = `${customServiceName} (Custom)`;
@@ -173,10 +186,11 @@ export default function ItServiceCalculatorPage() {
       `Quantity: ${quantity} ${currentService.unit}(s)`,
       ...(featureLines ? [`Features:${nl}${featureLines}`] : []),
       `SLA: ${serviceConfig.slaTiers[selectedSla].name}`,
+      `Currency: ${selectedCurrency}`,
       `------------------`,
-      `Subtotal: $${totalCost.subtotal.toFixed(2)}`,
-      `VAT (16%): $${totalCost.vat.toFixed(2)}`,
-      `*Total: $${totalCost.total.toFixed(2)}*`,
+      `Subtotal: ${symbol}${totalCost.subtotal.toFixed(2)}`,
+      `VAT (16%): ${symbol}${totalCost.vat.toFixed(2)}`,
+      `*Total: ${symbol}${totalCost.total.toFixed(2)}*`,
     ].join(nl);
   };
   
@@ -184,6 +198,7 @@ export default function ItServiceCalculatorPage() {
     try {
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth();
+        const symbol = currencyInfo.symbol;
         let y = 20;
 
         doc.setFontSize(22);
@@ -194,6 +209,7 @@ export default function ItServiceCalculatorPage() {
         doc.setFontSize(12);
         doc.setFont('helvetica', 'normal');
         doc.text(`Date: ${new Date().toLocaleDateString()}`, 15, y);
+        doc.text(`Currency: ${selectedCurrency}`, pageWidth - 15, y, { align: 'right' });
         y += 15;
 
         doc.setLineWidth(0.5);
@@ -242,17 +258,17 @@ export default function ItServiceCalculatorPage() {
             y += 8;
         }
 
-        addCostLine('Subtotal:', `$${totalCost.subtotal.toFixed(2)}`);
-        addCostLine(`VAT (${serviceConfig.vatRate * 100}%):`, `$${totalCost.vat.toFixed(2)}`);
+        addCostLine('Subtotal:', `${symbol}${totalCost.subtotal.toFixed(2)}`);
+        addCostLine(`VAT (${serviceConfig.vatRate * 100}%):`, `${symbol}${totalCost.vat.toFixed(2)}`);
         y += 2;
         doc.setLineWidth(0.2);
         doc.line(pageWidth - 68, y, pageWidth - 15, y);
         y += 8;
         
         doc.setFontSize(14);
-        addCostLine('Total Estimate:', `$${totalCost.total.toFixed(2)}`);
+        addCostLine('Total Estimate:', `${symbol}${totalCost.total.toFixed(2)}`);
         
-        doc.save(`Quote-${serviceName.replace(/\\s/g, '_')}.pdf`);
+        doc.save(`Quote-${serviceName.replace(/\s/g, '_')}.pdf`);
     } catch(error) {
         console.error("Failed to generate PDF:", error);
         toast({
@@ -289,6 +305,19 @@ export default function ItServiceCalculatorPage() {
               <CardDescription><TranslatedText text="Select a service and adjust the options to get a cost estimate." /></CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
+              {/* Currency Selection */}
+              <div className="space-y-2">
+                 <Label><TranslatedText text="Currency" /></Label>
+                 <RadioGroup value={selectedCurrency} onValueChange={(value) => setSelectedCurrency(value as CurrencyId)} className="flex gap-4">
+                    {Object.entries(serviceConfig.currencies).map(([id, { name }]) => (
+                      <div className="flex items-center space-x-2" key={id}>
+                        <RadioGroupItem value={id} id={`curr-${id}`} />
+                        <Label htmlFor={`curr-${id}`} className="font-normal"><TranslatedText text={name} /></Label>
+                      </div>
+                    ))}
+                 </RadioGroup>
+              </div>
+
               {/* Service Selection */}
               <div className="space-y-2">
                 <Label htmlFor="service-select"><TranslatedText text="Service" /></Label>
@@ -345,7 +374,7 @@ export default function ItServiceCalculatorPage() {
                          />
                          <Label htmlFor={`feature-${feature.id}`} className="font-normal flex justify-between w-full">
                            <TranslatedText text={feature.name} />
-                           <span className="text-muted-foreground text-xs">+${feature.price}</span>
+                           <span className="text-muted-foreground text-xs">+{currencyInfo.symbol}{(feature.price * currencyInfo.rate).toFixed(2)}</span>
                          </Label>
                        </div>
                      ))}
@@ -385,16 +414,16 @@ export default function ItServiceCalculatorPage() {
             <CardContent className="space-y-4">
               <div className="flex justify-between text-muted-foreground">
                 <span><TranslatedText text="Subtotal" /></span>
-                <span>${totalCost.subtotal.toFixed(2)}</span>
+                <span>{currencyInfo.symbol}{totalCost.subtotal.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-muted-foreground">
                 <span><TranslatedText text={`VAT (${serviceConfig.vatRate * 100}%)`} /></span>
-                <span>${totalCost.vat.toFixed(2)}</span>
+                <span>{currencyInfo.symbol}{totalCost.vat.toFixed(2)}</span>
               </div>
               <div className="border-t border-dashed my-2"></div>
               <div className="flex justify-between text-2xl font-bold text-primary">
                 <span><TranslatedText text="Total" /></span>
-                <span>${totalCost.total.toFixed(2)}</span>
+                <span>{currencyInfo.symbol}{totalCost.total.toFixed(2)}</span>
               </div>
             </CardContent>
             <CardFooter className="flex flex-col gap-3">
@@ -420,5 +449,3 @@ export default function ItServiceCalculatorPage() {
     </div>
   );
 }
-
-    

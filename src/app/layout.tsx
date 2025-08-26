@@ -21,8 +21,9 @@ import { MuzoInTechLogo } from '@/components/icons';
 import { SocialIcons } from '@/components/social-icons';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { Menu } from 'lucide-react';
+import { Menu, Calculator } from 'lucide-react';
 import TranslatedText from './components/translated-text';
+import { FloatingCalculatorButton } from './components/floating-calculator-button';
 
 
 const inter = Inter({
@@ -188,6 +189,7 @@ export default function RootLayout({
 
                   <ViewModeWrapper>
                      <SocialIcons className="social-bar" />
+                     <FloatingCalculatorButton />
                     <main className="pt-20">
                         {children}
                     </main>

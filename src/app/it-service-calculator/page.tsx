@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Textarea } from '@/components/ui/textarea';
 import TranslatedText from '@/app/components/translated-text';
 import { ArrowLeft, Calculator, Download, Mail } from 'lucide-react';
 import { WhatsappIcon } from '@/components/icons';
@@ -75,9 +76,55 @@ const serviceConfig = {
         { id: 'ongoing_support', name: 'Ongoing Support Contract', price: 1500 },
       ],
     },
+     ai_ml: {
+      name: 'AI & Machine Learning',
+      baseRate: 1500,
+      unit: 'project',
+      features: [
+        { id: 'data_preprocessing', name: 'Data Preprocessing & Cleaning', price: 500 },
+        { id: 'model_training', name: 'Custom Model Training', price: 1000 },
+        { id: 'api_deployment', name: 'Model API Deployment', price: 700 },
+      ],
+    },
+    data_analytics: {
+      name: 'Data Analytics & BI',
+      baseRate: 800,
+      unit: 'project',
+      features: [
+        { id: 'dashboard_dev', name: 'Interactive Dashboard Dev', price: 600 },
+        { id: 'data_warehousing', name: 'Data Warehousing', price: 900 },
+        { id: 'etl_pipelines', name: 'ETL Pipelines', price: 700 },
+      ],
+    },
+     ui_ux_design: {
+      name: 'UI/UX Design',
+      baseRate: 400,
+      unit: 'project',
+      features: [
+        { id: 'wireframing', name: 'Wireframing', price: 200 },
+        { id: 'high_fidelity_mockups', name: 'High-Fidelity Mockups', price: 400 },
+        { id: 'design_system', name: 'Design System Creation', price: 600 },
+      ],
+    },
+    seo_marketing: {
+      name: 'SEO & Digital Marketing',
+      baseRate: 300,
+      unit: 'month',
+      features: [
+        { id: 'keyword_research', name: 'Keyword Research', price: 150 },
+        { id: 'on_page_seo', name: 'On-Page SEO', price: 200 },
+        { id: 'content_strategy', name: 'Content Strategy', price: 250 },
+      ],
+    },
     it_support: {
       name: 'IT Support / Maintenance',
       baseRate: 50,
+      unit: 'hour',
+      features: [],
+    },
+    consulting_training: {
+      name: 'Consulting & Training',
+      baseRate: 75,
       unit: 'hour',
       features: [],
     },
@@ -117,6 +164,7 @@ export default function ItServiceCalculatorPage() {
   const [selectedService, setSelectedService] = useState<ServiceId>('web_development');
   const [quantity, setQuantity] = useState(1);
   const [customServiceName, setCustomServiceName] = useState('');
+  const [customFeatures, setCustomFeatures] = useState('');
   const [selectedSla, setSelectedSla] = useState<SlaId>('standard');
   const [selectedFeatures, setSelectedFeatures] = useState<Record<string, boolean>>({});
   const [selectedCurrency, setSelectedCurrency] = useState<CurrencyId>('USD');
@@ -158,6 +206,8 @@ export default function ItServiceCalculatorPage() {
     setSelectedService(value as ServiceId);
     setQuantity(1); // Reset quantity
     setSelectedFeatures({}); // Reset features
+    setCustomServiceName('');
+    setCustomFeatures('');
   };
 
   const handleFeatureChange = (featureId: string) => {
@@ -179,12 +229,15 @@ export default function ItServiceCalculatorPage() {
       .filter(f => selectedFeatures[f.id])
       .map(f => `- ${f.name}`)
       .join(nl);
+      
+    const customFeatureLines = selectedService === 'other' && customFeatures ? `${nl}Custom Requirements:${nl}${customFeatures}` : '';
 
     return [
       `*Quote Summary*`,
       `Service: ${serviceName}`,
       `Quantity: ${quantity} ${currentService.unit}(s)`,
       ...(featureLines ? [`Features:${nl}${featureLines}`] : []),
+      customFeatureLines,
       `SLA: ${serviceConfig.slaTiers[selectedSla].name}`,
       `Currency: ${selectedCurrency}`,
       `------------------`,
@@ -245,6 +298,16 @@ export default function ItServiceCalculatorPage() {
                 y += 6;
             });
             y+= 4;
+        }
+
+        if (selectedService === 'other' && customFeatures) {
+            doc.setFont('helvetica', 'bold');
+            doc.text('Custom Requirements:', 15, y);
+            y += 8;
+            doc.setFont('helvetica', 'normal');
+            const splitText = doc.splitTextToSize(customFeatures, pageWidth - 35);
+            doc.text(splitText, 20, y);
+            y += (splitText.length * 6) + 4;
         }
         
         doc.line(15, y, pageWidth - 15, y);
@@ -333,17 +396,29 @@ export default function ItServiceCalculatorPage() {
                 </Select>
               </div>
 
-              {/* Custom Service Name */}
+              {/* Custom Service Name & Features */}
               {selectedService === 'other' && (
-                <div className="space-y-2">
-                  <Label htmlFor="custom-service-name"><TranslatedText text="Custom Service Name" /></Label>
-                  <Input
-                    id="custom-service-name"
-                    value={customServiceName}
-                    onChange={(e) => setCustomServiceName(e.target.value)}
-                    placeholder="e.g., Data Analysis Pipeline"
-                  />
-                </div>
+                <>
+                    <div className="space-y-2">
+                      <Label htmlFor="custom-service-name"><TranslatedText text="Custom Service Name" /></Label>
+                      <Input
+                        id="custom-service-name"
+                        value={customServiceName}
+                        onChange={(e) => setCustomServiceName(e.target.value)}
+                        placeholder="e.g., Data Analysis Pipeline"
+                      />
+                    </div>
+                     <div className="space-y-2">
+                      <Label htmlFor="custom-features"><TranslatedText text="Describe Your Requirements" /></Label>
+                      <Textarea
+                        id="custom-features"
+                        value={customFeatures}
+                        onChange={(e) => setCustomFeatures(e.target.value)}
+                        placeholder="Please list the features you need..."
+                        rows={4}
+                      />
+                    </div>
+                </>
               )}
 
               {/* Quantity */}

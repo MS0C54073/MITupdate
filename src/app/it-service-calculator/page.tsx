@@ -10,10 +10,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Slider } from '@/components/ui/slider';
+import { Checkbox } from '@/components/ui/checkbox';
 import TranslatedText from '@/app/components/translated-text';
 import { ArrowLeft, Calculator, Download, Mail } from 'lucide-react';
 import { WhatsappIcon } from '@/components/icons';
+import { useToast } from '@/hooks/use-toast';
 
 // --- Configuration Object for easy editing ---
 const serviceConfig = {
@@ -21,38 +22,66 @@ const serviceConfig = {
   services: {
     web_development: {
       name: 'Web Development',
-      baseRate: 1500,
+      baseRate: 500,
       unit: 'project',
+      features: [
+        { id: 'ui_design', name: 'UI/UX Design', price: 400 },
+        { id: 'auth', name: 'User Authentication', price: 300 },
+        { id: 'cms', name: 'CMS Integration', price: 350 },
+        { id: 'ecommerce', name: 'E-commerce Functionality', price: 700 },
+      ],
     },
     software_development: {
       name: 'Software Development',
-      baseRate: 2500,
+      baseRate: 1000,
       unit: 'project',
+      features: [
+        { id: 'api_dev', name: 'Custom API Development', price: 800 },
+        { id: 'db_design', name: 'Database Architecture', price: 600 },
+        { id: 'third_party_integration', name: 'Third-party Integrations', price: 500 },
+      ],
     },
     mobile_app_development: {
       name: 'Mobile App Development',
-      baseRate: 3000,
+      baseRate: 1200,
       unit: 'project',
+      features: [
+        { id: 'ios', name: 'iOS App', price: 1000 },
+        { id: 'android', name: 'Android App', price: 1000 },
+        { id: 'push_notifications', name: 'Push Notifications', price: 250 },
+        { id: 'in_app_purchases', name: 'In-App Purchases', price: 400 },
+      ],
     },
     prototypes: {
       name: 'Prototypes (Web, Mobile, System Demos)',
-      baseRate: 500,
+      baseRate: 300,
       unit: 'prototype',
+      features: [
+        { id: 'interactive_mockup', name: 'Interactive Mockup', price: 200 },
+        { id: 'basic_backend', name: 'Basic Backend Logic', price: 250 },
+      ],
     },
     full_systems: {
       name: 'Full Systems (End-to-End Solutions)',
-      baseRate: 10000,
+      baseRate: 5000,
       unit: 'system',
+      features: [
+        { id: 'cloud_hosting', name: 'Cloud Hosting Setup', price: 500 },
+        { id: 'ci_cd', name: 'CI/CD Pipeline', price: 750 },
+        { id: 'ongoing_support', name: 'Ongoing Support Contract', price: 1500 },
+      ],
     },
     it_support: {
       name: 'IT Support / Maintenance',
       baseRate: 50,
       unit: 'hour',
+      features: [],
     },
     other: {
       name: 'Other (Custom)',
       baseRate: 60,
       unit: 'hour',
+      features: [],
     },
   },
   slaTiers: {
@@ -79,21 +108,29 @@ type ServiceId = keyof typeof serviceConfig.services;
 type SlaId = keyof typeof serviceConfig.slaTiers;
 
 export default function ItServiceCalculatorPage() {
+  const { toast } = useToast();
   const [selectedService, setSelectedService] = useState<ServiceId>('web_development');
   const [quantity, setQuantity] = useState(1);
-  const [complexity, setComplexity] = useState(2); // 1-5 scale, default to "Medium"
   const [customServiceName, setCustomServiceName] = useState('');
   const [selectedSla, setSelectedSla] = useState<SlaId>('standard');
+  const [selectedFeatures, setSelectedFeatures] = useState<Record<string, boolean>>({});
   const [totalCost, setTotalCost] = useState({ subtotal: 0, vat: 0, total: 0 });
 
   const currentService = serviceConfig.services[selectedService];
-  const complexityMultiplier = 1 + (complexity - 1) * 0.25; // e.g., 1, 1.25, 1.5, 1.75, 2
 
   useEffect(() => {
     const slaMultiplier = serviceConfig.slaTiers[selectedSla].multiplier;
-    const baseSubtotal = currentService.baseRate * quantity;
-    const complexityAdjustedSubtotal = baseSubtotal * complexityMultiplier;
-    const finalSubtotal = complexityAdjustedSubtotal * slaMultiplier;
+    const baseForQuantity = currentService.baseRate * quantity;
+
+    const featuresCost = currentService.features.reduce((acc, feature) => {
+      if (selectedFeatures[feature.id]) {
+        return acc + feature.price;
+      }
+      return acc;
+    }, 0);
+
+    const subtotalBeforeSla = baseForQuantity + featuresCost;
+    const finalSubtotal = subtotalBeforeSla * slaMultiplier;
 
     const vatAmount = finalSubtotal * serviceConfig.vatRate;
     const finalTotal = finalSubtotal + vatAmount;
@@ -103,14 +140,21 @@ export default function ItServiceCalculatorPage() {
       vat: vatAmount,
       total: finalTotal,
     });
-  }, [selectedService, quantity, complexity, selectedSla, currentService, complexityMultiplier]);
+  }, [selectedService, quantity, selectedSla, selectedFeatures, currentService]);
 
   const handleServiceChange = (value: string) => {
     setSelectedService(value as ServiceId);
-    setQuantity(1); // Reset quantity on service change
-    setComplexity(2); // Reset complexity
+    setQuantity(1); // Reset quantity
+    setSelectedFeatures({}); // Reset features
   };
 
+  const handleFeatureChange = (featureId: string) => {
+    setSelectedFeatures(prev => ({
+      ...prev,
+      [featureId]: !prev[featureId],
+    }));
+  };
+  
   const getQuoteText = (forUrl = false) => {
     const nl = forUrl ? '%0A' : '\n';
     let serviceName = currentService.name;
@@ -118,11 +162,16 @@ export default function ItServiceCalculatorPage() {
       serviceName = `${customServiceName} (Custom)`;
     }
 
+    const featureLines = currentService.features
+      .filter(f => selectedFeatures[f.id])
+      .map(f => `- ${f.name}`)
+      .join(nl);
+
     return [
       `*Quote Summary*`,
       `Service: ${serviceName}`,
       `Quantity: ${quantity} ${currentService.unit}(s)`,
-      `Complexity: ${['Low', 'Medium-Low', 'Medium', 'Medium-High', 'High'][complexity - 1]}`,
+      ...(featureLines ? [`Features:${nl}${featureLines}`] : []),
       `SLA: ${serviceConfig.slaTiers[selectedSla].name}`,
       `------------------`,
       `Subtotal: $${totalCost.subtotal.toFixed(2)}`,
@@ -132,65 +181,86 @@ export default function ItServiceCalculatorPage() {
   };
   
   const generatePdfQuote = () => {
-    const doc = new jsPDF();
-    const pageWidth = doc.internal.pageSize.getWidth();
-    let y = 20;
+    try {
+        const doc = new jsPDF();
+        const pageWidth = doc.internal.pageSize.getWidth();
+        let y = 20;
 
-    doc.setFontSize(22);
-    doc.setFont('helvetica', 'bold');
-    doc.text('IT Service Quote', pageWidth / 2, y, { align: 'center' });
-    y += 15;
-    
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'normal');
-    doc.text(`Date: ${new Date().toLocaleDateString()}`, 15, y);
-    y += 15;
-
-    doc.setLineWidth(0.5);
-    doc.line(15, y, pageWidth - 15, y);
-    y += 10;
-
-    const addLine = (label: string, value: string) => {
-      doc.setFont('helvetica', 'bold');
-      doc.text(label, 15, y);
-      doc.setFont('helvetica', 'normal');
-      doc.text(value, 70, y);
-      y += 8;
-    };
-    
-    let serviceName = currentService.name;
-    if (selectedService === 'other' && customServiceName) {
-      serviceName = `${customServiceName} (Custom)`;
-    }
-
-    addLine('Service:', serviceName);
-    addLine('Quantity:', `${quantity} ${currentService.unit}(s)`);
-    addLine('Project Complexity:', `${['Low', 'Medium-Low', 'Medium', 'Medium-High', 'High'][complexity - 1]}`);
-    addLine('Service Level (SLA):', serviceConfig.slaTiers[selectedSla].name);
-    y += 5;
-    
-    doc.line(15, y, pageWidth - 15, y);
-    y += 10;
-
-    const addCostLine = (label: string, value: string) => {
-        doc.setFont('helvetica', 'normal');
-        doc.text(label, pageWidth - 65, y, { align: 'right' });
+        doc.setFontSize(22);
         doc.setFont('helvetica', 'bold');
-        doc.text(value, pageWidth - 15, y, { align: 'right' });
-        y += 8;
-    }
+        doc.text('IT Service Quote', pageWidth / 2, y, { align: 'center' });
+        y += 15;
+        
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'normal');
+        doc.text(`Date: ${new Date().toLocaleDateString()}`, 15, y);
+        y += 15;
 
-    addCostLine('Subtotal:', `$${totalCost.subtotal.toFixed(2)}`);
-    addCostLine(`VAT (${serviceConfig.vatRate * 100}%):`, `$${totalCost.vat.toFixed(2)}`);
-    y += 2;
-    doc.setLineWidth(0.2);
-    doc.line(pageWidth - 68, y, pageWidth - 15, y);
-    y += 8;
-    
-    doc.setFontSize(14);
-    addCostLine('Total Estimate:', `$${totalCost.total.toFixed(2)}`);
-    
-    doc.save(`Quote-${serviceName.replace(/\s/g, '_')}.pdf`);
+        doc.setLineWidth(0.5);
+        doc.line(15, y, pageWidth - 15, y);
+        y += 10;
+
+        const addLine = (label: string, value: string) => {
+          doc.setFont('helvetica', 'bold');
+          doc.text(label, 15, y);
+          doc.setFont('helvetica', 'normal');
+          doc.text(value, 70, y);
+          y += 8;
+        };
+        
+        let serviceName = currentService.name;
+        if (selectedService === 'other' && customServiceName) {
+          serviceName = `${customServiceName} (Custom)`;
+        }
+
+        addLine('Service:', serviceName);
+        addLine('Quantity:', `${quantity} ${currentService.unit}(s)`);
+        addLine('Service Level (SLA):', serviceConfig.slaTiers[selectedSla].name);
+        y += 5;
+
+        const selectedFeatureList = currentService.features.filter(f => selectedFeatures[f.id]);
+        if (selectedFeatureList.length > 0) {
+            doc.setFont('helvetica', 'bold');
+            doc.text('Selected Features:', 15, y);
+            y += 8;
+            doc.setFont('helvetica', 'normal');
+            selectedFeatureList.forEach(feature => {
+                doc.text(`- ${feature.name}`, 20, y);
+                y += 6;
+            });
+            y+= 4;
+        }
+        
+        doc.line(15, y, pageWidth - 15, y);
+        y += 10;
+
+        const addCostLine = (label: string, value: string) => {
+            doc.setFont('helvetica', 'normal');
+            doc.text(label, pageWidth - 65, y, { align: 'right' });
+            doc.setFont('helvetica', 'bold');
+            doc.text(value, pageWidth - 15, y, { align: 'right' });
+            y += 8;
+        }
+
+        addCostLine('Subtotal:', `$${totalCost.subtotal.toFixed(2)}`);
+        addCostLine(`VAT (${serviceConfig.vatRate * 100}%):`, `$${totalCost.vat.toFixed(2)}`);
+        y += 2;
+        doc.setLineWidth(0.2);
+        doc.line(pageWidth - 68, y, pageWidth - 15, y);
+        y += 8;
+        
+        doc.setFontSize(14);
+        addCostLine('Total Estimate:', `$${totalCost.total.toFixed(2)}`);
+        
+        doc.save(`Quote-${serviceName.replace(/\\s/g, '_')}.pdf`);
+    } catch(error) {
+        console.error("Failed to generate PDF:", error);
+        toast({
+            variant: "destructive",
+            title: "PDF Generation Failed",
+            description: "There was an error creating the PDF. Please try again.",
+        });
+    }
   };
 
   return (
@@ -205,7 +275,7 @@ export default function ItServiceCalculatorPage() {
         <div className="flex items-center space-x-3">
           <Calculator className="h-10 w-10 text-primary" />
           <h1 className="text-4xl font-bold text-primary">
-            <TranslatedText text="IT Service Calculator" />
+            <TranslatedText text="IT Service Quotation Calculator" />
           </h1>
         </div>
       </header>
@@ -261,32 +331,40 @@ export default function ItServiceCalculatorPage() {
                 />
               </div>
 
-              {/* Complexity Slider */}
-              <div className="space-y-2">
-                <Label><TranslatedText text="Project Complexity" /></Label>
-                <Slider
-                  value={[complexity]}
-                  onValueChange={(value) => setComplexity(value[0])}
-                  min={1}
-                  max={5}
-                  step={1}
-                />
-                <div className="flex justify-between text-xs text-muted-foreground">
-                  <span><TranslatedText text="Low" /></span>
-                  <span><TranslatedText text="Medium" /></span>
-                  <span><TranslatedText text="High" /></span>
+              {/* Features Checkboxes */}
+              {currentService.features.length > 0 && (
+                <div className="space-y-2">
+                  <Label><TranslatedText text="Additional Features" /></Label>
+                  <div className="space-y-2 rounded-md border p-4">
+                     {currentService.features.map(feature => (
+                       <div key={feature.id} className="flex items-center space-x-2">
+                         <Checkbox
+                           id={`feature-${feature.id}`}
+                           checked={!!selectedFeatures[feature.id]}
+                           onCheckedChange={() => handleFeatureChange(feature.id)}
+                         />
+                         <Label htmlFor={`feature-${feature.id}`} className="font-normal flex justify-between w-full">
+                           <TranslatedText text={feature.name} />
+                           <span className="text-muted-foreground text-xs">+${feature.price}</span>
+                         </Label>
+                       </div>
+                     ))}
+                  </div>
                 </div>
-              </div>
-
+              )}
+              
               {/* SLA Tiers */}
               <div className="space-y-2">
                 <Label><TranslatedText text="Priority / Service Level (SLA)" /></Label>
-                <RadioGroup value={selectedSla} onValueChange={(value) => setSelectedSla(value as SlaId)}>
+                <RadioGroup value={selectedSla} onValueChange={(value) => setSelectedSla(value as SlaId)} className="rounded-md border p-4 space-y-2">
                   {Object.entries(serviceConfig.slaTiers).map(([id, { name, description }]) => (
                     <div key={id} className="flex items-center space-x-2">
                       <RadioGroupItem value={id} id={`sla-${id}`} />
-                      <Label htmlFor={`sla-${id}`} className="font-normal">
-                        <TranslatedText text={name} />
+                      <Label htmlFor={`sla-${id}`} className="font-normal w-full">
+                        <div className="flex justify-between">
+                            <TranslatedText text={name} />
+                            <span className="text-muted-foreground text-xs">({serviceConfig.slaTiers[id as SlaId].multiplier}x cost)</span>
+                        </div>
                         <p className="text-xs text-muted-foreground"><TranslatedText text={description} /></p>
                       </Label>
                     </div>
@@ -310,7 +388,7 @@ export default function ItServiceCalculatorPage() {
                 <span>${totalCost.subtotal.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-muted-foreground">
-                <span><TranslatedText text="VAT (16%)" /></span>
+                <span><TranslatedText text={`VAT (${serviceConfig.vatRate * 100}%)`} /></span>
                 <span>${totalCost.vat.toFixed(2)}</span>
               </div>
               <div className="border-t border-dashed my-2"></div>
@@ -342,3 +420,5 @@ export default function ItServiceCalculatorPage() {
     </div>
   );
 }
+
+    

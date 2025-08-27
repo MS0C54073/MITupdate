@@ -6,7 +6,7 @@ import Link from 'next/link';
 import TranslatedText from '@/app/components/translated-text';
 import { Button } from '@/components/ui/button';
 import { SocialIcons } from '@/components/social-icons';
-import { ArrowRight, Award, BrainCircuit, Calendar, Code, Download, Eye, ExternalLink, Github, Globe, GraduationCap, Loader2, Mail, Network, Phone, Server, Shield, Smartphone, Star, Users, Check, UserCog } from 'lucide-react';
+import { ArrowRight, Award, BrainCircuit, Calendar, Code, Download, Eye, ExternalLink, Github, Globe, GraduationCap, Loader2, Mail, Network, Phone, Server, Shield, Smartphone, Star, Users, Check, UserCog, ChevronDown } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -275,6 +275,8 @@ export default function Home() {
     const [isGenerating, setIsGenerating] = useState(false);
     const { toast } = useToast();
     const [orderStatus, setOrderStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+    const [showAllCerts, setShowAllCerts] = useState(false);
+    const initialCertsToShow = 4;
 
 
     const { register, handleSubmit, reset, formState: { errors } } = useForm<OrderFormData>({
@@ -722,7 +724,7 @@ export default function Home() {
               </Button>
           </div>
           <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
-              {certifications.map((cert, index) => (
+              {certifications.slice(0, showAllCerts ? certifications.length : initialCertsToShow).map((cert, index) => (
                   <Card key={index} className="bg-card/50">
                       <CardHeader>
                           <CardTitle className="text-lg text-accent"><TranslatedText text={cert.title} /></CardTitle>
@@ -748,6 +750,14 @@ export default function Home() {
                   </Card>
               ))}
           </div>
+          {!showAllCerts && certifications.length > initialCertsToShow && (
+              <div className="text-center mt-8">
+                  <Button variant="secondary" onClick={() => setShowAllCerts(true)}>
+                      <TranslatedText text="View All Certifications" />
+                      <ChevronDown className="ml-2 h-4 w-4" />
+                  </Button>
+              </div>
+          )}
         </section>
 
         {/* References Section (Hidden on page, used for PDF) */}

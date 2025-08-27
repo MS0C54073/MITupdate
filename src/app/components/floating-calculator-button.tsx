@@ -18,22 +18,27 @@ export function FloatingCalculatorButton() {
 
   return (
     <div className={cn(
-      'fixed bottom-6 right-6 z-50',
+      'fixed bottom-6 right-6 z-50 group',
       'lg:bottom-8 lg:right-8'
     )}>
       <Button
         asChild
         size="lg"
         className={cn(
-          'h-14 w-14 rounded-full p-0 shadow-xl',
+          'h-14 rounded-full shadow-xl overflow-hidden',
           'bg-gradient-to-r from-primary to-accent text-primary-foreground',
-          'hover:scale-110 hover:shadow-2xl active:scale-100',
+          'hover:shadow-2xl active:scale-95',
           'transition-all duration-300 ease-in-out',
-          'animate-pulse-slow group'
+          'w-14 group-hover:w-64' // Expand width on hover
         )}
       >
-        <Link href="/it-service-calculator" aria-label="Calculate Project Cost">
-          <Calculator className="h-7 w-7 transition-transform duration-300 group-hover:scale-125" />
+        <Link href="/it-service-calculator" aria-label="Calculate Project Cost" className="flex items-center justify-center">
+          <div className="flex items-center">
+             <Calculator className="h-7 w-7 flex-shrink-0" />
+             <span className="whitespace-nowrap pl-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 delay-150">
+                <TranslatedText text="Calculate My Project Cost" />
+             </span>
+          </div>
         </Link>
       </Button>
     </div>

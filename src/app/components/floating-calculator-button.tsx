@@ -32,13 +32,11 @@ export function FloatingCalculatorButton() {
           'w-14 group-hover:w-64' // Expand width on hover
         )}
       >
-        <Link href="/it-service-calculator" aria-label="Calculate Project Cost" className="flex items-center justify-center">
-          <div className="flex items-center">
-             <Calculator className="h-7 w-7 flex-shrink-0" />
-             <span className="whitespace-nowrap pl-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 delay-150">
-                <TranslatedText text="Calculate My Project Cost" />
-             </span>
-          </div>
+        <Link href="/it-service-calculator" aria-label="Calculate Project Cost" className="flex items-center justify-start pl-3.5">
+          <Calculator className="h-7 w-7 flex-shrink-0" />
+          <span className="whitespace-nowrap pl-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 delay-150">
+              <TranslatedText text="Calculate My Project Cost" />
+          </span>
         </Link>
       </Button>
     </div>

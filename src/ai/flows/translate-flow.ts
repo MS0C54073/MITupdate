@@ -14,25 +14,8 @@ import {
   type TranslateOutput,
 } from './translate-flow.types';
 
-
-/**
- * A server action that translates text to a specified language.
- * It handles edge cases like empty input or translation to English directly.
- * On failure, it gracefully returns the original text.
- *
- * @param input An object containing the text and targetLanguage.
- * @returns A promise that resolves to an object with the translatedText.
- */
-export async function translate(input: TranslateInput): Promise<TranslateOutput> {
-  // If the input text is empty or the target is English, return the original text to avoid unnecessary API calls.
-  if (!input.text.trim() || input.targetLanguage === 'en') {
-    return { translatedText: input.text };
-  }
-  return translateFlow(input);
-}
-
-
-// Define the Genkit prompt for the translation task
+// Define the Genkit prompt for the translation task.
+// This is defined at the module level so it's only created once.
 const translatePrompt = ai.definePrompt({
   name: 'translatePrompt',
   input: { schema: TranslateInputSchema },
@@ -56,31 +39,49 @@ Original Text:
   },
 });
 
-// Define the Genkit flow that orchestrates the translation
-const translateFlow = ai.defineFlow(
-  {
-    name: 'translateFlow',
-    inputSchema: TranslateInputSchema,
-    outputSchema: TranslateOutputSchema,
-  },
-  async (input) => {
-     try {
-        const response = await translatePrompt(input);
-        const output = response.output;
-
-        if (output && typeof output.translatedText === 'string') {
-            return output;
-        }
-
-        console.warn('Translation prompt returned invalid structure, falling back to original text.', { input, response });
-        return { translatedText: input.text }; // Fallback for invalid structure
-    } catch (error) {
-        console.error(
-            `Translation failed for text "${input.text}" to "${input.targetLanguage}". This could be due to API rate limits or service restrictions. Falling back to original text.`,
-            error
-        );
-        // On any error (including rate limiting), gracefully fall back to the original text.
-        return { translatedText: input.text };
-    }
+/**
+ * A server action that translates text to a specified language.
+ * It handles edge cases like empty input or translation to English directly.
+ * On failure, it gracefully returns the original text.
+ *
+ * @param input An object containing the text and targetLanguage.
+ * @returns A promise that resolves to an object with the translatedText.
+ */
+export async function translate(input: TranslateInput): Promise<TranslateOutput> {
+  // If the input text is empty or the target is English, return the original text to avoid unnecessary API calls.
+  if (!input.text.trim() || input.targetLanguage === 'en') {
+    return { translatedText: input.text };
   }
-);
+
+  // Define and execute the Genkit flow within the server action.
+  const translateFlow = ai.defineFlow(
+    {
+      name: 'translateFlow',
+      inputSchema: TranslateInputSchema,
+      outputSchema: TranslateOutputSchema,
+    },
+    async (flowInput) => {
+       try {
+          const response = await translatePrompt(flowInput);
+          const output = response.output;
+
+          if (output && typeof output.translatedText === 'string') {
+              return output;
+          }
+
+          console.warn('Translation prompt returned invalid structure, falling back to original text.', { input: flowInput, response });
+          return { translatedText: flowInput.text }; // Fallback for invalid structure
+      } catch (error) {
+          console.error(
+              `Translation failed for text "${flowInput.text}" to "${flowInput.targetLanguage}". This could be due to API rate limits or service restrictions. Falling back to original text.`,
+              error
+          );
+          // On any error (including rate limiting), gracefully fall back to the original text.
+          return { translatedText: flowInput.text };
+      }
+    }
+  );
+  
+  // Execute the flow and return the result.
+  return await translateFlow(input);
+}

@@ -5,7 +5,7 @@ import React, { useState, createContext, useContext, ReactNode, useEffect, useCa
 import { translate } from '@/ai/flows/translate-flow';
 import type { TranslateInput } from '@/ai/flows/translate-flow.types';
 
-type LanguageCode = 'en' | 'ru' | 'ar' | 'zh' | 'fr' | 'es';
+type LanguageCode = 'en' | 'ru';
 
 interface TranslationContextProps {
   language: LanguageCode;
@@ -30,7 +30,7 @@ const getInitialLanguage = (): LanguageCode => {
     }
     try {
         const storedLang = localStorage.getItem('user-language');
-        if (storedLang && ['en', 'ru', 'ar', 'zh', 'fr', 'es'].includes(storedLang)) {
+        if (storedLang && ['en', 'ru'].includes(storedLang)) {
             return storedLang as LanguageCode;
         }
     } catch (error) {

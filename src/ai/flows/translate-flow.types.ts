@@ -7,7 +7,7 @@ import {z} from 'genkit';
 // Define the input schema for the translation function
 export const TranslateInputSchema = z.object({
   text: z.string().describe('The text to translate.'),
-  targetLanguage: z.enum(['en', 'ru', 'ar', 'zh', 'fr', 'es']).describe('The target language code (e.g., es, fr, ru).'),
+  targetLanguage: z.enum(['en', 'ru']).describe('The target language code (e.g., ru).'),
 });
 export type TranslateInput = z.infer<typeof TranslateInputSchema>;
 

@@ -47,6 +47,10 @@ const skills = [
 
 const projects = [
   {
+    title: 'AquaView Water Quality Monitoring System',
+    link: 'https://github.com/MS0C54073/AquaAnalys',
+  },
+  {
     title: 'Career Connect Zambia (CCZ), personal project.',
     link: 'https://github.com/MS0C54073/CCZ',
     demo: 'https://shorturl.at/jLk8n',

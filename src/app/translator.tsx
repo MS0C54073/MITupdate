@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useState, createContext, useContext, ReactNode, useEffect, useCallback } from 'react';
-import { translateText, type TranslateInput } from '@/lib/firebase-functions';
+import { translate, type TranslateInput } from '@/ai/flows/translate-flow';
 
 type LanguageCode = 'en' | 'ru' | 'ar' | 'zh' | 'fr' | 'es';
 
@@ -75,7 +75,7 @@ export const TranslationProvider: React.FC<TranslationProviderProps> = ({ childr
           text: englishText,
           targetLanguage: language,
         };
-        const result = await translateText(translateFlowInput);
+        const result = await translate(translateFlowInput);
         
         const translatedText = result.translatedText;
 
@@ -98,7 +98,7 @@ export const TranslationProvider: React.FC<TranslationProviderProps> = ({ childr
             `TRANSLATION FAILED: Could not translate "${englishText}" to "${language}".`,
             error
         );
-        // On API error, return original text and DO NOT cache the failure.
+        // On any error (including rate limiting), gracefully fall back to the original text.
         return englishText;
       }
     },

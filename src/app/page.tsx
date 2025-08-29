@@ -72,10 +72,6 @@ const projects = [
     link: 'https://github.com/MS0C54073/QueueDatabaseCplusplus',
   },
   {
-    title: 'DEVELOPMENT OF A COMPILER (Theory of formal languages and translations)',
-    link: 'https://github.com/MS0C54073/Compiler',
-  },
-  {
     title: 'STOPWATCH (COMPUTING SYSTEMS ARCHITECTURE)',
     link: 'https://github.com/MS0C54073/Stopwatch-in-8051',
   },

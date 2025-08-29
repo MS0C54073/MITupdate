@@ -2,7 +2,8 @@
 'use client';
 
 import React, { useState, createContext, useContext, ReactNode, useEffect, useCallback } from 'react';
-import { translate, type TranslateInput } from '@/ai/flows/translate-flow';
+import { translate } from '@/ai/flows/translate-flow';
+import type { TranslateInput } from '@/ai/flows/translate-flow.types';
 
 type LanguageCode = 'en' | 'ru' | 'ar' | 'zh' | 'fr' | 'es';
 

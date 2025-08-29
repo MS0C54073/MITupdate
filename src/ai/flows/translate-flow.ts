@@ -5,25 +5,14 @@
  * This flow is designed to be called securely from the client-side as a Next.js Server Action.
  *
  * - translate: The main function to translate text.
- * - TranslateInput: The Zod schema for the input object.
- * - TranslateOutput: The Zod schema for the output object.
  */
-
-import {z} from 'genkit';
 import {ai} from '@/ai/ai-instance';
-
-// Define the input schema for the translation function
-export const TranslateInputSchema = z.object({
-  text: z.string().describe('The text to translate.'),
-  targetLanguage: z.enum(['en', 'ru', 'ar', 'zh', 'fr', 'es']).describe('The target language code (e.g., es, fr, ru).'),
-});
-export type TranslateInput = z.infer<typeof TranslateInputSchema>;
-
-// Define the output schema for the translation function
-export const TranslateOutputSchema = z.object({
-  translatedText: z.string().describe('The translated text.'),
-});
-export type TranslateOutput = z.infer<typeof TranslateOutputSchema>;
+import {
+  type TranslateInput,
+  TranslateInputSchema,
+  TranslateOutputSchema,
+  type TranslateOutput,
+} from './translate-flow.types';
 
 
 /**

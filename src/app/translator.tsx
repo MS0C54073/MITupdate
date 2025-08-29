@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useState, createContext, useContext, ReactNode, useEffect, useCallback } from 'react';
-import { translate as genkitTranslate, TranslateInput } from '@/ai/flows/translate-flow';
+import { translateText, type TranslateInput } from '@/lib/firebase-functions';
 
 type LanguageCode = 'en' | 'ru' | 'ar' | 'zh' | 'fr' | 'es';
 
@@ -54,13 +54,9 @@ export const TranslationProvider: React.FC<TranslationProviderProps> = ({ childr
        console.warn('Could not save language preference to local storage.', error);
     }
     setLanguageState(newLanguage);
-  };
-
-
-  useEffect(() => {
     // Clear session cache when language changes
     setSessionTranslationsCache(new Map());
-  }, [language]);
+  };
 
   const memoizedTranslate = useCallback(
     async (englishText: string): Promise<string> => {
@@ -73,21 +69,21 @@ export const TranslationProvider: React.FC<TranslationProviderProps> = ({ childr
         return sessionTranslationsCache.get(cacheKey)!;
       }
 
-      // If not in cache, call the translation API.
+      // If not in cache, call the translation function.
       try {
         const translateFlowInput: TranslateInput = {
           text: englishText,
           targetLanguage: language,
         };
-        const apiResult = await genkitTranslate(translateFlowInput);
+        const result = await translateText(translateFlowInput);
         
-        const translatedText = apiResult.translatedText;
+        const translatedText = result.translatedText;
 
         if (typeof translatedText !== 'string' || !translatedText.trim()) {
-          console.warn(`Translation for "${englishText}" to "${language}" returned invalid or empty result. Falling back to original text.`, {apiResult});
+          console.warn(`Translation for "${englishText}" to "${language}" returned invalid or empty result. Falling back to original text.`, {result});
           return englishText; // Fallback, do not cache.
         }
-
+        
         // Update session cache with the new translation.
         setSessionTranslationsCache(prevCache => {
             const newCache = new Map(prevCache);
@@ -97,13 +93,9 @@ export const TranslationProvider: React.FC<TranslationProviderProps> = ({ childr
 
         return translatedText;
 
-      } catch (error) {
-        // This is a critical error path. Most likely, the GOOGLE_GENAI_API_KEY is not set correctly
-        // in the .env file, or the associated Google Cloud project does not have billing enabled.
+      } catch (error: any) {
         console.error(
-            `TRANSLATION FAILED: Could not translate "${englishText}" to "${language}". ` +
-            `This is likely due to an API key or billing issue. ` +
-            `Please check your .env file and Google Cloud project configuration.`,
+            `TRANSLATION FAILED: Could not translate "${englishText}" to "${language}".`,
             error
         );
         // On API error, return original text and DO NOT cache the failure.

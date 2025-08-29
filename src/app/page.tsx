@@ -72,8 +72,8 @@ const projects = [
     link: 'https://github.com/MS0C54073/QueueDatabaseCplusplus',
   },
   {
-    title: 'STOPWATCH (COMPUTING SYSTEMS ARCHITECTURE)',
-    link: 'https://github.com/MS0C54073/Stopwatch-in-8051',
+    title: 'ToDoTasks',
+    link: 'https://github.com/MS0C54073/TaskTicker',
   },
   {
     title: 'STOCK PRICE PREDICTION',

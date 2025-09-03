@@ -53,35 +53,22 @@ export async function translate(input: TranslateInput): Promise<TranslateOutput>
     return { translatedText: input.text };
   }
 
-  // Define and execute the Genkit flow within the server action.
-  const translateFlow = ai.defineFlow(
-    {
-      name: 'translateFlow',
-      inputSchema: TranslateInputSchema,
-      outputSchema: TranslateOutputSchema,
-    },
-    async (flowInput) => {
-       try {
-          const response = await translatePrompt(flowInput);
-          const output = response.output;
+   try {
+      const response = await translatePrompt(input);
+      const output = response.output;
 
-          if (output && typeof output.translatedText === 'string') {
-              return output;
-          }
-
-          console.warn('Translation prompt returned invalid structure, falling back to original text.', { input: flowInput, response });
-          return { translatedText: flowInput.text }; // Fallback for invalid structure
-      } catch (error) {
-          console.error(
-              `Translation failed for text "${flowInput.text}" to "${flowInput.targetLanguage}". This could be due to API rate limits or service restrictions. Falling back to original text.`,
-              error
-          );
-          // On any error (including rate limiting), gracefully fall back to the original text.
-          return { translatedText: flowInput.text };
+      if (output && typeof output.translatedText === 'string') {
+          return output;
       }
-    }
-  );
-  
-  // Execute the flow and return the result.
-  return await translateFlow(input);
+
+      console.warn('Translation prompt returned invalid structure, falling back to original text.', { input: input, response });
+      return { translatedText: input.text }; // Fallback for invalid structure
+  } catch (error) {
+      console.error(
+          `Translation failed for text "${input.text}" to "${input.targetLanguage}". This could be due to API rate limits or service restrictions. Falling back to original text.`,
+          error
+      );
+      // On any error (including rate limiting), gracefully fall back to the original text.
+      return { translatedText: input.text };
+  }
 }

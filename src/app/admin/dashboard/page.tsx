@@ -70,7 +70,8 @@ export default function AdminDashboardPage() {
                   name: doc.data().name || 'Anonymous',
                   comment: doc.data().comment || 'No comment provided',
                   email: '',
-                  timestamp: ''
+                  timestamp: '',
+                  userId: null,
               } as DisplayComment)));
           }, (error) => console.error("Error fetching latest comments:", error)));
 
@@ -80,7 +81,8 @@ export default function AdminDashboardPage() {
                   id: doc.id,
                   name: doc.data().name || 'N/A',
                   details: doc.data().details || 'No details provided.',
-                  email: '', phone: '', attachmentName: null, timestamp: '', status: 'pending', attachmentUrl: null
+                  email: '', phone: '', attachmentName: null, timestamp: '', status: 'pending', attachmentUrl: null,
+                  userId: null,
               } as DisplayOrder)));
           }, (error) => console.error("Error fetching latest orders:", error)));
           
@@ -91,7 +93,7 @@ export default function AdminDashboardPage() {
                   name: doc.data().name || 'Anonymous',
                   review: doc.data().review || 'No review text.',
                   rating: doc.data().rating || 0,
-                  timestamp: ''
+                  timestamp: '',
               } as DisplayReview)));
               setLoadingData(false);
           }, (error) => {

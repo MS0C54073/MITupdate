@@ -8,7 +8,7 @@ import { ArrowLeft, Gift, Trophy, ChevronLeft, ChevronRight, Info } from 'lucide
 import Image from 'next/image';
 import { SocialIcons } from '@/components/social-icons';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { ZambiaFlagIcon, RussiaFlagIcon } from '@/components/flag-icons';
+import { RussiaFlagIcon } from '@/components/flag-icons';
 import { TelegramIcon } from '@/components/icons';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import '@/app/ai.css';
@@ -229,8 +229,7 @@ export default function AffiliateMarketingManagerPage() {
                      <div className="flex flex-col sm:flex-row justify-center items-center gap-2 pt-2 flex-wrap">
                         <Button asChild size="sm" className="font-bold bg-accent text-accent-foreground hover:bg-accent/90">
                            <a href="https://tinyurl.com/5xd8rb5e" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-                             <ZambiaFlagIcon className="h-4 w-6" />
-                             <span>BWZED (Zambia)</span>
+                            BWZED (Zambia)
                            </a>
                          </Button>
                          <Button asChild size="sm" className="font-bold">
@@ -267,8 +266,7 @@ export default function AffiliateMarketingManagerPage() {
               <div className="flex flex-col sm:flex-row justify-center items-center gap-4 my-6 flex-wrap">
                 <Button asChild size="lg" className="w-full sm:w-auto font-bold bg-accent text-accent-foreground hover:bg-accent/90">
                   <a href="https://tinyurl.com/5xd8rb5e" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-                    <ZambiaFlagIcon className="h-6 w-9" />
-                    <span>BWZED (Zambia)</span>
+                    BWZED (Zambia)
                   </a>
                 </Button>
                 <Button asChild size="lg" className="w-full sm:w-auto font-bold">

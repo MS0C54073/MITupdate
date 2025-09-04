@@ -50,10 +50,10 @@ export const TranslationProvider = ({ children }: { children: ReactNode }) => {
 
   // Function for components to register their text
   const requestTranslation = useCallback((text: string) => {
-    if (text && language !== 'en') {
+    if (text && language !== 'en' && !translations.has(text)) {
       setTranslationRequestQueue(prev => new Set(prev).add(text));
     }
-  }, [language]);
+  }, [language, translations]);
 
   const setLanguage = (newLanguage: LanguageCode) => {
     try {
@@ -76,10 +76,11 @@ export const TranslationProvider = ({ children }: { children: ReactNode }) => {
     if (translationRequestQueue.size === 0) {
       return;
     }
-
+    
+    // Create a snapshot of the current queue for processing.
     const textsToTranslate = Array.from(translationRequestQueue);
     
-    // Clear the queue to prevent re-fetching
+    // Clear the queue immediately after capturing the texts.
     setTranslationRequestQueue(new Set());
     
     const performBatchTranslation = async () => {
@@ -106,9 +107,12 @@ export const TranslationProvider = ({ children }: { children: ReactNode }) => {
       }
     };
 
-    performBatchTranslation();
+    // Debounce the call to avoid rapid-fire requests
+    const timer = setTimeout(performBatchTranslation, 50);
 
-  }, [language, translationRequestQueue]); // This effect runs when the queue is populated
+    return () => clearTimeout(timer);
+
+  }, [language, translationRequestQueue]);
 
   const contextValue = {
     language,
@@ -124,13 +128,14 @@ export const TranslationProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-
 export const useTranslatedText = (text: string): string => {
   const { translations, requestTranslation, language } = useTranslation();
 
   useEffect(() => {
     // Register the text for translation when the component mounts or text changes
-    requestTranslation(text);
+    if (text) {
+      requestTranslation(text);
+    }
   }, [text, requestTranslation]);
 
   if (language === 'en') {

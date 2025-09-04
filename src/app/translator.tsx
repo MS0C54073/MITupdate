@@ -1,16 +1,20 @@
 
 'use client';
 
-import React, { useState, createContext, useContext, ReactNode, useEffect, useCallback } from 'react';
-import { translate } from '@/ai/flows/translate-flow';
-import type { TranslateInput } from '@/ai/flows/translate-flow.types';
+import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
+import { translateBatch } from '@/ai/flows/translate-batch-flow';
+import type { TranslateBatchInput } from '@/ai/flows/translate-batch.types';
 
 type LanguageCode = 'en' | 'ru';
+
+// A Set is used to efficiently track unique strings that need translation.
+type TranslationRequestContext = Set<string>;
 
 interface TranslationContextProps {
   language: LanguageCode;
   setLanguage: (language: LanguageCode) => void;
-  translate: (text: string) => Promise<string>;
+  translations: Map<string, string>; // Cache for translated text
+  requestTranslation: (text: string) => void; // Function for components to register text
 }
 
 const TranslationContext = createContext<TranslationContextProps | undefined>(undefined);
@@ -39,15 +43,18 @@ const getInitialLanguage = (): LanguageCode => {
     return 'en';
 }
 
-interface TranslationProviderProps {
-  children: ReactNode;
-}
-
-export const TranslationProvider: React.FC<TranslationProviderProps> = ({ children }) => {
+export const TranslationProvider = ({ children }: { children: ReactNode }) => {
   const [language, setLanguageState] = useState<LanguageCode>(getInitialLanguage);
-  // Using a Map for the cache is slightly more performant for frequent lookups/updates
-  const [sessionTranslationsCache, setSessionTranslationsCache] = useState<Map<string, string>>(new Map());
-  
+  const [translations, setTranslations] = useState<Map<string, string>>(new Map());
+  const [translationRequestQueue, setTranslationRequestQueue] = useState<TranslationRequestContext>(new Set());
+
+  // Function for components to register their text
+  const requestTranslation = useCallback((text: string) => {
+    if (text && language !== 'en') {
+      setTranslationRequestQueue(prev => new Set(prev).add(text));
+    }
+  }, [language]);
+
   const setLanguage = (newLanguage: LanguageCode) => {
     try {
       localStorage.setItem('user-language', newLanguage);
@@ -55,99 +62,81 @@ export const TranslationProvider: React.FC<TranslationProviderProps> = ({ childr
        console.warn('Could not save language preference to local storage.', error);
     }
     setLanguageState(newLanguage);
-    // Clear session cache when language changes
-    setSessionTranslationsCache(new Map());
+    // Clear cache and request queue on language change
+    setTranslations(new Map());
+    setTranslationRequestQueue(new Set());
   };
-
-  const memoizedTranslate = useCallback(
-    async (englishText: string): Promise<string> => {
-      if (!englishText.trim() || language === 'en') {
-        return englishText;
-      }
-
-      const cacheKey = `${language}::${englishText}`;
-      if (sessionTranslationsCache.has(cacheKey)) {
-        return sessionTranslationsCache.get(cacheKey)!;
-      }
-
-      // If not in cache, call the translation function.
-      try {
-        const translateFlowInput: TranslateInput = {
-          text: englishText,
-          targetLanguage: language,
-        };
-        const result = await translate(translateFlowInput);
-        
-        const translatedText = result.translatedText;
-
-        if (typeof translatedText !== 'string' || !translatedText.trim()) {
-          console.warn(`Translation for "${englishText}" to "${language}" returned invalid or empty result. Falling back to original text.`, {result});
-          return englishText; // Fallback, do not cache.
-        }
-        
-        // Update session cache with the new translation.
-        setSessionTranslationsCache(prevCache => {
-            const newCache = new Map(prevCache);
-            newCache.set(cacheKey, translatedText);
-            return newCache;
-        });
-
-        return translatedText;
-
-      } catch (error: any) {
-        console.error(
-            `TRANSLATION FAILED: Could not translate "${englishText}" to "${language}".`,
-            error
-        );
-        // On any error (including rate limiting), gracefully fall back to the original text.
-        return englishText;
-      }
-    },
-    [language, sessionTranslationsCache] // Dependency on cache is correct here
-  );
-
-  const value = {
-    language,
-    setLanguage,
-    translate: memoizedTranslate,
-  };
-
-  return <TranslationContext.Provider value={value}>{children}</TranslationContext.Provider>;
-};
-
-export const useTranslated = (englishText: string): string => {
-  const { translate, language: currentLanguage } = useTranslation();
-  const [translatedText, setTranslatedText] = useState(englishText);
 
   useEffect(() => {
-    let isMounted = true;
-
-    // Immediately reset to English text to avoid showing stale translations
-    // when the language or source text changes. This provides instant UI feedback.
-    setTranslatedText(englishText);
-
-    if (currentLanguage === 'en') {
+    if (language === 'en') {
+      setTranslations(new Map()); // Clear translations if language is English
       return;
     }
 
-    const doTranslate = async () => {
-      if (!englishText.trim()) {
-        if (isMounted) setTranslatedText('');
-        return;
-      }
-      
-      const result = await translate(englishText);
-      if (isMounted) {
-        setTranslatedText(result);
-      }
-    };
-    
-    doTranslate();
-    
-    return () => {
-      isMounted = false;
-    };
-  }, [englishText, currentLanguage, translate]);
+    if (translationRequestQueue.size === 0) {
+      return;
+    }
 
-  return translatedText;
+    const textsToTranslate = Array.from(translationRequestQueue);
+    
+    // Clear the queue to prevent re-fetching
+    setTranslationRequestQueue(new Set());
+    
+    const performBatchTranslation = async () => {
+      try {
+        const input: TranslateBatchInput = {
+          texts: textsToTranslate,
+          targetLanguage: language,
+        };
+        const result = await translateBatch(input);
+        
+        // Update the central cache with all the new translations
+        setTranslations(prev => {
+          const newTranslations = new Map(prev);
+          result.translations.forEach((translatedText, i) => {
+            newTranslations.set(textsToTranslate[i], translatedText);
+          });
+          return newTranslations;
+        });
+
+      } catch (error) {
+        console.error("Batch translation failed:", error);
+        // In case of a batch failure, we don't update the cache.
+        // The original text will be shown as a fallback.
+      }
+    };
+
+    performBatchTranslation();
+
+  }, [language, translationRequestQueue]); // This effect runs when the queue is populated
+
+  const contextValue = {
+    language,
+    setLanguage,
+    translations,
+    requestTranslation,
+  };
+
+  return (
+    <TranslationContext.Provider value={contextValue}>
+      {children}
+    </TranslationContext.Provider>
+  );
+};
+
+
+export const useTranslatedText = (text: string): string => {
+  const { translations, requestTranslation, language } = useTranslation();
+
+  useEffect(() => {
+    // Register the text for translation when the component mounts or text changes
+    requestTranslation(text);
+  }, [text, requestTranslation]);
+
+  if (language === 'en') {
+    return text;
+  }
+  
+  // Return the translated text from the central cache, or the original text as a fallback.
+  return translations.get(text) || text;
 };

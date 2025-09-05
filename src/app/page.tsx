@@ -279,7 +279,9 @@ export default function Home() {
     const [isGenerating, setIsGenerating] = useState(false);
     const { toast } = useToast();
     const [orderStatus, setOrderStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+    const [showAllProjects, setShowAllProjects] = useState(false);
     const [showAllCerts, setShowAllCerts] = useState(false);
+    const initialProjectsToShow = 4;
     const initialCertsToShow = 4;
 
 
@@ -603,7 +605,7 @@ export default function Home() {
               </Button>
           </div>
           <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
-            {projects.map((project, index) => {
+            {(showAllProjects ? projects : projects.slice(0, initialProjectsToShow)).map((project, index) => {
               if (project.demo) {
                 return (
                   <Card key={index} className="bg-card/50 hover:bg-accent/20 hover:border-primary transition-all duration-300 h-full flex flex-col">
@@ -658,6 +660,14 @@ export default function Home() {
               )
             })}
           </div>
+          {!showAllProjects && projects.length > initialProjectsToShow && (
+              <div className="text-center mt-8">
+                  <Button variant="secondary" onClick={() => setShowAllProjects(true)}>
+                      <TranslatedText text="View All Projects" />
+                      <ChevronDown className="ml-2 h-4 w-4" />
+                  </Button>
+              </div>
+          )}
         </section>
 
         {/* Experience Section */}

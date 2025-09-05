@@ -68,12 +68,16 @@ const projects = [
     link: 'https://github.com/MS0C54073/TEXT-FILES-ARCHIVING-PROGRAM-Cplusplus-Builder',
   },
   {
-    title: 'PBX SUBSCRIBERS (Data structures and algorithms)',
-    link: 'https://github.com/MS0C54073/QueueDatabaseCplusplus',
+    title: 'Asset verification System',
+    link: 'https://github.com/MS0C54073/AssVeri',
   },
   {
     title: 'ToDoTasks',
     link: 'https://github.com/MS0C54073/TaskTicker',
+  },
+  {
+    title: 'PBX SUBSCRIBERS (Data structures and algorithms)',
+    link: 'https://github.com/MS0C54073/QueueDatabaseCplusplus',
   },
   {
     title: 'STOCK PRICE PREDICTION',

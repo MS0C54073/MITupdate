@@ -60,16 +60,16 @@ const projects = [
     link: 'https://github.com/MS0C54073/CM_Electronics',
   },
   {
+    title: 'Asset verification System',
+    link: 'https://github.com/MS0C54073/AssVeri',
+  },
+  {
     title: 'MULTI-VENDOR ECOMMERCE WEBSITE (FINAL YEAR PROJECT)',
     link: 'https://github.com/MS0C54073/Final-Year-Project',
   },
   {
     title: 'TEXT FILES ARCHIVING PROGRAM (High-level language programming)',
     link: 'https://github.com/MS0C54073/TEXT-FILES-ARCHIVING-PROGRAM-Cplusplus-Builder',
-  },
-  {
-    title: 'Asset verification System',
-    link: 'https://github.com/MS0C54073/AssVeri',
   },
   {
     title: 'ToDoTasks',

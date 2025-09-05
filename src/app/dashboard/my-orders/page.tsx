@@ -115,7 +115,7 @@ export default function MyOrdersPage() {
                      <p className="text-xs text-muted-foreground">{order.timestamp}</p>
                   </div>
                   <div className="space-y-2">
-                    <p className="text-sm text-foreground"><span className="font-semibold"><TranslatedText text="Details:" /></span> <TranslatedText text={order.details} /></p>
+                    <p className="text-sm text-foreground"><span className="font-semibold"><TranslatedText text="Details:" /></span> {order.details}</p>
                     <div className="flex items-center text-sm">
                       <span className="font-semibold mr-2"><TranslatedText text="Status:" /></span>
                       <Badge variant={order.status === 'pending' ? 'secondary' : 'default'} className="capitalize">

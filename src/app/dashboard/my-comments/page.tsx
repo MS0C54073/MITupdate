@@ -105,7 +105,7 @@ export default function MyCommentsPage() {
                     <h3 className="text-lg font-semibold text-accent">{comment.name}</h3>
                     <p className="text-xs text-muted-foreground">{comment.timestamp}</p>
                   </div>
-                  <p className="text-sm text-foreground italic">"<TranslatedText text={comment.comment} />"</p>
+                  <p className="text-sm text-foreground italic">"{comment.comment}"</p>
                 </div>
               ))}
             </div>

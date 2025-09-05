@@ -175,7 +175,7 @@ export default function AdminDashboardPage() {
                                 </div>
                                </div>
                               <span className="text-xs text-muted-foreground truncate">
-                                <TranslatedText text={review.review} />
+                                {review.review}
                               </span>
                             </div>
                           </Link>
@@ -193,7 +193,7 @@ export default function AdminDashboardPage() {
                             <div className="flex flex-col w-full">
                               <span className="font-semibold text-sm">{comment.name}</span>
                               <span className="text-xs text-muted-foreground truncate">
-                                <TranslatedText text={comment.comment} />
+                                {comment.comment}
                               </span>
                             </div>
                           </Link>
@@ -211,7 +211,7 @@ export default function AdminDashboardPage() {
                             <div className="flex flex-col w-full">
                               <span className="font-semibold text-sm">{order.name}</span>
                               <span className="text-xs text-muted-foreground truncate">
-                                <TranslatedText text={order.details} />
+                                {order.details}
                               </span>
                             </div>
                           </Link>

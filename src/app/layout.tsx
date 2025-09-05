@@ -5,8 +5,6 @@ import './globals.css';
 import './social-bar.css'; // <--- Import the CSS file
 import {ModeToggle} from '@/components/mode-toggle';
 import {ThemeProvider} from '@/components/theme-provider';
-import {TranslationProvider} from './translator';
-import {LanguageSelector} from '@/app/components/language-selector';
 import { Toaster } from "@/components/ui/toaster";
 import { ViewModeProvider } from '@/app/components/view-mode-provider';
 import { ViewModeToggle } from '@/app/components/view-mode-toggle';
@@ -14,8 +12,6 @@ import { ViewModeWrapper } from '@/app/components/view-mode-wrapper';
 import { BackgroundThemeProvider } from './components/background-theme-provider';
 import { BackgroundThemeToggle } from './components/background-theme-toggle';
 import { DynamicBackground } from './components/dynamic-background';
-import { AuthProvider } from './auth-context';
-import AuthNav from './components/auth-nav';
 import Link from 'next/link';
 import { MuzoInTechLogo } from '@/components/icons';
 import { SocialIcons } from '@/components/social-icons';
@@ -115,90 +111,82 @@ export default function RootLayout({
           defaultTheme="light"
           disableTransitionOnChange
         >
-          <TranslationProvider>
-            <AuthProvider>
-              <BackgroundThemeProvider>
-                <ViewModeProvider>
-                  <DynamicBackground />
-                  
-                  <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm">
-                    <div className="container mx-auto flex h-20 items-center justify-between px-4 md:px-6">
-                        <Link href="/" className="h-12 w-12 transition-transform hover:scale-110" aria-label="Go to homepage">
-                            <MuzoInTechLogo />
-                        </Link>
-                        
-                        {/* Desktop Nav */}
-                        <nav className="hidden lg:flex items-center gap-1">
-                            {navLinks.map(link => (
-                                <Button key={link.href} variant="link" asChild size="sm">
-                                    <Link href={link.href} className="text-sm font-medium hover:text-primary">
-                                        <TranslatedText text={link.text} />
-                                    </Link>
+          <BackgroundThemeProvider>
+            <ViewModeProvider>
+              <DynamicBackground />
+              
+              <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm">
+                <div className="container mx-auto flex h-20 items-center justify-between px-4 md:px-6">
+                    <Link href="/" className="h-12 w-12 transition-transform hover:scale-110" aria-label="Go to homepage">
+                        <MuzoInTechLogo />
+                    </Link>
+                    
+                    {/* Desktop Nav */}
+                    <nav className="hidden lg:flex items-center gap-1">
+                        {navLinks.map(link => (
+                            <Button key={link.href} variant="link" asChild size="sm">
+                                <Link href={link.href} className="text-sm font-medium hover:text-primary">
+                                    <TranslatedText text={link.text} />
+                                </Link>
+                            </Button>
+                        ))}
+                    </nav>
+
+                    {/* Mobile & Tablet Nav */}
+                    <div className="lg:hidden">
+                        <Sheet>
+                            <SheetTrigger asChild>
+                                <Button variant="ghost" size="icon">
+                                    <Menu className="h-6 w-6" />
+                                    <span className="sr-only">Open menu</span>
                                 </Button>
-                            ))}
-                        </nav>
-
-                        {/* Mobile & Tablet Nav */}
-                        <div className="lg:hidden">
-                            <Sheet>
-                                <SheetTrigger asChild>
-                                    <Button variant="ghost" size="icon">
-                                        <Menu className="h-6 w-6" />
-                                        <span className="sr-only">Open menu</span>
-                                    </Button>
-                                </SheetTrigger>
-                                <SheetContent side="right">
-                                    <SheetHeader>
-                                        <SheetTitle className="sr-only">
-                                            <TranslatedText text="Navigation" />
-                                        </SheetTitle>
-                                    </SheetHeader>
-                                    <nav className="flex flex-col gap-4 mt-8">
-                                        {navLinks.map(link => (
-                                            <SheetTrigger asChild key={link.href}>
-                                                <Link href={link.href} className="text-lg font-medium hover:text-primary">
-                                                    <TranslatedText text={link.text} />
-                                                </Link>
-                                            </SheetTrigger>
-                                        ))}
-                                    </nav>
-                                    <div className="mt-8 pt-4 border-t">
-                                      <SocialIcons className="flex flex-wrap justify-center gap-4" />
-                                    </div>
-                                </SheetContent>
-                            </Sheet>
-                        </div>
-
-                         <div className="hidden lg:flex items-center gap-2">
-                            <AuthNav />
-                            <LanguageSelector />
-                            <ModeToggle />
-                            <ViewModeToggle />
-                            <BackgroundThemeToggle />
-                        </div>
+                            </SheetTrigger>
+                            <SheetContent side="right">
+                                <SheetHeader>
+                                    <SheetTitle className="sr-only">
+                                        <TranslatedText text="Navigation" />
+                                    </SheetTitle>
+                                </SheetHeader>
+                                <nav className="flex flex-col gap-4 mt-8">
+                                    {navLinks.map(link => (
+                                        <SheetTrigger asChild key={link.href}>
+                                            <Link href={link.href} className="text-lg font-medium hover:text-primary">
+                                                <TranslatedText text={link.text} />
+                                            </Link>
+                                        </SheetTrigger>
+                                    ))}
+                                </nav>
+                                <div className="mt-8 pt-4 border-t">
+                                  <SocialIcons className="flex flex-wrap justify-center gap-4" />
+                                </div>
+                            </SheetContent>
+                        </Sheet>
                     </div>
-                  </header>
-                  
-                  <div className="fixed top-24 right-4 z-50 flex flex-col items-end space-y-2 lg:hidden">
-                    <AuthNav />
-                    <LanguageSelector />
-                    <ModeToggle />
-                    <ViewModeToggle />
-                    <BackgroundThemeToggle />
-                  </div>
 
-                  <ViewModeWrapper>
-                     <SocialIcons className="social-bar" />
-                     <FloatingCalculatorButton />
-                    <main className="pt-20">
-                        {children}
-                    </main>
-                  </ViewModeWrapper>
-                  <Toaster />
-                </ViewModeProvider>
-              </BackgroundThemeProvider>
-            </AuthProvider>
-          </TranslationProvider>
+                     <div className="hidden lg:flex items-center gap-2">
+                        <ModeToggle />
+                        <ViewModeToggle />
+                        <BackgroundThemeToggle />
+                    </div>
+                </div>
+              </header>
+              
+              <div className="fixed top-24 right-4 z-50 flex flex-col items-end space-y-2 lg:hidden">
+                <ModeToggle />
+                <ViewModeToggle />
+                <BackgroundThemeToggle />
+              </div>
+
+              <ViewModeWrapper>
+                 <SocialIcons className="social-bar" />
+                 <FloatingCalculatorButton />
+                <main className="pt-20">
+                    {children}
+                </main>
+              </ViewModeWrapper>
+              <Toaster />
+            </ViewModeProvider>
+          </BackgroundThemeProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -666,9 +666,9 @@ export default function Home() {
                   <div className="absolute left-[-34px] top-1.5 w-4 h-4 bg-primary rounded-full border-4 border-background"></div>
                   <p className="text-sm text-muted-foreground">{exp.duration}</p>
                   <h3 className="text-xl font-bold text-accent"><TranslatedText text={exp.title}/></h3>
-                  <p className="font-semibold text-foreground mb-2"><TranslatedText text={exp.company}/></p>
+                  <p className="font-semibold text-foreground mb-2">{exp.company}</p>
                   <ul className="list-disc list-inside text-muted-foreground space-y-1">
-                    {exp.details.map((d, i) => <li key={i}><TranslatedText text={d} /></li>)}
+                    {exp.details.map((d, i) => <li key={i}>{d}</li>)}
                   </ul>
               </div>
             ))}
@@ -684,8 +684,8 @@ export default function Home() {
               <div key={index} className="mb-12 relative">
                 <div className="absolute left-[-34px] top-1.5 w-4 h-4 bg-primary rounded-full border-4 border-background"></div>
                 <p className="text-sm text-muted-foreground">{edu.duration}</p>
-                <h3 className="text-xl font-bold text-accent"><TranslatedText text={edu.degree}/></h3>
-                <p className="font-semibold text-foreground"><TranslatedText text={edu.university}/></p>
+                <h3 className="text-xl font-bold text-accent">{edu.degree}</h3>
+                <p className="font-semibold text-foreground">{edu.university}</p>
               </div>
             ))}
           </div>
@@ -701,9 +701,9 @@ export default function Home() {
                           <div className="flex items-start gap-4">
                               <Award className="h-8 w-8 text-accent flex-shrink-0 mt-1" />
                               <div>
-                                  <CardTitle className="text-lg text-accent"><TranslatedText text={award.title} /></CardTitle>
+                                  <CardTitle className="text-lg text-accent">{award.title}</CardTitle>
                                   <CardDescription className="mt-1">
-                                      <TranslatedText text="Awarded by "/> <strong><TranslatedText text={award.issuer}/></strong> - <TranslatedText text={award.date}/>
+                                      <TranslatedText text="Awarded by "/> <strong>{award.issuer}</strong> - {award.date}
                                   </CardDescription>
                               </div>
                           </div>
@@ -727,11 +727,11 @@ export default function Home() {
               {certifications.slice(0, showAllCerts ? certifications.length : initialCertsToShow).map((cert, index) => (
                   <Card key={index} className="bg-card/50">
                       <CardHeader>
-                          <CardTitle className="text-lg text-accent"><TranslatedText text={cert.title} /></CardTitle>
+                          <CardTitle className="text-lg text-accent">{cert.title}</CardTitle>
                       </CardHeader>
                       <CardContent>
                           <p className="text-sm text-muted-foreground">
-                              <TranslatedText text="Issued by "/> <strong><TranslatedText text={cert.issuer}/></strong> - <TranslatedText text={cert.date}/>
+                              <TranslatedText text="Issued by "/> <strong>{cert.issuer}</strong> - {cert.date}
                           </p>
                           {cert.credentialId && (
                               <p className="text-xs text-muted-foreground mt-1">
@@ -742,7 +742,7 @@ export default function Home() {
                               <div className="mt-2">
                                   <h4 className="text-xs font-semibold text-foreground mb-1"><TranslatedText text="Skills:"/></h4>
                                   <div className="flex flex-wrap gap-1">
-                                      {cert.skills.map(skill => <Badge key={skill} variant="secondary"><TranslatedText text={skill}/></Badge>)}
+                                      {cert.skills.map(skill => <Badge key={skill} variant="secondary">{skill}</Badge>)}
                                   </div>
                               </div>
                           )}
@@ -769,7 +769,7 @@ export default function Home() {
                       <CardHeader>
                           <CardTitle className="text-xl text-primary">{ref.name}</CardTitle>
                           <CardDescription>
-                              <TranslatedText text={ref.title}/> at <TranslatedText text={ref.company}/>
+                              {ref.title} at {ref.company}
                           </CardDescription>
                       </CardHeader>
                       <CardContent className="flex-grow space-y-2">
@@ -866,7 +866,7 @@ export default function Home() {
             </p>
             <div className="flex flex-col items-center gap-4 mb-8">
               <Button asChild size="lg">
-                <a href="mailto:musondasalim@gmail.com"><TranslatedText text="musondasalim@gmail.com"/></a>
+                <a href="mailto:musondasalim@gmail.com">musondasalim@gmail.com</a>
               </Button>
               <div className="flex flex-col sm:flex-row gap-x-6 gap-y-2 text-muted-foreground">
                 <a href="tel:+260977288260" className="flex items-center gap-2 hover:text-primary">

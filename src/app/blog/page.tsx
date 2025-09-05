@@ -105,17 +105,17 @@ export default function BlogIndexPage() {
                                     </CardHeader>
                                     <CardContent className="p-6 flex-grow">
                                         <CardTitle className="text-xl font-bold mb-2 text-foreground line-clamp-2">
-                                            <TranslatedText text={post.title} />
+                                            {post.title}
                                         </CardTitle>
                                         <p className="text-muted-foreground text-sm line-clamp-3">
-                                           <TranslatedText text={post.excerpt} />
+                                           {post.excerpt}
                                         </p>
                                     </CardContent>
                                     <CardFooter className="p-6 pt-0 border-t mt-auto">
                                         <div className="flex justify-between items-center w-full text-xs text-muted-foreground">
                                              <div className="flex items-center gap-1">
                                                 <User className="h-3 w-3" />
-                                                <span><TranslatedText text={post.author} /></span>
+                                                <span>{post.author}</span>
                                             </div>
                                             <div className="flex items-center gap-1">
                                                 <Calendar className="h-3 w-3" />

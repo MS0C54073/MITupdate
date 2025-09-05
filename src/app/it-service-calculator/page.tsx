@@ -375,7 +375,7 @@ export default function ItServiceCalculatorPage() {
                     {Object.entries(serviceConfig.currencies).map(([id, { name }]) => (
                       <div className="flex items-center space-x-2" key={id}>
                         <RadioGroupItem value={id} id={`curr-${id}`} />
-                        <Label htmlFor={`curr-${id}`} className="font-normal"><TranslatedText text={name} /></Label>
+                        <Label htmlFor={`curr-${id}`} className="font-normal">{name}</Label>
                       </div>
                     ))}
                  </RadioGroup>
@@ -390,7 +390,7 @@ export default function ItServiceCalculatorPage() {
                   </SelectTrigger>
                   <SelectContent>
                     {Object.entries(serviceConfig.services).map(([id, { name }]) => (
-                      <SelectItem key={id} value={id}><TranslatedText text={name} /></SelectItem>
+                      <SelectItem key={id} value={id}>{name}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -448,7 +448,7 @@ export default function ItServiceCalculatorPage() {
                            onCheckedChange={() => handleFeatureChange(feature.id)}
                          />
                          <Label htmlFor={`feature-${feature.id}`} className="font-normal flex justify-between w-full">
-                           <TranslatedText text={feature.name} />
+                           {feature.name}
                            <span className="text-muted-foreground text-xs">+{currencyInfo.symbol}{(feature.price * currencyInfo.rate).toFixed(2)}</span>
                          </Label>
                        </div>
@@ -466,10 +466,10 @@ export default function ItServiceCalculatorPage() {
                       <RadioGroupItem value={id} id={`sla-${id}`} />
                       <Label htmlFor={`sla-${id}`} className="font-normal w-full">
                         <div className="flex justify-between">
-                            <TranslatedText text={name} />
+                            {name}
                             <span className="text-muted-foreground text-xs">({serviceConfig.slaTiers[id as SlaId].multiplier}x cost)</span>
                         </div>
-                        <p className="text-xs text-muted-foreground"><TranslatedText text={description} /></p>
+                        <p className="text-xs text-muted-foreground">{description}</p>
                       </Label>
                     </div>
                   ))}

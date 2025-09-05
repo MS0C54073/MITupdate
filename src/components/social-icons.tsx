@@ -43,7 +43,7 @@ export function SocialIcons({ className }: { className?: string }) {
               </a>
             </TooltipTrigger>
             <TooltipContent>
-              <p><TranslatedText text={link.name} /></p>
+              <p>{link.name}</p>
             </TooltipContent>
           </Tooltip>
         ))}

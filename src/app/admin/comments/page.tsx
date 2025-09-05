@@ -148,7 +148,7 @@ export default function AdminCommentsPage() {
                       {comment.timestamp}
                     </p>
                   </div>
-                  <p className="text-sm text-foreground italic">"<TranslatedText text={comment.comment} />"</p>
+                  <p className="text-sm text-foreground italic">"{comment.comment}"</p>
                 </div>
               ))}
             </div>

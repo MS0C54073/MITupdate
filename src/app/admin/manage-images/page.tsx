@@ -193,7 +193,7 @@ export default function ManageImagesPage() {
                       <SelectTrigger><SelectValue placeholder="Select a section..." /></SelectTrigger>
                       <SelectContent>
                         {imageSections.map(sec => (
-                          <SelectItem key={sec.id} value={sec.id}><TranslatedText text={sec.name} /></SelectItem>
+                          <SelectItem key={sec.id} value={sec.id}>{sec.name}</SelectItem>
                         ))}
                       </SelectContent>
                     </Select>

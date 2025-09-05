@@ -35,9 +35,7 @@ export function ModeToggle() {
         </TooltipTrigger>
         <TooltipContent>
           <p>
-            <TranslatedText
-              text={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
-            />
+            {theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
           </p>
         </TooltipContent>
       </Tooltip>

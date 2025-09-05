@@ -200,7 +200,7 @@ export default function ServiceDetailPage() {
         <div className="flex items-center space-x-4">
           <ServiceIcon className="h-10 w-10 text-primary" />
           <h1 className="text-4xl font-bold text-primary">
-            <TranslatedText text={service.title} />
+            {service.title}
           </h1>
         </div>
       </header>
@@ -218,7 +218,7 @@ export default function ServiceDetailPage() {
             <TranslatedText text="Service Overview" />
           </h2>
           <p className="text-muted-foreground mb-6 text-lg">
-            <TranslatedText text={service.description} />
+            {service.description}
           </p>
           
           <div className="my-8 text-center">
@@ -236,7 +236,7 @@ export default function ServiceDetailPage() {
           <ul className="list-disc list-inside text-muted-foreground space-y-2">
             {service.details.map((detail, index) => (
               <li key={index}>
-                <TranslatedText text={detail} />
+                {detail}
               </li>
             ))}
           </ul>

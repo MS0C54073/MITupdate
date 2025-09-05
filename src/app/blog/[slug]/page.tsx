@@ -108,12 +108,12 @@ export default function BlogPostPage() {
                     />
                     <div className="p-6 md:p-8 lg:p-10">
                         <h1 className="text-3xl md:text-4xl font-bold text-primary mb-4">
-                            <TranslatedText text={post.title} />
+                            {post.title}
                         </h1>
                         <div className="flex items-center space-x-4 text-sm text-muted-foreground mb-6">
                             <div className="flex items-center gap-2">
                                 <User className="h-4 w-4" />
-                                <span><TranslatedText text={post.author} /></span>
+                                <span>{post.author}</span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <Calendar className="h-4 w-4" />

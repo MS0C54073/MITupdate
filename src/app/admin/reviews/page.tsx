@@ -155,7 +155,7 @@ export default function AdminReviewsPage() {
                       {review.timestamp}
                     </p>
                   </div>
-                  <p className="text-sm text-foreground italic">"<TranslatedText text={review.review} />"</p>
+                  <p className="text-sm text-foreground italic">"{review.review}"</p>
                 </div>
               ))}
             </div>
